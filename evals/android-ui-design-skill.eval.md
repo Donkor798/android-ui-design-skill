@@ -9,56 +9,95 @@ Run with: `python3 scripts/run_evals.py`
   "run": "python3 scripts/run_pipeline.py --screen {input} --output {output}",
   "criteria": [
     {
-      "id": "xml-valid",
+      "id": "spec-md-exists",
       "type": "command",
-      "text": "Generated layout XML starts with <?xml and contains ConstraintLayout",
-      "cmd": "grep -l 'ConstraintLayout' {output}/res/layout/*.xml"
+      "text": "A design-spec_*.md file was generated",
+      "cmd": "ls {output}/design-spec_*.md"
     },
     {
-      "id": "colors-file-exists",
+      "id": "spec-has-9-chapters",
       "type": "command",
-      "text": "A colors_*.xml file was generated in res/values/",
-      "cmd": "ls {output}/res/values/colors_*.xml"
+      "text": "Design spec contains all 9 required chapter headings",
+      "cmd": "grep -c '### 第 . 章' {output}/design-spec_*.md"
     },
     {
-      "id": "no-hardcoded-hex",
+      "id": "spec-has-state-specs",
       "type": "command",
-      "text": "No hardcoded hex colors in layout XML (all use @color/ references)",
-      "cmd": "! grep -rE 'android:background=\"#|android:textColor=\"#' {output}/res/layout/"
+      "text": "Design spec includes Loading/Empty/Error state specifications",
+      "cmd": "grep -qE '(加载态|空状态|错误态)' {output}/design-spec_*.md"
     },
     {
-      "id": "button-drawable-exists",
+      "id": "spec-has-a11y",
       "type": "command",
-      "text": "A bg_button_*.xml drawable was generated",
-      "cmd": "ls {output}/res/drawable/bg_button_*.xml"
+      "text": "Design spec includes accessibility constraints",
+      "cmd": "grep -q '无障碍约束' {output}/design-spec_*.md"
     },
     {
-      "id": "content-descriptions",
+      "id": "spec-color-tokens",
+      "type": "command",
+      "text": "Design spec includes color token table with HEX values",
+      "cmd": "grep -c '#[0-9A-Fa-f]\\{6\\}' {output}/design-spec_*.md | grep -q '[3-9][0-9]'"
+    },
+    {
+      "id": "spec-no-xml-code",
+      "type": "command",
+      "text": "Design spec contains no XML code blocks (no <?xml or </resources>)",
+      "cmd": "! grep -q '<?xml\\|</resources>\\|ConstraintLayout' {output}/design-spec_*.md"
+    },
+    {
+      "id": "spec-no-kotlin-code",
+      "type": "command",
+      "text": "Design spec contains no Kotlin code blocks (no fun / class / val patterns)",
+      "cmd": "! grep -qE '^fun |^class |^val |^object ' {output}/design-spec_*.md"
+    },
+    {
+      "id": "spec-has-button-states",
+      "type": "command",
+      "text": "Design spec includes button state specs (enabled/pressed/disabled/loading)",
+      "cmd": "grep -qE '(Pressed|Disabled|Loading)' {output}/design-spec_*.md"
+    },
+    {
+      "id": "spec-typography-table",
       "type": "llm-judge",
-      "text": "Interactive views (ImageButton, buttons with icons) include android:contentDescription"
+      "text": "Design spec chapter 2 includes font family, scale levels, weight and letterSpacing specs"
     },
     {
-      "id": "constraint-chains-closed",
+      "id": "spec-heading-hierarchy",
       "type": "llm-judge",
-      "text": "All ConstraintLayout views have complete constraint attributes (no missing constraint warnings)"
+      "text": "Design spec chapter 3 includes heading hierarchy with alignment, capitalization, and truncation rules"
+    },
+    {
+      "id": "spec-icon-system",
+      "type": "llm-judge",
+      "text": "Design spec chapter 4 includes icon library, style, sizing table, and color mapping"
+    },
+    {
+      "id": "spec-shape-table",
+      "type": "llm-judge",
+      "text": "Design spec chapter 5 includes corner radius per component"
+    },
+    {
+      "id": "spec-animation-table",
+      "type": "llm-judge",
+      "text": "Design spec chapter 9 includes duration, interpolator, and feedback pattern descriptions"
     }
   ],
   "golden": [
     {
-      "id": "quiz-neon-dark",
-      "input": "inputs/quiz_neon_dark.txt",
+      "id": "neon-dark",
+      "input": "inputs/neon_dark.txt",
       "expected": null,
       "expected_status": "pending-first-green"
     },
     {
-      "id": "main-menu-candy-pop",
-      "input": "inputs/main_menu_candy_pop.txt",
+      "id": "candy-pop",
+      "input": "inputs/candy_pop.txt",
       "expected": null,
       "expected_status": "pending-first-green"
     },
     {
-      "id": "game-over-ocean-breeze",
-      "input": "inputs/game_over_ocean_breeze.txt",
+      "id": "ocean-breeze",
+      "input": "inputs/ocean_breeze.txt",
       "expected": null,
       "expected_status": "pending-first-green"
     }
