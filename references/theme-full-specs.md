@@ -1,9 +1,11 @@
-# Theme Full Specs — 所有主题完整配色数值
+# Theme Full Specs — 30 个主题完整配色数值
+
+数值以 `scripts/generate_theme.py` 为准。写作时用材质与场景描述，少用空泛情绪词。
 
 ---
 
 ## 🌑 NEON DARK — 霓虹暗黑
-> 赛博朋克深夜街头。电光与暗面的对话，高对比、强刺激。
+> 湿沥青路面 + 粉红/青灯管。高对比，适合夜间玩的 speed / quiz。
 
 **灵魂色**：Electric Pink `#E94560` + Neon Cyan `#00FFCC`
 
@@ -81,7 +83,7 @@
 ---
 
 ## 🌌 SPACE GALAXY — 星际宇宙
-> 深空星云，漂浮在无重力的宇宙里。沉浸感强，适合解谜类游戏。
+> 深蓝真空底 + 星云紫。适合 puzzle / logic，背景可加稀疏星点。
 
 **灵魂色**：Nebula Purple `#7B2FBE` + Starlight Blue `#4CC9F0`
 
@@ -144,7 +146,7 @@
 ---
 
 ## 🌋 LAVA FIRE — 熔岩火焰
-> 地心岩浆涌动。高能量、高危险感，适合竞速/高难度游戏。
+> 焦黑岩层 + 熔橙裂缝。适合竞速、高难度关卡反馈。
 
 **灵魂色**：Molten Orange `#FF4500` + Ember Yellow `#FFB700`
 
@@ -205,7 +207,7 @@
 ---
 
 ## ✨ MIDNIGHT LUXURY — 午夜奢华
-> 黑金配色，高端感。像打开一款私人会所的游戏。
+> 哑光黑漆 + 香槟金细线。衬线标题，圆角极小，偏成人 trivia。
 
 **灵魂色**：Pure Black `#0A0A0A` + Champagne Gold `#D4AF37`
 
@@ -266,7 +268,7 @@
 ---
 
 ## 🌊 OCEAN BREEZE — 海洋清风
-> 碧海蓝天，夏日午后。轻松、治愈、国际化受众最广。
+> 浅蓝天 + 白浪 + 深海蓝按钮。大众向默认亮色之一。
 
 **灵魂色**：Deep Ocean `#0077B6` + Sky Blue `#48CAE4`
 
@@ -327,7 +329,7 @@
 ---
 
 ## 🌸 SAKURA SPRING — 樱花春日
-> 日式和风，粉白交织，花瓣随风落下的宁静感。
+> 淡粉花瓣 + 抹茶点缀 + 和纸白。季节活动或偏日式皮肤。
 
 **灵魂色**：Sakura Pink `#FFB7C5` + Matcha Green `#5C8A5F`
 
@@ -388,7 +390,7 @@
 ---
 
 ## 🎃 HALLOWEEN — 万圣节
-> 橙黑南瓜，鬼影幢幢，适合限时活动版本。
+> 焦橙南瓜 + 紫雾 + 骨白。限时活动版专用。
 
 **灵魂色**：Pumpkin `#FF6600` + Ghost White `#F0F0F0`
 
@@ -447,7 +449,7 @@
 ---
 
 ## 🎄 CHRISTMAS — 圣诞节
-> 红绿金三色，雪花飘落，温暖节日气氛。
+> 圣诞红 + 松针绿 + 金箔。节日运营皮肤。
 
 **灵魂色**：Christmas Red `#CC0000` + Pine Green `#165B33`
 
@@ -504,7 +506,7 @@
 ---
 
 ## ❄️ ICE CRYSTAL — 冰晶雪域
-> 极寒透明感，玻璃拟态风格。适合高难度冬日主题游戏。
+> 霜白玻璃 + 冰蓝描边。卡片可半透明 + 细白边。
 
 **灵魂色**：Ice Blue `#A8D8EA` + Frost White `#F0F8FF`
 
@@ -561,7 +563,7 @@
 ---
 
 ## 🎮 PIXEL CLASSIC — 像素复古
-> 8-bit 游戏机时代，有限调色盘，全无圆角，纯粹经典。
+> 8-bit 调色盘，0 圆角，无过渡动画。2048 / arcade 友好。
 
 **灵魂色**：CRT Orange `#FF6B35` + Phosphor Yellow `#FFBE0B`
 
@@ -623,8 +625,8 @@
 
 ---
 
-## 🌿 FOREST ZEN — 森林禅意
-> 竹林微风，自然呼吸感。治愈系玩家的选择。
+## 🌿 FOREST ZEN — 森林竹影
+> 竹绿 + 苔藓 + 米白纸感。长时间阅读友好。
 
 **灵魂色**：Deep Green `#2E7D32` + Bamboo `#A5D6A7`
 
@@ -679,7 +681,7 @@
 ---
 
 ## 🍬 CANDY POP — 糖果缤纷
-> 马卡龙色系，大圆角，弹跳感。低龄向、休闲向首选。
+> 糖纸高饱和 + 厚圆角。Match-3 / bubble 首选。
 
 **灵魂色**：Bubblegum `#FF4D6D` + Sky Candy `#A4DEF5`
 
@@ -734,7 +736,7 @@
 ---
 
 ## 🌅 DESERT GOLD — 沙漠金沙
-> 中东/北非风格，土黄与铜金，神秘古老感。
+> 沙土暖黄 + 陶土红。暖色 trivia / puzzle。
 
 **灵魂色**：Sand `#C8A96E` + Terracotta `#A0522D`
 
@@ -788,8 +790,8 @@
 
 ---
 
-## 🌈 PASTEL DREAM — 梦幻粉彩
-> 低饱和度彩虹，每页一种渐变色，极具治愈感。
+## 🌈 PASTEL DREAM — 柔彩色卡
+> 低饱和马卡龙色阶，无强对比。轻量 puzzle / kids。
 
 **灵魂色**：Lavender `#C3B1E1` + Mint `#B5EAD7`
 
@@ -1124,7 +1126,7 @@
 ---
 
 ## 🎪 CARTOON FUN — 卡通趣味
-> 面向低年龄段，粗描边、高饱和、大色块，充满儿童动画能量。
+> 粗黑描边 + 原色块。儿童向主皮肤。
 
 **灵魂色**：Cartoon Red `#FF3333` + Sun Yellow `#FFD700`
 
@@ -1177,7 +1179,7 @@
 ---
 
 ## ⬜ MINIMALIST WHITE — 极简白
-> 苹果式留白哲学，克制到极致，让内容自己说话。
+> 大量留白 + 单一系统蓝强调。适合 quiz / 设置页重内容。
 
 **灵魂色**：Pure White `#FFFFFF` + Accent Black `#1C1C1E`
 
@@ -1230,7 +1232,7 @@
 ---
 
 ## 📄 PAPER CRAFT — 纸艺剪贴
-> 手工剪贴画风格，每个元素像从彩纸上剪下来，有纸张折叠的投影质感。
+> 牛皮纸底 + 叠层阴影。word / crossword 友好。
 
 **灵魂色**：Cream Paper `#F5E6C8` + Craft Brown `#8B5E3C`
 
@@ -1279,3 +1281,443 @@
 **特殊设计**：卡片用 `cardElevation=8dp` + `shadowColor=#8B5E3C`（纸张叠放投影）
 
 **形状**：非对称圆角建议（用 `ShapeAppearance` 设置不同角），模拟手剪效果
+
+---
+
+## 🎞 NOIR CINEMA — 黑色电影
+> 高反差黑白银幕，只留一点血红做强调。适合 trivia、推理 quiz。
+
+**灵魂色**：Bone White `#E8E8E8` + Blood Accent `#8A1C1C`
+
+```xml
+<resources>
+    <color name="nc_background">#0A0A0A</color>
+    <color name="nc_surface">#161616</color>
+    <color name="nc_surface_variant">#222222</color>
+    <color name="nc_surface_tint">#1C1212</color>
+    <color name="nc_primary">#E8E8E8</color>
+    <color name="nc_primary_dark">#BDBDBD</color>
+    <color name="nc_secondary">#8A1C1C</color>
+    <color name="nc_tertiary">#C4A35A</color>
+    <color name="nc_on_background">#F2F2F2</color>
+    <color name="nc_on_surface">#F2F2F2</color>
+    <color name="nc_on_surface_dim">#7A7A7A</color>
+    <color name="nc_on_primary">#0A0A0A</color>
+    <color name="nc_correct">#6FBF73</color>
+    <color name="nc_wrong">#C62828</color>
+    <color name="nc_score">#C4A35A</color>
+    <color name="nc_timer_normal">#E8E8E8</color>
+    <color name="nc_timer_warning">#C62828</color>
+    <color name="nc_highlight">#8A1C1C</color>
+    <color name="nc_badge">#8A1C1C</color>
+    <color name="nc_nav_bar">#161616</color>
+    <color name="nc_nav_selected">#E8E8E8</color>
+    <color name="nc_nav_unselected">#555555</color>
+    <color name="nc_status_bar">#0A0A0A</color>
+    <color name="nc_tile_empty">#1C1C1C</color>
+    <color name="nc_tile_2">#2A2A2A</color>
+    <color name="nc_tile_4">#3A3A3A</color>
+    <color name="nc_tile_8">#4A4A4A</color>
+    <color name="nc_tile_16">#6A6A6A</color>
+    <color name="nc_tile_32">#8A1C1C</color>
+    <color name="nc_tile_64">#A02424</color>
+    <color name="nc_tile_128">#C4A35A</color>
+    <color name="nc_tile_256">#D4B86A</color>
+    <color name="nc_tile_512">#E8E8E8</color>
+    <color name="nc_tile_1024">#F5F5F5</color>
+    <color name="nc_tile_2048">#FFFFFF</color>
+    <color name="nc_overlay">#E50A0A0A</color>
+    <color name="nc_scrim">#990A0A0A</color>
+</resources>
+```
+
+**字体**：`serif`，标题 `letterSpacing=0.04`，正文不加特效
+
+**形状**：按钮 `2dp` + `1dp` 骨白描边；卡片 `2dp`
+
+**动画**：Smooth & Fluid — 硬切与短 cross-fade，答错时红框一闪
+
+---
+
+## 🖥 CYBER MINT — 薄荷赛博
+> 墨绿终端底，薄荷绿光标。像老式 CRT 终端跑分界面。
+
+**灵魂色**：Terminal Mint `#3DFFB5` + Deep Terminal `#04120F`
+
+```xml
+<resources>
+    <color name="cm_background">#04120F</color>
+    <color name="cm_surface">#0A1F1A</color>
+    <color name="cm_surface_variant">#123028</color>
+    <color name="cm_surface_tint">#0F2A22</color>
+    <color name="cm_primary">#3DFFB5</color>
+    <color name="cm_primary_dark">#20C98A</color>
+    <color name="cm_secondary">#1FA2A2</color>
+    <color name="cm_tertiary">#A8FFCE</color>
+    <color name="cm_on_background">#D8FFF0</color>
+    <color name="cm_on_surface">#D8FFF0</color>
+    <color name="cm_on_surface_dim">#4A7A68</color>
+    <color name="cm_on_primary">#04120F</color>
+    <color name="cm_correct">#3DFFB5</color>
+    <color name="cm_wrong">#FF4D6D</color>
+    <color name="cm_score">#A8FFCE</color>
+    <color name="cm_timer_normal">#3DFFB5</color>
+    <color name="cm_timer_warning">#FF8A3D</color>
+    <color name="cm_highlight">#A8FFCE</color>
+    <color name="cm_badge">#3DFFB5</color>
+    <color name="cm_nav_bar">#0A1F1A</color>
+    <color name="cm_nav_selected">#3DFFB5</color>
+    <color name="cm_nav_unselected">#3A5A50</color>
+    <color name="cm_status_bar">#04120F</color>
+    <color name="cm_tile_empty">#123028</color>
+    <color name="cm_tile_2">#163A30</color>
+    <color name="cm_tile_4">#1A4A3C</color>
+    <color name="cm_tile_8">#1FA2A2</color>
+    <color name="cm_tile_16">#20C98A</color>
+    <color name="cm_tile_32">#3DFFB5</color>
+    <color name="cm_tile_64">#6AFFC8</color>
+    <color name="cm_tile_128">#A8FFCE</color>
+    <color name="cm_tile_256">#D8FFF0</color>
+    <color name="cm_tile_512">#FF8A3D</color>
+    <color name="cm_tile_1024">#FF4D6D</color>
+    <color name="cm_tile_2048">#FFFFFF</color>
+    <color name="cm_overlay">#CC04120F</color>
+    <color name="cm_scrim">#9904120F</color>
+</resources>
+```
+
+**字体**：`monospace`，数字等宽，标题可轻微 scanline 感（描述即可）
+
+**形状**：按钮 `6dp` + `1dp` mint 描边
+
+**动画**：Fast & Electric — 终端闪烁 100ms 级
+
+---
+
+## 🔥 EMBER COAL — 余烬炭火
+> 炭黑底上暗红余烬，偶有琥珀火花。比 Lava Fire 更闷、更暗。
+
+**灵魂色**：Ember Orange `#E85D04` + Coal Black `#100806`
+
+```xml
+<resources>
+    <color name="ec_background">#100806</color>
+    <color name="ec_surface">#1C100C</color>
+    <color name="ec_surface_variant">#2A1812</color>
+    <color name="ec_surface_tint">#301A12</color>
+    <color name="ec_primary">#E85D04</color>
+    <color name="ec_primary_dark">#B84503</color>
+    <color name="ec_secondary">#DC2F02</color>
+    <color name="ec_tertiary">#F48C06</color>
+    <color name="ec_on_background">#FFE8D6</color>
+    <color name="ec_on_surface">#FFE8D6</color>
+    <color name="ec_on_surface_dim">#8A5A40</color>
+    <color name="ec_on_primary">#100806</color>
+    <color name="ec_correct">#90BE6D</color>
+    <color name="ec_wrong">#DC2F02</color>
+    <color name="ec_score">#F48C06</color>
+    <color name="ec_timer_normal">#F48C06</color>
+    <color name="ec_timer_warning">#DC2F02</color>
+    <color name="ec_highlight">#F48C06</color>
+    <color name="ec_badge">#E85D04</color>
+    <color name="ec_nav_bar">#1C100C</color>
+    <color name="ec_nav_selected">#E85D04</color>
+    <color name="ec_nav_unselected">#5A3A2A</color>
+    <color name="ec_status_bar">#100806</color>
+    <color name="ec_tile_empty">#2A1812</color>
+    <color name="ec_tile_2">#3A2018</color>
+    <color name="ec_tile_4">#4A2818</color>
+    <color name="ec_tile_8">#6A3410</color>
+    <color name="ec_tile_16">#9A4010</color>
+    <color name="ec_tile_32">#B84503</color>
+    <color name="ec_tile_64">#E85D04</color>
+    <color name="ec_tile_128">#F48C06</color>
+    <color name="ec_tile_256">#FFB703</color>
+    <color name="ec_tile_512">#DC2F02</color>
+    <color name="ec_tile_1024">#FFD166</color>
+    <color name="ec_tile_2048">#FFFFFF</color>
+    <color name="ec_overlay">#CC100806</color>
+    <color name="ec_scrim">#99100806</color>
+</resources>
+```
+
+**字体**：`sans-serif`，标题可加微弱橙色外发光
+
+**形状**：按钮 `4dp`，硬朗；卡片 `4dp`
+
+**动画**：Dramatic & Intense — 180ms 级火花闪
+
+---
+
+## 🍵 MATCHA CAFE — 抹茶咖啡馆
+> 抹茶绿 + 燕麦奶色 + 木桌褐。适合 word、crossword 长时间阅读。
+
+**灵魂色**：Matcha `#5F7A45` + Oat Milk `#FFFCF5`
+
+```xml
+<resources>
+    <color name="mc_background">#F4F1E8</color>
+    <color name="mc_surface">#FFFCF5</color>
+    <color name="mc_surface_variant">#E4E8D4</color>
+    <color name="mc_surface_tint">#F0EDE2</color>
+    <color name="mc_primary">#5F7A45</color>
+    <color name="mc_primary_dark">#465C32</color>
+    <color name="mc_secondary">#C4A574</color>
+    <color name="mc_tertiary">#8B6F47</color>
+    <color name="mc_on_background">#2A2E22</color>
+    <color name="mc_on_surface">#2A2E22</color>
+    <color name="mc_on_surface_dim">#7A8070</color>
+    <color name="mc_on_primary">#FFFCF5</color>
+    <color name="mc_correct">#5F7A45</color>
+    <color name="mc_wrong">#B54A3A</color>
+    <color name="mc_score">#C4A574</color>
+    <color name="mc_timer_normal">#5F7A45</color>
+    <color name="mc_timer_warning">#B54A3A</color>
+    <color name="mc_highlight">#A8C47A</color>
+    <color name="mc_badge">#5F7A45</color>
+    <color name="mc_nav_bar">#FFFCF5</color>
+    <color name="mc_nav_selected">#5F7A45</color>
+    <color name="mc_nav_unselected">#A8A898</color>
+    <color name="mc_status_bar">#F4F1E8</color>
+    <color name="mc_tile_empty">#E4E8D4</color>
+    <color name="mc_tile_2">#D4DCC0</color>
+    <color name="mc_tile_4">#C0CCAA</color>
+    <color name="mc_tile_8">#A8C47A</color>
+    <color name="mc_tile_16">#8BA85C</color>
+    <color name="mc_tile_32">#5F7A45</color>
+    <color name="mc_tile_64">#465C32</color>
+    <color name="mc_tile_128">#C4A574</color>
+    <color name="mc_tile_256">#8B6F47</color>
+    <color name="mc_tile_512">#B54A3A</color>
+    <color name="mc_tile_1024">#E8D5A3</color>
+    <color name="mc_tile_2048">#2A2E22</color>
+    <color name="mc_overlay">#80E4E8D4</color>
+    <color name="mc_scrim">#505F7A45</color>
+</resources>
+```
+
+**字体**：`sans-serif`，正文字号偏松，适合长文
+
+**形状**：按钮 `12dp`，卡片 `12dp`，无描边
+
+**动画**：Gentle & Breathing — 500–800ms
+
+---
+
+## 🪸 CORAL REEF — 珊瑚礁
+> 珊瑚粉 + 潟湖蓝 + 浅沙底。Match-3、bubble 类首选亮色之一。
+
+**灵魂色**：Coral `#FF6F61` + Lagoon `#00A8A8`
+
+```xml
+<resources>
+    <color name="cr_background">#FFF5F2</color>
+    <color name="cr_surface">#FFFFFF</color>
+    <color name="cr_surface_variant">#FFE0D6</color>
+    <color name="cr_surface_tint">#FFF0EC</color>
+    <color name="cr_primary">#FF6F61</color>
+    <color name="cr_primary_dark">#E2554A</color>
+    <color name="cr_secondary">#00A8A8</color>
+    <color name="cr_tertiary">#FFB4A2</color>
+    <color name="cr_on_background">#3A1F1A</color>
+    <color name="cr_on_surface">#3A1F1A</color>
+    <color name="cr_on_surface_dim">#A07870</color>
+    <color name="cr_on_primary">#FFFFFF</color>
+    <color name="cr_correct">#2BB673</color>
+    <color name="cr_wrong">#E2554A</color>
+    <color name="cr_score">#00A8A8</color>
+    <color name="cr_timer_normal">#00A8A8</color>
+    <color name="cr_timer_warning">#FF6F61</color>
+    <color name="cr_highlight">#FFB4A2</color>
+    <color name="cr_badge">#FF6F61</color>
+    <color name="cr_nav_bar">#FFFFFF</color>
+    <color name="cr_nav_selected">#FF6F61</color>
+    <color name="cr_nav_unselected">#C8A8A0</color>
+    <color name="cr_status_bar">#FFF5F2</color>
+    <color name="cr_tile_empty">#FFE0D6</color>
+    <color name="cr_tile_2">#FFD0C4</color>
+    <color name="cr_tile_4">#FFB4A2</color>
+    <color name="cr_tile_8">#FF8F7A</color>
+    <color name="cr_tile_16">#FF6F61</color>
+    <color name="cr_tile_32">#E2554A</color>
+    <color name="cr_tile_64">#00A8A8</color>
+    <color name="cr_tile_128">#008F8F</color>
+    <color name="cr_tile_256">#2BB673</color>
+    <color name="cr_tile_512">#FFD166</color>
+    <color name="cr_tile_1024">#3A1F1A</color>
+    <color name="cr_tile_2048">#FFFFFF</color>
+    <color name="cr_overlay">#80FFE0D6</color>
+    <color name="cr_scrim">#50FF6F61</color>
+</resources>
+```
+
+**字体**：`sans-serif-medium`，标题可略大
+
+**形状**：按钮 `20dp`，卡片 `16dp`
+
+**动画**：Bouncy & Playful — 气泡 overshoot
+
+---
+
+## 🍯 HONEY AMBER — 蜂蜜琥珀
+> 蜂蜡金 + 奶油白 + 焦糖边。数字类游戏可读性好，温暖不刺眼。
+
+**灵魂色**：Honey `#D4A017` + Cream `#FFFCF5`
+
+```xml
+<resources>
+    <color name="ha_background">#FFF8EB</color>
+    <color name="ha_surface">#FFFCF5</color>
+    <color name="ha_surface_variant">#F5E6C8</color>
+    <color name="ha_surface_tint">#FFF4E0</color>
+    <color name="ha_primary">#D4A017</color>
+    <color name="ha_primary_dark">#A67C0A</color>
+    <color name="ha_secondary">#E8B86D</color>
+    <color name="ha_tertiary">#8B5A2B</color>
+    <color name="ha_on_background">#3A2A12</color>
+    <color name="ha_on_surface">#3A2A12</color>
+    <color name="ha_on_surface_dim">#9A8050</color>
+    <color name="ha_on_primary">#3A2A12</color>
+    <color name="ha_correct">#6B9E3A</color>
+    <color name="ha_wrong">#C4472A</color>
+    <color name="ha_score">#D4A017</color>
+    <color name="ha_timer_normal">#D4A017</color>
+    <color name="ha_timer_warning">#C4472A</color>
+    <color name="ha_highlight">#E8B86D</color>
+    <color name="ha_badge">#D4A017</color>
+    <color name="ha_nav_bar">#FFFCF5</color>
+    <color name="ha_nav_selected">#D4A017</color>
+    <color name="ha_nav_unselected">#C0A878</color>
+    <color name="ha_status_bar">#FFF8EB</color>
+    <color name="ha_tile_empty">#F5E6C8</color>
+    <color name="ha_tile_2">#F0DCA8</color>
+    <color name="ha_tile_4">#E8D08A</color>
+    <color name="ha_tile_8">#E8B86D</color>
+    <color name="ha_tile_16">#D4A017</color>
+    <color name="ha_tile_32">#A67C0A</color>
+    <color name="ha_tile_64">#8B5A2B</color>
+    <color name="ha_tile_128">#6B9E3A</color>
+    <color name="ha_tile_256">#C4472A</color>
+    <color name="ha_tile_512">#F0C040</color>
+    <color name="ha_tile_1024">#FFF8EB</color>
+    <color name="ha_tile_2048">#3A2A12</color>
+    <color name="ha_overlay">#80F5E6C8</color>
+    <color name="ha_scrim">#50D4A017</color>
+</resources>
+```
+
+**注意**：`on_primary` 用深褐而非白，保证金按钮上文字对比度
+
+**形状**：按钮 `14dp`，卡片 `12dp`
+
+**动画**：Smooth & Fluid
+
+---
+
+## 🌇 SUNSET PLAZA — 落日广场
+> 晚霞橘粉 + 石砖暖灰 + 一点青绿点缀。活动页、季节运营常用。
+
+**灵魂色**：Sunset Coral `#E76F51` + Plaza Teal `#2A9D8F`
+
+```xml
+<resources>
+    <color name="sz_background">#FFF1E8</color>
+    <color name="sz_surface">#FFFAF6</color>
+    <color name="sz_surface_variant">#FFD8C2</color>
+    <color name="sz_surface_tint">#FFE8DA</color>
+    <color name="sz_primary">#E76F51</color>
+    <color name="sz_primary_dark">#C4553A</color>
+    <color name="sz_secondary">#F4A261</color>
+    <color name="sz_tertiary">#2A9D8F</color>
+    <color name="sz_on_background">#3A2218</color>
+    <color name="sz_on_surface">#3A2218</color>
+    <color name="sz_on_surface_dim">#A07A68</color>
+    <color name="sz_on_primary">#FFFFFF</color>
+    <color name="sz_correct">#2A9D8F</color>
+    <color name="sz_wrong">#C4553A</color>
+    <color name="sz_score">#F4A261</color>
+    <color name="sz_timer_normal">#E76F51</color>
+    <color name="sz_timer_warning">#C4553A</color>
+    <color name="sz_highlight">#F4A261</color>
+    <color name="sz_badge">#E76F51</color>
+    <color name="sz_nav_bar">#FFFAF6</color>
+    <color name="sz_nav_selected">#E76F51</color>
+    <color name="sz_nav_unselected">#C8A898</color>
+    <color name="sz_status_bar">#FFF1E8</color>
+    <color name="sz_tile_empty">#FFD8C2</color>
+    <color name="sz_tile_2">#FFC8A8</color>
+    <color name="sz_tile_4">#F4A261</color>
+    <color name="sz_tile_8">#E98A4A</color>
+    <color name="sz_tile_16">#E76F51</color>
+    <color name="sz_tile_32">#C4553A</color>
+    <color name="sz_tile_64">#2A9D8F</color>
+    <color name="sz_tile_128">#1F7A70</color>
+    <color name="sz_tile_256">#E9C46A</color>
+    <color name="sz_tile_512">#264653</color>
+    <color name="sz_tile_1024">#FFFFFF</color>
+    <color name="sz_tile_2048">#3A2218</color>
+    <color name="sz_overlay">#80FFD8C2</color>
+    <color name="sz_scrim">#50E76F51</color>
+</resources>
+```
+
+**字体**：`sans-serif`，标题可用 medium
+
+**形状**：按钮 `12dp`，卡片 `12dp`
+
+**动画**：Smooth & Fluid — 地平线式上滑
+
+---
+
+## 🕹 ARCADE CABINET — 街机柜
+> CRT 磷光绿 + 机柜深紫 + thruster 橙。比 Pixel Classic 更「机台」，适合 arcade / 高分榜。
+
+**灵魂色**：Phosphor Green `#39FF14` + Cabinet Violet `#161625`
+
+```xml
+<resources>
+    <color name="ac_background">#0B0B14</color>
+    <color name="ac_surface">#161625</color>
+    <color name="ac_surface_variant">#222238</color>
+    <color name="ac_surface_tint">#1A1A2E</color>
+    <color name="ac_primary">#39FF14</color>
+    <color name="ac_primary_dark">#28C40E</color>
+    <color name="ac_secondary">#FF6B00</color>
+    <color name="ac_tertiary">#00E5FF</color>
+    <color name="ac_on_background">#E8FFE8</color>
+    <color name="ac_on_surface">#E8FFE8</color>
+    <color name="ac_on_surface_dim">#5A7A5A</color>
+    <color name="ac_on_primary">#0B0B14</color>
+    <color name="ac_correct">#39FF14</color>
+    <color name="ac_wrong">#FF2A55</color>
+    <color name="ac_score">#FF6B00</color>
+    <color name="ac_timer_normal">#39FF14</color>
+    <color name="ac_timer_warning">#FF6B00</color>
+    <color name="ac_highlight">#00E5FF</color>
+    <color name="ac_badge">#FF6B00</color>
+    <color name="ac_nav_bar">#161625</color>
+    <color name="ac_nav_selected">#39FF14</color>
+    <color name="ac_nav_unselected">#4A4A68</color>
+    <color name="ac_status_bar">#0B0B14</color>
+    <color name="ac_tile_empty">#222238</color>
+    <color name="ac_tile_2">#2A2A48</color>
+    <color name="ac_tile_4">#323260</color>
+    <color name="ac_tile_8">#28C40E</color>
+    <color name="ac_tile_16">#39FF14</color>
+    <color name="ac_tile_32">#00E5FF</color>
+    <color name="ac_tile_64">#00B8CC</color>
+    <color name="ac_tile_128">#FF6B00</color>
+    <color name="ac_tile_256">#FF8C33</color>
+    <color name="ac_tile_512">#FF2A55</color>
+    <color name="ac_tile_1024">#FFE600</color>
+    <color name="ac_tile_2048">#FFFFFF</color>
+    <color name="ac_overlay">#CC0B0B14</color>
+    <color name="ac_scrim">#990B0B14</color>
+</resources>
+```
+
+**字体**：`monospace`，分数 ALL CAPS
+
+**形状**：全部 `0dp` + `2dp` 磷光绿描边
+
+**动画**：Instant Snap — 切屏无过渡，正确反馈 CRT 闪一下

@@ -37,6 +37,14 @@ THEMES: dict[str, dict] = {
     "minimalist_white": {"prefix": "mw",  "corner": "10dp", "tile_corner": "6dp",  "elevation": "2dp",  "dark": False, "animation": "Gentle & Breathing",  "duration": "500–800ms", "interpolator": "AccelerateDecelerate",      "font": "sans-serif",           "stroke": "0dp"},
     "paper_craft":      {"prefix": "ppc", "corner": "8dp",  "tile_corner": "4dp",  "elevation": "8dp",  "dark": False, "animation": "Smooth & Fluid",      "duration": "200–300ms", "interpolator": "AccelerateDecelerate",      "font": "sans-serif",           "stroke": "0dp"},
     "neon_synthwave":   {"prefix": "sw",  "corner": "8dp",  "tile_corner": "4dp",  "elevation": "0dp",  "dark": True,  "animation": "Fast & Electric",     "duration": "80–150ms",  "interpolator": "FastOutLinearIn",           "font": "sans-serif-condensed", "stroke": "1dp"},
+    "noir_cinema":      {"prefix": "nc",  "corner": "2dp",  "tile_corner": "2dp",  "elevation": "4dp",  "dark": True,  "animation": "Smooth & Fluid",      "duration": "200–300ms", "interpolator": "AccelerateDecelerate",      "font": "serif",                "stroke": "1dp"},
+    "cyber_mint":       {"prefix": "cm",  "corner": "6dp",  "tile_corner": "4dp",  "elevation": "0dp",  "dark": True,  "animation": "Fast & Electric",     "duration": "80–150ms",  "interpolator": "FastOutLinearIn",           "font": "monospace",            "stroke": "1dp"},
+    "ember_coal":       {"prefix": "ec",  "corner": "4dp",  "tile_corner": "2dp",  "elevation": "0dp",  "dark": True,  "animation": "Dramatic & Intense",  "duration": "100–200ms", "interpolator": "LinearInterpolator",        "font": "sans-serif",           "stroke": "0dp"},
+    "matcha_cafe":      {"prefix": "mc",  "corner": "12dp", "tile_corner": "8dp",  "elevation": "2dp",  "dark": False, "animation": "Gentle & Breathing",  "duration": "500–800ms", "interpolator": "AccelerateDecelerate",      "font": "sans-serif",           "stroke": "0dp"},
+    "coral_reef":       {"prefix": "cr",  "corner": "20dp", "tile_corner": "10dp", "elevation": "6dp",  "dark": False, "animation": "Bouncy & Playful",    "duration": "400–500ms", "interpolator": "OvershootInterpolator(2f)", "font": "sans-serif-medium",    "stroke": "0dp"},
+    "honey_amber":      {"prefix": "ha",  "corner": "14dp", "tile_corner": "8dp",  "elevation": "4dp",  "dark": False, "animation": "Smooth & Fluid",      "duration": "200–300ms", "interpolator": "AccelerateDecelerate",      "font": "sans-serif",           "stroke": "0dp"},
+    "sunset_plaza":     {"prefix": "sz",  "corner": "12dp", "tile_corner": "8dp",  "elevation": "4dp",  "dark": False, "animation": "Smooth & Fluid",      "duration": "200–300ms", "interpolator": "AccelerateDecelerate",      "font": "sans-serif",           "stroke": "0dp"},
+    "arcade_cabinet":   {"prefix": "ac",  "corner": "0dp",  "tile_corner": "0dp",  "elevation": "0dp",  "dark": True,  "animation": "Instant Snap",        "duration": "0–80ms",    "interpolator": "none (instant)",            "font": "monospace",            "stroke": "2dp"},
 }
 
 # ── Screen design constraints ─────────────────────────────────────────────────
@@ -462,6 +470,14 @@ def _anim_correct(theme_id: str, p: str) -> str:
         "minimalist_white":"subtle scale 1→1.03→1, 400ms",
         "paper_craft":     "paper fold ripple, 350ms",
         "neon_synthwave":  f"@color/{p}_secondary cyan flash ×3, 120ms",
+        "noir_cinema":     "white flash then red accent blink, 250ms",
+        "cyber_mint":      f"@color/{p}_primary terminal blink ×2, 100ms",
+        "ember_coal":      "ember spark flash + scale 1→1.06→1, 180ms",
+        "matcha_cafe":     "soft green steam rise, 600ms",
+        "coral_reef":      "bubble pop scale overshoot, 450ms",
+        "honey_amber":     "honey drip glow, 300ms",
+        "sunset_plaza":    "warm gold flare, 280ms",
+        "arcade_cabinet":  f"@color/{p}_primary CRT flash, 0ms cut",
     }
     return m.get(theme_id, "scale pulse 1→1.08→1, 400ms")
 
@@ -490,6 +506,14 @@ def _anim_wrong(theme_id: str, p: str) -> str:
         "minimalist_white":"shakeX ±6dp, 300ms",
         "paper_craft":     "paper scrunch shakeX, 350ms",
         "neon_synthwave":  f"@color/{p}_wrong red flash + shakeX, 120ms",
+        "noir_cinema":     "hard cut to red frame, shakeX ±6dp, 250ms",
+        "cyber_mint":      "red cursor glitch shakeX, 120ms",
+        "ember_coal":      "coal spark red flash + shakeX, 180ms",
+        "matcha_cafe":     "gentle shakeX ±8dp, 500ms",
+        "coral_reef":      "deflate scaleY + red tint, 400ms",
+        "honey_amber":     "shakeX ±10dp, 300ms",
+        "sunset_plaza":    "warm red wash + shakeX, 280ms",
+        "arcade_cabinet":  "instant wrong palette swap, 0ms",
     }
     return m.get(theme_id, "shakeX ±15dp, 400ms")
 
@@ -518,6 +542,14 @@ def _anim_transition(theme_id: str) -> str:
         "minimalist_white":"fade, 400ms",
         "paper_craft":     "page-flip slide, 350ms",
         "neon_synthwave":  "scan-line wipe, 120ms",
+        "noir_cinema":     "hard cut / iris cross-fade, 250ms",
+        "cyber_mint":      "terminal scroll-up, 100ms",
+        "ember_coal":      "ember wipe-up, 180ms",
+        "matcha_cafe":     "soft fade, 600ms",
+        "coral_reef":      "bubble slide-up + overshoot, 450ms",
+        "honey_amber":     "cross-fade, 300ms",
+        "sunset_plaza":    "horizon slide-up, 300ms",
+        "arcade_cabinet":  "instant cut, 0ms",
     }
     return m.get(theme_id, "fade, 300ms")
 

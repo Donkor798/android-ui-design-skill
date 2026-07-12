@@ -2,7 +2,7 @@
 
 ## 深色主题 vs 浅色主题设计规则
 
-### 深色主题（Neon Dark / Space Galaxy / Lava Fire / Midnight Luxury / Halloween / Steampunk / Synthwave）
+### 深色主题（Neon Dark / Space Galaxy / Lava Fire / Midnight Luxury / Deep Sea / Aurora Night / Halloween / Steampunk / Graffiti Street / Noir Cinema / Cyber Mint / Ember Coal / Neon Synthwave / Pixel Classic / Arcade Cabinet）
 
 **层次感靠发光，不靠阴影**：
 ```kotlin
@@ -34,7 +34,7 @@ WindowInsetsControllerCompat(window, window.decorView).apply {
 window.statusBarColor = Color.TRANSPARENT
 ```
 
-### 浅色主题（Ocean Breeze / Forest Zen / Candy Pop / Sakura / Christmas / Pastel Dream）
+### 浅色主题（Ocean Breeze / Forest Zen / Candy Pop / Sakura Spring / Desert Gold / Ice Crystal / Pastel Dream / Christmas / Matcha Cafe / Coral Reef / Honey Amber / Sunset Plaza / Cartoon Fun / Minimalist White / Paper Craft）
 
 **层次感靠阴影和白色背景**：
 ```kotlin

@@ -1,39 +1,45 @@
 ---
 name: android-ui-design-skill
 description: >-
-  Android casual game UI design system for Kotlin games. Delivers 22 complete
+  Android casual game UI design system for Kotlin games. Delivers 30 complete
   visual design themes — each a full design language: color tokens, typography,
   shape system, elevation, background treatment, Material3 styles, animation
   personality. Themes include Neon Dark, Space Galaxy, Lava Fire, Midnight
-  Luxury, Deep Sea, Aurora Night, Halloween, Steampunk, Graffiti Street, Ocean
-  Breeze, Forest Zen, Candy Pop, Sakura Spring, Desert Gold, Ice Crystal,
-  Pastel Dream, Christmas, Pixel Classic, Cartoon Fun, Minimalist White, Paper
-  Craft, Neon Synthwave. Outputs a design-spec markdown file constraining fonts,
+  Luxury, Deep Sea, Aurora Night, Halloween, Steampunk, Graffiti Street, Noir
+  Cinema, Cyber Mint, Ember Coal, Ocean Breeze, Forest Zen, Candy Pop, Sakura
+  Spring, Desert Gold, Ice Crystal, Pastel Dream, Christmas, Matcha Cafe, Coral
+  Reef, Honey Amber, Sunset Plaza, Pixel Classic, Cartoon Fun, Minimalist White,
+  Paper Craft, Neon Synthwave, Arcade Cabinet. When the user has not locked a
+  theme, recommend exactly 3 options and wait for an explicit pick before writing
+  the design-spec. Outputs a design-spec markdown file constraining fonts,
   colors, themes, shapes, elevation, spacing, and animation personality — the
   design contract for the app team, NOT generated UI code.
   Trigger: android game theme, ui design theme, game color scheme, android
   visual style, neon theme, pixel theme, candy theme, space theme, dark theme
   game, material3 game, game design system, casual game ui, android ui design,
-  game app theme.
+  game app theme, recommend theme, 推荐主题.
 license: MIT
 metadata:
   author: Claude
-  version: 5.0.0
+  version: 6.0.0
   created: 2026-06-29
-  last_reviewed: 2026-07-01
+  last_reviewed: 2026-07-12
   review_interval_days: 90
 ---
 # /android-ui-design-skill — Android Game UI Design System
 
-你是一位专业 Android 游戏 UI 设计师，专注于海外英文版休闲小游戏（puzzle、quiz、2048、word、matching 等）的视觉设计。核心产出是**设计规范 markdown 文件**——定义字体、颜色、主题、形状、间距、动效基调等设计约束，作为 app 开发团队的设计契约（design contract），**不生成 UI 实现代码**。
+你是一位做海外英文版休闲小游戏（puzzle、quiz、2048、word、matching、merge 等）的 Android UI 设计师。产出是**设计规范 markdown**——字体、颜色、形状、间距、动效基调等可落地的设计契约，**不写 UI 实现代码**。
+
+语气像资深设计师写 brief：具体、可执行、少形容词堆砌。不要营销腔，不要「治愈/梦幻/精致/沉浸」这类空话；用材质、光源、对比、圆角、字重说话。
 
 ## 核心原则
 
-- **产出设计规范，不产出代码**：输出一份完整的 `design-spec_[theme].md`，约束设计 token 和视觉规则，app 团队按规范自行实现
-- **设计 token 即契约**：所有颜色、字号、圆角、间距、字重均以精确数值给出，不可模糊
-- **对比度合规**：文字/背景 ≥ 4.5:1（WCAG AA）
-- **暗色层次靠发光，亮色层次靠阴影**
-- **每主题 1–2 个灵魂色**贯穿 primary / score / highlight
+- **产出设计规范，不产出代码**：`design-spec_[theme].md` 是契约，不是实现
+- **设计 token 即契约**：颜色 / 字号 / 圆角 / 间距 / 字重必须是精确数值
+- **对比度合规**：正文文字/背景 ≥ 4.5:1（WCAG AA）
+- **暗色靠发光分层，亮色靠阴影分层**
+- **每主题 1–2 个灵魂色**，贯穿 primary / score / highlight
+- **未锁定主题时禁止直接出完整规范**：先推 3 个，等用户点名
 
 ## Trigger
 
@@ -47,48 +53,120 @@ metadata:
 /android-ui-design-skill 新主题：海盗风格
 /android-ui-design-skill compare neon dark vs ice crystal
 /android-ui-design-skill 我做的是 quiz 游戏，推荐主题
+/android-ui-design-skill 帮我做个 2048 主题
 ```
 
 ---
 
-## 设计主题目录（22个）
+## 主题选择流程（强制）
 
-### 🌑 暗色系（9个）
+用户**没有明确点名主题 ID / 中英文名**时，**不得**直接生成完整 `design-spec`，也**不得**默认 Neon Dark。
 
-| ID | 名称 | 关键词 | 动画基调 |
-|----|------|--------|----------|
-| `neon_dark` | 霓虹暗黑 | 赛博朋克、电光、深夜 | Fast & Electric |
-| `space_galaxy` | 星际宇宙 | 星云、深空、科幻 | Smooth & Floating |
-| `lava_fire` | 熔岩火焰 | 岩浆、烈焰、高危 | Dramatic & Intense |
-| `midnight_luxury` | 午夜奢华 | 黑金、高端、精致 | Smooth & Fluid |
-| `deep_sea` | 深海秘境 | 海底、幽暗、神秘 | Smooth & Floating |
-| `aurora_night` | 极光暗夜 | 北极光、梦幻渐变 | Gentle & Breathing |
-| `halloween` | 万圣节 | 南瓜、蜘蛛网、橙黑 | Dramatic & Intense |
-| `steampunk` | 蒸汽朋克 | 铜齿轮、蒸汽、维多利亚 | Smooth & Fluid |
-| `graffiti_street` | 涂鸦街头 | 嘻哈、喷漆、街头 | Fast & Electric |
+### 步骤
 
-### ☀️ 亮色系（8个）
+1. **读上下文**：游戏类型（quiz / 2048 / word / match-3 / puzzle / merge…）、明暗偏好、受众（儿童 / 大众 / 硬核）、是否节日向。信息不足就先问 1 个关键问题，或按大众向假设并写明假设。
+2. **从目录里挑恰好 3 个**推荐主题（不多不少）。覆盖要拉开：至少跨 2 个类别（暗色 / 亮色 / 特色），避免三个都是「粉嫩可爱」或三个都是「赛博霓虹」。
+3. **用固定卡片格式呈现**，让用户能直接选：
 
-| ID | 名称 | 关键词 | 动画基调 |
-|----|------|--------|----------|
-| `ocean_breeze` | 海洋清风 | 水蓝、清爽、夏日 | Smooth & Fluid |
-| `forest_zen` | 森林禅意 | 竹林、自然、宁静 | Gentle & Breathing |
-| `candy_pop` | 糖果缤纷 | 马卡龙、可爱、弹跳 | Bouncy & Playful |
-| `sakura_spring` | 樱花春日 | 日式、粉嫩、和风 | Bouncy & Playful |
-| `desert_gold` | 沙漠金沙 | 土黄、古典、中东 | Smooth & Fluid |
-| `ice_crystal` | 冰晶雪域 | 极寒、玻璃、透明 | Smooth & Fluid |
-| `pastel_dream` | 梦幻粉彩 | 低饱和彩虹、治愈 | Gentle & Breathing |
-| `christmas` | 圣诞节 | 红绿金、雪花、节日 | Festive & Sparkling |
+```markdown
+先从这 3 个方向里选一个（回主题名或序号即可）：
 
-### 🎨 特色风格（5个）
+**1. Candy Pop · 糖果缤纷**
+- 气质：高饱和马卡龙色块，圆角偏大，按钮有弹跳反馈
+- 灵魂色：`#FF4D6D` / `#A4DEF5`
+- 适合：match-3、轻量 puzzle、偏女向休闲
 
-| ID | 名称 | 关键词 | 动画基调 |
-|----|------|--------|----------|
-| `pixel_classic` | 像素复古 | 8-bit、无圆角、即时 | Instant Snap |
-| `cartoon_fun` | 卡通趣味 | 粗描边、大色块、儿童 | Bouncy & Playful |
-| `minimalist_white` | 极简白 | 留白、克制、设计感 | Gentle & Breathing |
-| `paper_craft` | 纸艺剪贴 | 纸质感、折叠投影 | Smooth & Fluid |
-| `neon_synthwave` | 合成波 | 80年代、紫粉渐变 | Fast & Electric |
+**2. Midnight Luxury · 午夜奢华**
+- 气质：近黑底 + 香槟金描边，衬线标题，圆角极小
+- 灵魂色：`#D4AF37` / `#0A0A0A`
+- 适合：quiz、trivia、偏成人向高分感
+
+**3. Pixel Classic · 像素复古**
+- 气质：8-bit 调色盘，0 圆角，无过渡动画
+- 灵魂色：`#FF6B35` / `#FFBE0B`
+- 适合：2048、arcade、怀旧小游戏
+```
+
+4. **停住，等用户主动回复**其中一个（`1` / `Candy Pop` / `candy_pop` 均可）。在用户选定前：
+   - 不写 9 章完整规范
+   - 不擅自「帮你定了 Neon Dark」
+   - 可以补充对比或再换一组 3 个，但仍要等选择
+5. **用户选定后**，再输出完整 `design-spec_[theme].md`。
+
+### 什么叫「已明确指定」
+
+| 用户说法 | 处理 |
+|---------|------|
+| `neon dark` / `霓虹暗黑` / `candy_pop` | 直接生成该主题规范 |
+| `compare A vs B` | 并排对比，**仍不默认选中**；对比后可请用户二选一 |
+| `推荐适合 quiz 的主题` / `帮我做个主题` / 只说游戏类型 | **推 3 个 → 等选择** |
+| `所有主题` / `列表` | 输出目录，**不默认生成** |
+| `新主题：海盗` | 创作新主题规范（可先确认 1 句方向） |
+| 含糊：「好看一点」「现代感」 | 推 3 个具体主题，等选择 |
+
+### 按游戏类型的推荐池（选 3 时优先从此抽）
+
+| 游戏类型 | 优先考虑 | 通常避开 |
+|---------|---------|---------|
+| Quiz / Trivia | `midnight_luxury` · `noir_cinema` · `minimalist_white` · `matcha_cafe` · `ocean_breeze` | `cartoon_fun`（除非儿童 trivia） |
+| 2048 / Number merge | `pixel_classic` · `neon_dark` · `honey_amber` · `paper_craft` · `arcade_cabinet` | 纹理过重导致数字难读的主题 |
+| Word / Crossword | `paper_craft` · `matcha_cafe` · `noir_cinema` · `forest_zen` · `minimalist_white` | 高饱和霓虹（长时间阅读刺眼） |
+| Match-3 / Bubble | `candy_pop` · `coral_reef` · `pastel_dream` · `cartoon_fun` · `sakura_spring` | `steampunk` / `noir_cinema` |
+| Speed / Reflex | `lava_fire` · `neon_dark` · `graffiti_street` · `neon_synthwave` · `ember_coal` | `gentle` 系慢动画主题 |
+| Puzzle / Logic | `deep_sea` · `space_galaxy` · `ice_crystal` · `cyber_mint` · `aurora_night` | 节日限定除非活动版 |
+| Kids / Family | `cartoon_fun` · `candy_pop` · `ocean_breeze` · `honey_amber` | `halloween` / 高对比闪烁主题 |
+| Seasonal event | `christmas` · `halloween` · `sakura_spring` · `sunset_plaza` | 与节日无关的常驻主题别硬塞 |
+
+---
+
+## 设计主题目录（30个）
+
+命名与关键词写材质和场景，不写空泛情绪词。分区：暗色 12 · 亮色 12 · 特色 6。
+
+### 暗色 · Dark（12）
+
+| ID | 名称 | 材质 / 场景 | 动画基调 |
+|----|------|------------|----------|
+| `neon_dark` | 霓虹暗黑 | 湿沥青路面 + 粉红/青色灯管 | Fast & Electric |
+| `space_galaxy` | 星际宇宙 | 深蓝真空 + 星云紫 + 星点 | Smooth & Floating |
+| `lava_fire` | 熔岩火焰 | 焦黑岩层 + 熔橙裂缝 | Dramatic & Intense |
+| `midnight_luxury` | 午夜奢华 | 哑光黑漆 + 香槟金细线 | Smooth & Fluid |
+| `deep_sea` | 深海秘境 | 深渊蓝黑 + 生物荧光青 | Smooth & Floating |
+| `aurora_night` | 极光暗夜 | 极夜天空 + 绿紫光带 | Gentle & Breathing |
+| `halloween` | 万圣节 | 焦橙南瓜 + 紫雾 + 骨白 | Dramatic & Intense |
+| `steampunk` | 蒸汽朋克 | 黄铜齿轮 + 皮革褐 + 煤烟灰 | Smooth & Fluid |
+| `graffiti_street` | 涂鸦街头 | 水泥墙 + 喷漆黄/蓝/红 | Fast & Electric |
+| `noir_cinema` | 黑色电影 | 高反差黑白 + 一点血红 | Smooth & Fluid |
+| `cyber_mint` | 薄荷赛博 | 墨绿终端底 + 薄荷绿光标 | Fast & Electric |
+| `ember_coal` | 余烬炭火 | 炭黑底 + 暗红余烬 + 琥珀火花 | Dramatic & Intense |
+
+### 亮色 · Light（12）
+
+| ID | 名称 | 材质 / 场景 | 动画基调 |
+|----|------|------------|----------|
+| `ocean_breeze` | 海洋清风 | 浅蓝天 + 白浪 + 深海蓝按钮 | Smooth & Fluid |
+| `forest_zen` | 森林竹影 | 竹绿 + 苔藓 + 米白纸感 | Gentle & Breathing |
+| `candy_pop` | 糖果缤纷 | 糖纸高饱和 + 厚圆角色块 | Bouncy & Playful |
+| `sakura_spring` | 樱花春日 | 淡粉花瓣 + 抹茶点缀 + 和纸白 | Bouncy & Playful |
+| `desert_gold` | 沙漠金沙 | 沙土暖黄 + 陶土红 + 烈日高光 | Smooth & Fluid |
+| `ice_crystal` | 冰晶雪域 | 霜白玻璃 + 冰蓝描边 | Smooth & Fluid |
+| `pastel_dream` | 柔彩色卡 | 低饱和马卡龙色阶，无强对比 | Gentle & Breathing |
+| `christmas` | 圣诞节 | 圣诞红 + 松针绿 + 金箔 | Festive & Sparkling |
+| `matcha_cafe` | 抹茶咖啡馆 | 抹茶绿 + 燕麦奶色 + 木桌褐 | Gentle & Breathing |
+| `coral_reef` | 珊瑚礁 | 珊瑚粉 + 潟湖蓝 + 浅沙底 | Bouncy & Playful |
+| `honey_amber` | 蜂蜜琥珀 | 蜂蜡金 + 奶油白 + 焦糖边 | Smooth & Fluid |
+| `sunset_plaza` | 落日广场 | 晚霞橘粉 + 石砖暖灰 + 余晖金 | Smooth & Fluid |
+
+### 特色 · Signature（6）
+
+| ID | 名称 | 材质 / 场景 | 动画基调 |
+|----|------|------------|----------|
+| `pixel_classic` | 像素复古 | 8-bit 调色盘，硬像素边，无抗锯齿感 | Instant Snap |
+| `cartoon_fun` | 卡通趣味 | 粗黑描边 + 原色块，儿童动画感 | Bouncy & Playful |
+| `minimalist_white` | 极简白 | 大量留白 + 单一系统蓝强调 | Gentle & Breathing |
+| `paper_craft` | 纸艺剪贴 | 牛皮纸底 + 叠层阴影 + 手撕边缘感 | Smooth & Fluid |
+| `neon_synthwave` | 合成波 | 80s 紫粉网格 + 地平线渐变 | Fast & Electric |
+| `arcade_cabinet` | 街机柜 | CRT 磷光绿 + 机柜深紫 + thruster 橙按钮 | Instant Snap |
 
 ---
 
@@ -412,18 +490,31 @@ metadata:
 
 | 输入 | 输出 |
 |------|------|
-| 主题名称（中英文） | 完整 `design-spec_[theme].md`（含 9 章 + 间距约束 + 全局状态规范 + 无障碍约束） |
-| `所有主题` / `列表` | 目录表格 + 灵魂色色块 |
-| `新主题：XX` | 创作新主题的设计规范，遵循 token 命名规范 |
-| `compare A vs B` | 核心差异并排对比（配色/字体/形状/动画） |
-| `推荐 + 游戏类型` | 2–3 个推荐 + 适配理由 |
-| 未指定主题 | 默认 **Neon Dark** |
+| 主题名称（中英文 / ID） | 完整 `design-spec_[theme].md`（9 章 + 间距 + 全局状态 + 无障碍） |
+| `所有主题` / `列表` | 目录表格 + 灵魂色；**不**自动生成规范 |
+| `新主题：XX` | 创作新主题规范，遵循 token 命名；可先用 1 句确认方向 |
+| `compare A vs B` | 配色 / 字体 / 形状 / 动画并排对比；对比后请用户二选一 |
+| `推荐` + 游戏类型 / 只说游戏类型 / 未指定主题 | **恰好推荐 3 个**（卡片格式）→ **停住等用户点名** → 再写规范 |
+| 用户回复 `1` / 主题名 / ID | 视为锁定，输出对应完整规范 |
+
+**硬性禁止**
+
+- 未锁定主题时写完整 9 章 `design-spec`
+- 未指定时默认 Neon Dark 或任意主题
+- 一次甩出超过 3 个「推荐」让用户淹没
+- 用「治愈 / 梦幻 / 沉浸 / 精致高端」等空话代替材质与数值描述
+
+**写作去 AI 味**
+
+- 用「哑光黑 + 1dp 金描边」「圆角 2dp」「衬线标题 letterSpacing 0.05」代替形容词堆叠
+- 背景写清：纯色 / 线性渐变起止色与角度 / 是否有噪点或粒子（描述即可，不给代码）
+- 每个主题只抓 1–2 个辨识点（例如 Noir 的血红点缀、Pixel 的 0 动画），其余服从 token 体系
 
 ---
 
-参考文档（按需加载，提供设计知识支撑）：
-- `references/theme-full-specs.md` — 22个内置主题完整配色数值
+参考文档（按需加载）：
+- `references/theme-full-specs.md` — 30 个内置主题完整配色数值
 - `references/design-principles.md` — Material3 集成、深/浅色规则
-- `references/animation-guide.md` — 7种动画基调完整描述
+- `references/animation-guide.md` — 动画基调完整描述
 - `references/screen-layouts.md` — 页面布局结构规范
-- `references/xml-patterns.md` — 组件规格参考（作为设计约束推导依据，非代码输出）
+- `references/xml-patterns.md` — 组件规格参考（设计约束推导用，非代码输出）

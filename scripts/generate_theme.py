@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-generate_theme.py — Generate res/values/colors_<theme>.xml for any of the 22 themes.
+generate_theme.py — Generate res/values/colors_<theme>.xml for any of the 30 themes.
 
 Usage:
     python3 scripts/generate_theme.py --theme neon_dark --output ./output/
@@ -11,7 +11,7 @@ from __future__ import annotations
 import argparse, sys, textwrap
 from pathlib import Path
 
-# ── Complete color data for all 22 themes ────────────────────────────────────
+# ── Complete color data for all 30 themes ────────────────────────────────────
 # Each theme: dict of token_suffix → hex_color
 # Token naming: {prefix}_{suffix}  e.g. nd_background, sg_primary
 
@@ -303,6 +303,110 @@ THEMES: dict[str, dict] = {
         "tile_256": "#00CCFF", "tile_512": "#FFFF00", "tile_1024": "#FF6EC7", "tile_2048": "#FFFFFF",
         "overlay": "#CC0A0010", "scrim": "#990A0010",
     },
+    "noir_cinema": {
+        "_meta": {"prefix": "nc", "name": "Noir Cinema", "dark": True},
+        "background": "#0A0A0A", "surface": "#161616", "surface_variant": "#222222", "surface_tint": "#1C1212",
+        "primary": "#E8E8E8", "primary_dark": "#BDBDBD", "secondary": "#8A1C1C", "tertiary": "#C4A35A",
+        "on_background": "#F2F2F2", "on_surface": "#F2F2F2", "on_surface_dim": "#7A7A7A", "on_primary": "#0A0A0A",
+        "correct": "#6FBF73", "wrong": "#C62828", "score": "#C4A35A",
+        "timer_normal": "#E8E8E8", "timer_warning": "#C62828", "highlight": "#8A1C1C", "badge": "#8A1C1C",
+        "nav_bar": "#161616", "nav_selected": "#E8E8E8", "nav_unselected": "#555555", "status_bar": "#0A0A0A",
+        "tile_empty": "#1C1C1C", "tile_2": "#2A2A2A", "tile_4": "#3A3A3A", "tile_8": "#4A4A4A",
+        "tile_16": "#6A6A6A", "tile_32": "#8A1C1C", "tile_64": "#A02424", "tile_128": "#C4A35A",
+        "tile_256": "#D4B86A", "tile_512": "#E8E8E8", "tile_1024": "#F5F5F5", "tile_2048": "#FFFFFF",
+        "overlay": "#E50A0A0A", "scrim": "#990A0A0A",
+    },
+    "cyber_mint": {
+        "_meta": {"prefix": "cm", "name": "Cyber Mint", "dark": True},
+        "background": "#04120F", "surface": "#0A1F1A", "surface_variant": "#123028", "surface_tint": "#0F2A22",
+        "primary": "#3DFFB5", "primary_dark": "#20C98A", "secondary": "#1FA2A2", "tertiary": "#A8FFCE",
+        "on_background": "#D8FFF0", "on_surface": "#D8FFF0", "on_surface_dim": "#4A7A68", "on_primary": "#04120F",
+        "correct": "#3DFFB5", "wrong": "#FF4D6D", "score": "#A8FFCE",
+        "timer_normal": "#3DFFB5", "timer_warning": "#FF8A3D", "highlight": "#A8FFCE", "badge": "#3DFFB5",
+        "nav_bar": "#0A1F1A", "nav_selected": "#3DFFB5", "nav_unselected": "#3A5A50", "status_bar": "#04120F",
+        "tile_empty": "#123028", "tile_2": "#163A30", "tile_4": "#1A4A3C", "tile_8": "#1FA2A2",
+        "tile_16": "#20C98A", "tile_32": "#3DFFB5", "tile_64": "#6AFFC8", "tile_128": "#A8FFCE",
+        "tile_256": "#D8FFF0", "tile_512": "#FF8A3D", "tile_1024": "#FF4D6D", "tile_2048": "#FFFFFF",
+        "overlay": "#CC04120F", "scrim": "#9904120F",
+    },
+    "ember_coal": {
+        "_meta": {"prefix": "ec", "name": "Ember Coal", "dark": True},
+        "background": "#100806", "surface": "#1C100C", "surface_variant": "#2A1812", "surface_tint": "#301A12",
+        "primary": "#E85D04", "primary_dark": "#B84503", "secondary": "#DC2F02", "tertiary": "#F48C06",
+        "on_background": "#FFE8D6", "on_surface": "#FFE8D6", "on_surface_dim": "#8A5A40", "on_primary": "#100806",
+        "correct": "#90BE6D", "wrong": "#DC2F02", "score": "#F48C06",
+        "timer_normal": "#F48C06", "timer_warning": "#DC2F02", "highlight": "#F48C06", "badge": "#E85D04",
+        "nav_bar": "#1C100C", "nav_selected": "#E85D04", "nav_unselected": "#5A3A2A", "status_bar": "#100806",
+        "tile_empty": "#2A1812", "tile_2": "#3A2018", "tile_4": "#4A2818", "tile_8": "#6A3410",
+        "tile_16": "#9A4010", "tile_32": "#B84503", "tile_64": "#E85D04", "tile_128": "#F48C06",
+        "tile_256": "#FFB703", "tile_512": "#DC2F02", "tile_1024": "#FFD166", "tile_2048": "#FFFFFF",
+        "overlay": "#CC100806", "scrim": "#99100806",
+    },
+    "matcha_cafe": {
+        "_meta": {"prefix": "mc", "name": "Matcha Cafe", "dark": False},
+        "background": "#F4F1E8", "surface": "#FFFCF5", "surface_variant": "#E4E8D4", "surface_tint": "#F0EDE2",
+        "primary": "#5F7A45", "primary_dark": "#465C32", "secondary": "#C4A574", "tertiary": "#8B6F47",
+        "on_background": "#2A2E22", "on_surface": "#2A2E22", "on_surface_dim": "#7A8070", "on_primary": "#FFFCF5",
+        "correct": "#5F7A45", "wrong": "#B54A3A", "score": "#C4A574",
+        "timer_normal": "#5F7A45", "timer_warning": "#B54A3A", "highlight": "#A8C47A", "badge": "#5F7A45",
+        "nav_bar": "#FFFCF5", "nav_selected": "#5F7A45", "nav_unselected": "#A8A898", "status_bar": "#F4F1E8",
+        "tile_empty": "#E4E8D4", "tile_2": "#D4DCC0", "tile_4": "#C0CCAA", "tile_8": "#A8C47A",
+        "tile_16": "#8BA85C", "tile_32": "#5F7A45", "tile_64": "#465C32", "tile_128": "#C4A574",
+        "tile_256": "#8B6F47", "tile_512": "#B54A3A", "tile_1024": "#E8D5A3", "tile_2048": "#2A2E22",
+        "overlay": "#80E4E8D4", "scrim": "#505F7A45",
+    },
+    "coral_reef": {
+        "_meta": {"prefix": "cr", "name": "Coral Reef", "dark": False},
+        "background": "#FFF5F2", "surface": "#FFFFFF", "surface_variant": "#FFE0D6", "surface_tint": "#FFF0EC",
+        "primary": "#FF6F61", "primary_dark": "#E2554A", "secondary": "#00A8A8", "tertiary": "#FFB4A2",
+        "on_background": "#3A1F1A", "on_surface": "#3A1F1A", "on_surface_dim": "#A07870", "on_primary": "#FFFFFF",
+        "correct": "#2BB673", "wrong": "#E2554A", "score": "#00A8A8",
+        "timer_normal": "#00A8A8", "timer_warning": "#FF6F61", "highlight": "#FFB4A2", "badge": "#FF6F61",
+        "nav_bar": "#FFFFFF", "nav_selected": "#FF6F61", "nav_unselected": "#C8A8A0", "status_bar": "#FFF5F2",
+        "tile_empty": "#FFE0D6", "tile_2": "#FFD0C4", "tile_4": "#FFB4A2", "tile_8": "#FF8F7A",
+        "tile_16": "#FF6F61", "tile_32": "#E2554A", "tile_64": "#00A8A8", "tile_128": "#008F8F",
+        "tile_256": "#2BB673", "tile_512": "#FFD166", "tile_1024": "#3A1F1A", "tile_2048": "#FFFFFF",
+        "overlay": "#80FFE0D6", "scrim": "#50FF6F61",
+    },
+    "honey_amber": {
+        "_meta": {"prefix": "ha", "name": "Honey Amber", "dark": False},
+        "background": "#FFF8EB", "surface": "#FFFCF5", "surface_variant": "#F5E6C8", "surface_tint": "#FFF4E0",
+        "primary": "#D4A017", "primary_dark": "#A67C0A", "secondary": "#E8B86D", "tertiary": "#8B5A2B",
+        "on_background": "#3A2A12", "on_surface": "#3A2A12", "on_surface_dim": "#9A8050", "on_primary": "#3A2A12",
+        "correct": "#6B9E3A", "wrong": "#C4472A", "score": "#D4A017",
+        "timer_normal": "#D4A017", "timer_warning": "#C4472A", "highlight": "#E8B86D", "badge": "#D4A017",
+        "nav_bar": "#FFFCF5", "nav_selected": "#D4A017", "nav_unselected": "#C0A878", "status_bar": "#FFF8EB",
+        "tile_empty": "#F5E6C8", "tile_2": "#F0DCA8", "tile_4": "#E8D08A", "tile_8": "#E8B86D",
+        "tile_16": "#D4A017", "tile_32": "#A67C0A", "tile_64": "#8B5A2B", "tile_128": "#6B9E3A",
+        "tile_256": "#C4472A", "tile_512": "#F0C040", "tile_1024": "#FFF8EB", "tile_2048": "#3A2A12",
+        "overlay": "#80F5E6C8", "scrim": "#50D4A017",
+    },
+    "sunset_plaza": {
+        "_meta": {"prefix": "sz", "name": "Sunset Plaza", "dark": False},
+        "background": "#FFF1E8", "surface": "#FFFAF6", "surface_variant": "#FFD8C2", "surface_tint": "#FFE8DA",
+        "primary": "#E76F51", "primary_dark": "#C4553A", "secondary": "#F4A261", "tertiary": "#2A9D8F",
+        "on_background": "#3A2218", "on_surface": "#3A2218", "on_surface_dim": "#A07A68", "on_primary": "#FFFFFF",
+        "correct": "#2A9D8F", "wrong": "#C4553A", "score": "#F4A261",
+        "timer_normal": "#E76F51", "timer_warning": "#C4553A", "highlight": "#F4A261", "badge": "#E76F51",
+        "nav_bar": "#FFFAF6", "nav_selected": "#E76F51", "nav_unselected": "#C8A898", "status_bar": "#FFF1E8",
+        "tile_empty": "#FFD8C2", "tile_2": "#FFC8A8", "tile_4": "#F4A261", "tile_8": "#E98A4A",
+        "tile_16": "#E76F51", "tile_32": "#C4553A", "tile_64": "#2A9D8F", "tile_128": "#1F7A70",
+        "tile_256": "#E9C46A", "tile_512": "#264653", "tile_1024": "#FFFFFF", "tile_2048": "#3A2218",
+        "overlay": "#80FFD8C2", "scrim": "#50E76F51",
+    },
+    "arcade_cabinet": {
+        "_meta": {"prefix": "ac", "name": "Arcade Cabinet", "dark": True},
+        "background": "#0B0B14", "surface": "#161625", "surface_variant": "#222238", "surface_tint": "#1A1A2E",
+        "primary": "#39FF14", "primary_dark": "#28C40E", "secondary": "#FF6B00", "tertiary": "#00E5FF",
+        "on_background": "#E8FFE8", "on_surface": "#E8FFE8", "on_surface_dim": "#5A7A5A", "on_primary": "#0B0B14",
+        "correct": "#39FF14", "wrong": "#FF2A55", "score": "#FF6B00",
+        "timer_normal": "#39FF14", "timer_warning": "#FF6B00", "highlight": "#00E5FF", "badge": "#FF6B00",
+        "nav_bar": "#161625", "nav_selected": "#39FF14", "nav_unselected": "#4A4A68", "status_bar": "#0B0B14",
+        "tile_empty": "#222238", "tile_2": "#2A2A48", "tile_4": "#323260", "tile_8": "#28C40E",
+        "tile_16": "#39FF14", "tile_32": "#00E5FF", "tile_64": "#00B8CC", "tile_128": "#FF6B00",
+        "tile_256": "#FF8C33", "tile_512": "#FF2A55", "tile_1024": "#FFE600", "tile_2048": "#FFFFFF",
+        "overlay": "#CC0B0B14", "scrim": "#990B0B14",
+    },
 }
 
 TOKEN_ORDER = [
@@ -354,7 +458,7 @@ def build_xml(theme_id: str) -> str:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Generate res/values/colors_<theme>.xml")
-    parser.add_argument("--theme", help="Theme ID, or 'all' to generate all 22 themes")
+    parser.add_argument("--theme", help="Theme ID, or 'all' to generate all 30 themes")
     parser.add_argument("--list", action="store_true", help="List all theme IDs")
     parser.add_argument("--output", default="./output", help="Output directory (default: ./output)")
     args = parser.parse_args(argv)

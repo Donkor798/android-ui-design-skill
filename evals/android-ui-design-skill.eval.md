@@ -84,20 +84,20 @@ Run with: `python3 scripts/run_evals.py`
   ],
   "golden": [
     {
-      "id": "neon-dark",
-      "input": "inputs/neon_dark.txt",
+      "id": "quiz-neon-dark",
+      "input": "inputs/quiz_neon_dark.txt",
       "expected": null,
       "expected_status": "pending-first-green"
     },
     {
-      "id": "candy-pop",
-      "input": "inputs/candy_pop.txt",
+      "id": "main-menu-candy-pop",
+      "input": "inputs/main_menu_candy_pop.txt",
       "expected": null,
       "expected_status": "pending-first-green"
     },
     {
-      "id": "ocean-breeze",
-      "input": "inputs/ocean_breeze.txt",
+      "id": "game-over-ocean-breeze",
+      "input": "inputs/game_over_ocean_breeze.txt",
       "expected": null,
       "expected_status": "pending-first-green"
     }
