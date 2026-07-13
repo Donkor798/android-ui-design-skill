@@ -1,4 +1,4 @@
-# Theme Full Specs — 30 个主题完整配色数值
+# Theme Full Specs — 50 个主题完整配色数值
 
 数值以 `scripts/generate_theme.py` 为准。写作时用材质与场景描述，少用空泛情绪词。
 
@@ -1721,3 +1721,1105 @@
 **形状**：全部 `0dp` + `2dp` 磷光绿描边
 
 **动画**：Instant Snap — 切屏无过渡，正确反馈 CRT 闪一下
+
+# ── 新增主题（20）──
+
+## 🌃 CYBERPUNK CITY — 赛博朋克都市
+> 霓虹雨夜 + 全息青/品红。
+
+**灵魂色**：`#00F0FF` + `#FF2A6D`
+
+```xml
+<resources>
+    <color name="cc_background">#0A0A12</color>
+    <color name="cc_surface">#12121F</color>
+    <color name="cc_surface_variant">#1A1A2E</color>
+    <color name="cc_surface_tint">#1E1535</color>
+    <color name="cc_primary">#00F0FF</color>
+    <color name="cc_primary_dark">#00B8C4</color>
+    <color name="cc_secondary">#FF2A6D</color>
+    <color name="cc_tertiary">#F9F002</color>
+    <color name="cc_on_background">#E8F4FF</color>
+    <color name="cc_on_surface">#E8F4FF</color>
+    <color name="cc_on_surface_dim">#5A6A80</color>
+    <color name="cc_on_primary">#0A0A12</color>
+    <color name="cc_correct">#00F0FF</color>
+    <color name="cc_wrong">#FF2A6D</color>
+    <color name="cc_score">#F9F002</color>
+    <color name="cc_timer_normal">#00F0FF</color>
+    <color name="cc_timer_warning">#FF2A6D</color>
+    <color name="cc_highlight">#F9F002</color>
+    <color name="cc_badge">#FF2A6D</color>
+    <color name="cc_nav_bar">#12121F</color>
+    <color name="cc_nav_selected">#00F0FF</color>
+    <color name="cc_nav_unselected">#4A4A68</color>
+    <color name="cc_status_bar">#0A0A12</color>
+    <color name="cc_tile_empty">#1A1A2E</color>
+    <color name="cc_tile_2">#222240</color>
+    <color name="cc_tile_4">#2A2A55</color>
+    <color name="cc_tile_8">#003A50</color>
+    <color name="cc_tile_16">#007A90</color>
+    <color name="cc_tile_32">#00B8C4</color>
+    <color name="cc_tile_64">#00F0FF</color>
+    <color name="cc_tile_128">#FF2A6D</color>
+    <color name="cc_tile_256">#FF5A8D</color>
+    <color name="cc_tile_512">#F9F002</color>
+    <color name="cc_tile_1024">#FFFFFF</color>
+    <color name="cc_tile_2048">#00F0FF</color>
+    <color name="cc_overlay">#CC0A0A12</color>
+    <color name="cc_scrim">#990A0A12</color>
+</resources>
+```
+
+**字体**：`sans-serif-condensed`
+
+**形状**：按钮 6dp，描边 1dp 青
+
+**动画**：Fast & Electric
+
+---
+
+## 🏴‍☠️ PIRATE COVE — 海盗海湾
+> 橡木甲板 + 旧金 + 深海蓝。
+
+**灵魂色**：`#C9A227` + `#1B4F72`
+
+```xml
+<resources>
+    <color name="pi_background">#0C100E</color>
+    <color name="pi_surface">#161C18</color>
+    <color name="pi_surface_variant">#1E2820</color>
+    <color name="pi_surface_tint">#243028</color>
+    <color name="pi_primary">#C9A227</color>
+    <color name="pi_primary_dark">#A07E1A</color>
+    <color name="pi_secondary">#1B4F72</color>
+    <color name="pi_tertiary">#8B3A2A</color>
+    <color name="pi_on_background">#F0E6C8</color>
+    <color name="pi_on_surface">#F0E6C8</color>
+    <color name="pi_on_surface_dim">#7A8068</color>
+    <color name="pi_on_primary">#0C100E</color>
+    <color name="pi_correct">#4CAF50</color>
+    <color name="pi_wrong">#C62828</color>
+    <color name="pi_score">#C9A227</color>
+    <color name="pi_timer_normal">#C9A227</color>
+    <color name="pi_timer_warning">#C62828</color>
+    <color name="pi_highlight">#1B4F72</color>
+    <color name="pi_badge">#C9A227</color>
+    <color name="pi_nav_bar">#161C18</color>
+    <color name="pi_nav_selected">#C9A227</color>
+    <color name="pi_nav_unselected">#4A5548</color>
+    <color name="pi_status_bar">#0C100E</color>
+    <color name="pi_tile_empty">#1E2820</color>
+    <color name="pi_tile_2">#283228</color>
+    <color name="pi_tile_4">#344038</color>
+    <color name="pi_tile_8">#3A4A50</color>
+    <color name="pi_tile_16">#1B4F72</color>
+    <color name="pi_tile_32">#2A6A90</color>
+    <color name="pi_tile_64">#8B3A2A</color>
+    <color name="pi_tile_128">#A07E1A</color>
+    <color name="pi_tile_256">#C9A227</color>
+    <color name="pi_tile_512">#E0C040</color>
+    <color name="pi_tile_1024">#F0E6C8</color>
+    <color name="pi_tile_2048">#FFFFFF</color>
+    <color name="pi_overlay">#CC0C100E</color>
+    <color name="pi_scrim">#990C100E</color>
+</resources>
+```
+
+**字体**：`serif`
+
+**形状**：按钮 6dp + 2dp 金描边
+
+**动画**：Smooth & Fluid
+
+---
+
+## 👑 ROYAL VELVET — 皇家天鹅绒
+> 紫丝绒 + 金冠线。
+
+**灵魂色**：`#C9A84C` + `#6B2D8B`
+
+```xml
+<resources>
+    <color name="rv_background">#0F0818</color>
+    <color name="rv_surface">#1A1028</color>
+    <color name="rv_surface_variant">#241838</color>
+    <color name="rv_surface_tint">#2E1E48</color>
+    <color name="rv_primary">#C9A84C</color>
+    <color name="rv_primary_dark">#A88A30</color>
+    <color name="rv_secondary">#6B2D8B</color>
+    <color name="rv_tertiary">#9B4DB8</color>
+    <color name="rv_on_background">#F5E8C8</color>
+    <color name="rv_on_surface">#F5E8C8</color>
+    <color name="rv_on_surface_dim">#7A6888</color>
+    <color name="rv_on_primary">#0F0818</color>
+    <color name="rv_correct">#6BCB77</color>
+    <color name="rv_wrong">#E74C3C</color>
+    <color name="rv_score">#C9A84C</color>
+    <color name="rv_timer_normal">#C9A84C</color>
+    <color name="rv_timer_warning">#E74C3C</color>
+    <color name="rv_highlight">#9B4DB8</color>
+    <color name="rv_badge">#C9A84C</color>
+    <color name="rv_nav_bar">#1A1028</color>
+    <color name="rv_nav_selected">#C9A84C</color>
+    <color name="rv_nav_unselected">#504060</color>
+    <color name="rv_status_bar">#0F0818</color>
+    <color name="rv_tile_empty">#241838</color>
+    <color name="rv_tile_2">#2E1E48</color>
+    <color name="rv_tile_4">#3A2860</color>
+    <color name="rv_tile_8">#4A3080</color>
+    <color name="rv_tile_16">#6B2D8B</color>
+    <color name="rv_tile_32">#9B4DB8</color>
+    <color name="rv_tile_64">#A88A30</color>
+    <color name="rv_tile_128">#C9A84C</color>
+    <color name="rv_tile_256">#D4BC68</color>
+    <color name="rv_tile_512">#E8D080</color>
+    <color name="rv_tile_1024">#F5E8C8</color>
+    <color name="rv_tile_2048">#FFFFFF</color>
+    <color name="rv_overlay">#CC0F0818</color>
+    <color name="rv_scrim">#990F0818</color>
+</resources>
+```
+
+**字体**：`serif`
+
+**形状**：按钮 4dp，精致描边
+
+**动画**：Smooth & Fluid
+
+---
+
+## ⚙️ INDUSTRIAL STEEL — 工业钢铁
+> 钢板灰 + 警示橙。
+
+**灵魂色**：`#FF6B00` + `#8A9199`
+
+```xml
+<resources>
+    <color name="is_background">#121418</color>
+    <color name="is_surface">#1C1E24</color>
+    <color name="is_surface_variant">#282A32</color>
+    <color name="is_surface_tint">#30323A</color>
+    <color name="is_primary">#FF6B00</color>
+    <color name="is_primary_dark">#CC5500</color>
+    <color name="is_secondary">#8A9199</color>
+    <color name="is_tertiary">#4FC3F7</color>
+    <color name="is_on_background">#E8EAED</color>
+    <color name="is_on_surface">#E8EAED</color>
+    <color name="is_on_surface_dim">#6A7078</color>
+    <color name="is_on_primary">#121418</color>
+    <color name="is_correct">#66BB6A</color>
+    <color name="is_wrong">#EF5350</color>
+    <color name="is_score">#FF6B00</color>
+    <color name="is_timer_normal">#4FC3F7</color>
+    <color name="is_timer_warning">#EF5350</color>
+    <color name="is_highlight">#FF6B00</color>
+    <color name="is_badge">#FF6B00</color>
+    <color name="is_nav_bar">#1C1E24</color>
+    <color name="is_nav_selected">#FF6B00</color>
+    <color name="is_nav_unselected">#505860</color>
+    <color name="is_status_bar">#121418</color>
+    <color name="is_tile_empty">#282A32</color>
+    <color name="is_tile_2">#343640</color>
+    <color name="is_tile_4">#404248</color>
+    <color name="is_tile_8">#505860</color>
+    <color name="is_tile_16">#606870</color>
+    <color name="is_tile_32">#8A9199</color>
+    <color name="is_tile_64">#CC5500</color>
+    <color name="is_tile_128">#FF6B00</color>
+    <color name="is_tile_256">#FF8A33</color>
+    <color name="is_tile_512">#4FC3F7</color>
+    <color name="is_tile_1024">#66BB6A</color>
+    <color name="is_tile_2048">#FFFFFF</color>
+    <color name="is_overlay">#CC121418</color>
+    <color name="is_scrim">#99121418</color>
+</resources>
+```
+
+**字体**：`sans-serif-condensed`
+
+**形状**：按钮 2dp + 2dp 粗描边
+
+**动画**：Fast & Electric
+
+---
+
+## 🏮 NIGHT MARKET — 夜市灯笼
+> 灯笼暖橙 + 夜市红。
+
+**灵魂色**：`#FF6B35` + `#FFD166`
+
+```xml
+<resources>
+    <color name="nm_background">#0E0A08</color>
+    <color name="nm_surface">#1A1410</color>
+    <color name="nm_surface_variant">#261C16</color>
+    <color name="nm_surface_tint">#302418</color>
+    <color name="nm_primary">#FF6B35</color>
+    <color name="nm_primary_dark">#D4521A</color>
+    <color name="nm_secondary">#FFD166</color>
+    <color name="nm_tertiary">#E63946</color>
+    <color name="nm_on_background">#FFE8D6</color>
+    <color name="nm_on_surface">#FFE8D6</color>
+    <color name="nm_on_surface_dim">#8A6A50</color>
+    <color name="nm_on_primary">#0E0A08</color>
+    <color name="nm_correct">#2A9D8F</color>
+    <color name="nm_wrong">#E63946</color>
+    <color name="nm_score">#FFD166</color>
+    <color name="nm_timer_normal">#FFD166</color>
+    <color name="nm_timer_warning">#E63946</color>
+    <color name="nm_highlight">#FF6B35</color>
+    <color name="nm_badge">#E63946</color>
+    <color name="nm_nav_bar">#1A1410</color>
+    <color name="nm_nav_selected">#FF6B35</color>
+    <color name="nm_nav_unselected">#5A4030</color>
+    <color name="nm_status_bar">#0E0A08</color>
+    <color name="nm_tile_empty">#261C16</color>
+    <color name="nm_tile_2">#322418</color>
+    <color name="nm_tile_4">#3E3020</color>
+    <color name="nm_tile_8">#5A4028</color>
+    <color name="nm_tile_16">#D4521A</color>
+    <color name="nm_tile_32">#FF6B35</color>
+    <color name="nm_tile_64">#FF8A55</color>
+    <color name="nm_tile_128">#FFD166</color>
+    <color name="nm_tile_256">#E63946</color>
+    <color name="nm_tile_512">#2A9D8F</color>
+    <color name="nm_tile_1024">#FFE8D6</color>
+    <color name="nm_tile_2048">#FFFFFF</color>
+    <color name="nm_overlay">#CC0E0A08</color>
+    <color name="nm_scrim">#990E0A08</color>
+</resources>
+```
+
+**字体**：`sans-serif-medium`
+
+**形状**：按钮 10dp
+
+**动画**：Festive & Sparkling
+
+---
+
+## 🌕 MOONLIT GARDEN — 月下花园
+> 月下苔绿 + 淡紫月光。
+
+**灵魂色**：`#7EC8A3` + `#C4B5E0`
+
+```xml
+<resources>
+    <color name="mg_background">#0A1210</color>
+    <color name="mg_surface">#121C18</color>
+    <color name="mg_surface_variant">#1A2820</color>
+    <color name="mg_surface_tint">#203028</color>
+    <color name="mg_primary">#7EC8A3</color>
+    <color name="mg_primary_dark">#5AA882</color>
+    <color name="mg_secondary">#C4B5E0</color>
+    <color name="mg_tertiary">#E8E0F0</color>
+    <color name="mg_on_background">#E0F0E8</color>
+    <color name="mg_on_surface">#E0F0E8</color>
+    <color name="mg_on_surface_dim">#5A7868</color>
+    <color name="mg_on_primary">#0A1210</color>
+    <color name="mg_correct">#7EC8A3</color>
+    <color name="mg_wrong">#E07080</color>
+    <color name="mg_score">#C4B5E0</color>
+    <color name="mg_timer_normal">#7EC8A3</color>
+    <color name="mg_timer_warning">#E07080</color>
+    <color name="mg_highlight">#C4B5E0</color>
+    <color name="mg_badge">#7EC8A3</color>
+    <color name="mg_nav_bar">#121C18</color>
+    <color name="mg_nav_selected">#7EC8A3</color>
+    <color name="mg_nav_unselected">#3A5048</color>
+    <color name="mg_status_bar">#0A1210</color>
+    <color name="mg_tile_empty">#1A2820</color>
+    <color name="mg_tile_2">#223028</color>
+    <color name="mg_tile_4">#2A3A30</color>
+    <color name="mg_tile_8">#3A5040</color>
+    <color name="mg_tile_16">#5AA882</color>
+    <color name="mg_tile_32">#7EC8A3</color>
+    <color name="mg_tile_64">#A0D8B8</color>
+    <color name="mg_tile_128">#C4B5E0</color>
+    <color name="mg_tile_256">#D0C8E8</color>
+    <color name="mg_tile_512">#E8E0F0</color>
+    <color name="mg_tile_1024">#FFFFFF</color>
+    <color name="mg_tile_2048">#7EC8A3</color>
+    <color name="mg_overlay">#CC0A1210</color>
+    <color name="mg_scrim">#990A1210</color>
+</resources>
+```
+
+**字体**：`sans-serif-light`
+
+**形状**：按钮 16dp 圆润
+
+**动画**：Gentle & Breathing
+
+---
+
+## 🥭 TROPICAL FRUIT — 热带水果
+> 芒果橙 + 青柠 + 浅沙。
+
+**灵魂色**：`#FF6B35` + `#00B4A0`
+
+```xml
+<resources>
+    <color name="tf_background">#FFF8F0</color>
+    <color name="tf_surface">#FFFFFF</color>
+    <color name="tf_surface_variant">#FFE8D0</color>
+    <color name="tf_surface_tint">#FFF0E0</color>
+    <color name="tf_primary">#FF6B35</color>
+    <color name="tf_primary_dark">#E05520</color>
+    <color name="tf_secondary">#00B4A0</color>
+    <color name="tf_tertiary">#FFD166</color>
+    <color name="tf_on_background">#3A2010</color>
+    <color name="tf_on_surface">#3A2010</color>
+    <color name="tf_on_surface_dim">#A07850</color>
+    <color name="tf_on_primary">#FFFFFF</color>
+    <color name="tf_correct">#00B4A0</color>
+    <color name="tf_wrong">#E63946</color>
+    <color name="tf_score">#FFD166</color>
+    <color name="tf_timer_normal">#FF6B35</color>
+    <color name="tf_timer_warning">#E63946</color>
+    <color name="tf_highlight">#00B4A0</color>
+    <color name="tf_badge">#FF6B35</color>
+    <color name="tf_nav_bar">#FFFFFF</color>
+    <color name="tf_nav_selected">#FF6B35</color>
+    <color name="tf_nav_unselected">#C0A080</color>
+    <color name="tf_status_bar">#FFF8F0</color>
+    <color name="tf_tile_empty">#FFE8D0</color>
+    <color name="tf_tile_2">#FFD8B0</color>
+    <color name="tf_tile_4">#FFC890</color>
+    <color name="tf_tile_8">#FFB070</color>
+    <color name="tf_tile_16">#FF6B35</color>
+    <color name="tf_tile_32">#E05520</color>
+    <color name="tf_tile_64">#00B4A0</color>
+    <color name="tf_tile_128">#008F80</color>
+    <color name="tf_tile_256">#FFD166</color>
+    <color name="tf_tile_512">#E63946</color>
+    <color name="tf_tile_1024">#3A2010</color>
+    <color name="tf_tile_2048">#FFFFFF</color>
+    <color name="tf_overlay">#80FFE8D0</color>
+    <color name="tf_scrim">#50FF6B35</color>
+</resources>
+```
+
+**字体**：`sans-serif-medium`
+
+**形状**：按钮 20dp
+
+**动画**：Bouncy & Playful
+
+---
+
+## 🧋 BUBBLE TEA — 奶茶时光
+> 奶茶褐 + 珍珠粉 + 燕麦底。
+
+**灵魂色**：`#C47A4A` + `#8B5E4A`
+
+```xml
+<resources>
+    <color name="bt_background">#FBF3EA</color>
+    <color name="bt_surface">#FFFCF7</color>
+    <color name="bt_surface_variant">#F0E0D0</color>
+    <color name="bt_surface_tint">#F8ECE0</color>
+    <color name="bt_primary">#C47A4A</color>
+    <color name="bt_primary_dark">#A06038</color>
+    <color name="bt_secondary">#8B5E4A</color>
+    <color name="bt_tertiary">#E8B4B8</color>
+    <color name="bt_on_background">#3A2A20</color>
+    <color name="bt_on_surface">#3A2A20</color>
+    <color name="bt_on_surface_dim">#9A8070</color>
+    <color name="bt_on_primary">#FFFCF7</color>
+    <color name="bt_correct">#6B9E5A</color>
+    <color name="bt_wrong">#C4473A</color>
+    <color name="bt_score">#C47A4A</color>
+    <color name="bt_timer_normal">#C47A4A</color>
+    <color name="bt_timer_warning">#C4473A</color>
+    <color name="bt_highlight">#E8B4B8</color>
+    <color name="bt_badge">#C47A4A</color>
+    <color name="bt_nav_bar">#FFFCF7</color>
+    <color name="bt_nav_selected">#C47A4A</color>
+    <color name="bt_nav_unselected">#C0A090</color>
+    <color name="bt_status_bar">#FBF3EA</color>
+    <color name="bt_tile_empty">#F0E0D0</color>
+    <color name="bt_tile_2">#E8D0B8</color>
+    <color name="bt_tile_4">#D8B898</color>
+    <color name="bt_tile_8">#C8A078</color>
+    <color name="bt_tile_16">#C47A4A</color>
+    <color name="bt_tile_32">#A06038</color>
+    <color name="bt_tile_64">#8B5E4A</color>
+    <color name="bt_tile_128">#E8B4B8</color>
+    <color name="bt_tile_256">#D09098</color>
+    <color name="bt_tile_512">#6B9E5A</color>
+    <color name="bt_tile_1024">#3A2A20</color>
+    <color name="bt_tile_2048">#FFFFFF</color>
+    <color name="bt_overlay">#80F0E0D0</color>
+    <color name="bt_scrim">#50C47A4A</color>
+</resources>
+```
+
+**字体**：`sans-serif`
+
+**形状**：按钮 18dp
+
+**动画**：Gentle & Breathing
+
+---
+
+## 🏡 FARM COTTAGE — 田园小屋
+> 田园绿 + 干草金 + 亚麻白。
+
+**灵魂色**：`#5B8C3E` + `#D4A05A`
+
+```xml
+<resources>
+    <color name="fc_background">#F5F0E6</color>
+    <color name="fc_surface">#FFFEF8</color>
+    <color name="fc_surface_variant">#E8E0D0</color>
+    <color name="fc_surface_tint">#F0EBE0</color>
+    <color name="fc_primary">#5B8C3E</color>
+    <color name="fc_primary_dark">#456C2E</color>
+    <color name="fc_secondary">#D4A05A</color>
+    <color name="fc_tertiary">#8B5A2B</color>
+    <color name="fc_on_background">#2A2A1A</color>
+    <color name="fc_on_surface">#2A2A1A</color>
+    <color name="fc_on_surface_dim">#7A7A60</color>
+    <color name="fc_on_primary">#FFFEF8</color>
+    <color name="fc_correct">#5B8C3E</color>
+    <color name="fc_wrong">#C04030</color>
+    <color name="fc_score">#D4A05A</color>
+    <color name="fc_timer_normal">#5B8C3E</color>
+    <color name="fc_timer_warning">#C04030</color>
+    <color name="fc_highlight">#D4A05A</color>
+    <color name="fc_badge">#5B8C3E</color>
+    <color name="fc_nav_bar">#FFFEF8</color>
+    <color name="fc_nav_selected">#5B8C3E</color>
+    <color name="fc_nav_unselected">#A0A088</color>
+    <color name="fc_status_bar">#F5F0E6</color>
+    <color name="fc_tile_empty">#E8E0D0</color>
+    <color name="fc_tile_2">#D8D0B8</color>
+    <color name="fc_tile_4">#C0C0A0</color>
+    <color name="fc_tile_8">#A0B080</color>
+    <color name="fc_tile_16">#80A060</color>
+    <color name="fc_tile_32">#5B8C3E</color>
+    <color name="fc_tile_64">#456C2E</color>
+    <color name="fc_tile_128">#D4A05A</color>
+    <color name="fc_tile_256">#8B5A2B</color>
+    <color name="fc_tile_512">#C04030</color>
+    <color name="fc_tile_1024">#2A2A1A</color>
+    <color name="fc_tile_2048">#FFFFFF</color>
+    <color name="fc_overlay">#80E8E0D0</color>
+    <color name="fc_scrim">#505B8C3E</color>
+</resources>
+```
+
+**字体**：`sans-serif`
+
+**形状**：按钮 12dp
+
+**动画**：Gentle & Breathing
+
+---
+
+## ☁️ CLOUD SKY — 云朵天空
+> 积云白 + 天蓝 + 珊瑚点缀。
+
+**灵魂色**：`#4A90D9` + `#7EC8E8`
+
+```xml
+<resources>
+    <color name="cs_background">#E8F4FC</color>
+    <color name="cs_surface">#FFFFFF</color>
+    <color name="cs_surface_variant">#D0E8F8</color>
+    <color name="cs_surface_tint">#E0F0FA</color>
+    <color name="cs_primary">#4A90D9</color>
+    <color name="cs_primary_dark">#3570B0</color>
+    <color name="cs_secondary">#7EC8E8</color>
+    <color name="cs_tertiary">#FFB4A0</color>
+    <color name="cs_on_background">#1A3050</color>
+    <color name="cs_on_surface">#1A3050</color>
+    <color name="cs_on_surface_dim">#7090B0</color>
+    <color name="cs_on_primary">#FFFFFF</color>
+    <color name="cs_correct">#3DB87A</color>
+    <color name="cs_wrong">#E85A5A</color>
+    <color name="cs_score">#4A90D9</color>
+    <color name="cs_timer_normal">#4A90D9</color>
+    <color name="cs_timer_warning">#E85A5A</color>
+    <color name="cs_highlight">#7EC8E8</color>
+    <color name="cs_badge">#4A90D9</color>
+    <color name="cs_nav_bar">#FFFFFF</color>
+    <color name="cs_nav_selected">#4A90D9</color>
+    <color name="cs_nav_unselected">#A0C0D8</color>
+    <color name="cs_status_bar">#E8F4FC</color>
+    <color name="cs_tile_empty">#D0E8F8</color>
+    <color name="cs_tile_2">#B8DCF0</color>
+    <color name="cs_tile_4">#A0D0E8</color>
+    <color name="cs_tile_8">#7EC8E8</color>
+    <color name="cs_tile_16">#4A90D9</color>
+    <color name="cs_tile_32">#3570B0</color>
+    <color name="cs_tile_64">#FFB4A0</color>
+    <color name="cs_tile_128">#FF9080</color>
+    <color name="cs_tile_256">#3DB87A</color>
+    <color name="cs_tile_512">#E85A5A</color>
+    <color name="cs_tile_1024">#1A3050</color>
+    <color name="cs_tile_2048">#FFFFFF</color>
+    <color name="cs_overlay">#80D0E8F8</color>
+    <color name="cs_scrim">#504A90D9</color>
+</resources>
+```
+
+**字体**：`sans-serif-light`
+
+**形状**：按钮 24dp 云朵感
+
+**动画**：Smooth & Floating
+
+---
+
+## 💜 LAVENDER FIELDS — 薰衣草田
+> 薰衣草紫 + 干草黄。
+
+**灵魂色**：`#7B5EA7` + `#B8A0D0`
+
+```xml
+<resources>
+    <color name="lv_background">#F5F0FA</color>
+    <color name="lv_surface">#FFFEFF</color>
+    <color name="lv_surface_variant">#E8DCF5</color>
+    <color name="lv_surface_tint">#F0E8F8</color>
+    <color name="lv_primary">#7B5EA7</color>
+    <color name="lv_primary_dark">#5E4580</color>
+    <color name="lv_secondary">#B8A0D0</color>
+    <color name="lv_tertiary">#E8C8A0</color>
+    <color name="lv_on_background">#2A1A3A</color>
+    <color name="lv_on_surface">#2A1A3A</color>
+    <color name="lv_on_surface_dim">#8070A0</color>
+    <color name="lv_on_primary">#FFFFFF</color>
+    <color name="lv_correct">#6B9E5A</color>
+    <color name="lv_wrong">#C05060</color>
+    <color name="lv_score">#7B5EA7</color>
+    <color name="lv_timer_normal">#7B5EA7</color>
+    <color name="lv_timer_warning">#C05060</color>
+    <color name="lv_highlight">#B8A0D0</color>
+    <color name="lv_badge">#7B5EA7</color>
+    <color name="lv_nav_bar">#FFFEFF</color>
+    <color name="lv_nav_selected">#7B5EA7</color>
+    <color name="lv_nav_unselected">#B0A0C8</color>
+    <color name="lv_status_bar">#F5F0FA</color>
+    <color name="lv_tile_empty">#E8DCF5</color>
+    <color name="lv_tile_2">#D8C8E8</color>
+    <color name="lv_tile_4">#C8B0E0</color>
+    <color name="lv_tile_8">#B8A0D0</color>
+    <color name="lv_tile_16">#9A80C0</color>
+    <color name="lv_tile_32">#7B5EA7</color>
+    <color name="lv_tile_64">#5E4580</color>
+    <color name="lv_tile_128">#E8C8A0</color>
+    <color name="lv_tile_256">#6B9E5A</color>
+    <color name="lv_tile_512">#C05060</color>
+    <color name="lv_tile_1024">#2A1A3A</color>
+    <color name="lv_tile_2048">#FFFFFF</color>
+    <color name="lv_overlay">#80E8DCF5</color>
+    <color name="lv_scrim">#507B5EA7</color>
+</resources>
+```
+
+**字体**：`sans-serif-light`
+
+**形状**：按钮 16dp
+
+**动画**：Gentle & Breathing
+
+---
+
+## 🍊 CITRUS FRESH — 柑橘清新
+> 橙橘 + 青绿点缀。
+
+**灵魂色**：`#F4A261` + `#2A9D8F`
+
+```xml
+<resources>
+    <color name="ct_background">#FFF9E8</color>
+    <color name="ct_surface">#FFFEF5</color>
+    <color name="ct_surface_variant">#FFF0C8</color>
+    <color name="ct_surface_tint">#FFF5D8</color>
+    <color name="ct_primary">#F4A261</color>
+    <color name="ct_primary_dark">#D4853A</color>
+    <color name="ct_secondary">#2A9D8F</color>
+    <color name="ct_tertiary">#E76F51</color>
+    <color name="ct_on_background">#3A2A10</color>
+    <color name="ct_on_surface">#3A2A10</color>
+    <color name="ct_on_surface_dim">#9A8050</color>
+    <color name="ct_on_primary">#FFFFFF</color>
+    <color name="ct_correct">#2A9D8F</color>
+    <color name="ct_wrong">#E76F51</color>
+    <color name="ct_score">#F4A261</color>
+    <color name="ct_timer_normal">#F4A261</color>
+    <color name="ct_timer_warning">#E76F51</color>
+    <color name="ct_highlight">#2A9D8F</color>
+    <color name="ct_badge">#F4A261</color>
+    <color name="ct_nav_bar">#FFFEF5</color>
+    <color name="ct_nav_selected">#F4A261</color>
+    <color name="ct_nav_unselected">#C0A870</color>
+    <color name="ct_status_bar">#FFF9E8</color>
+    <color name="ct_tile_empty">#FFF0C8</color>
+    <color name="ct_tile_2">#FFE8A8</color>
+    <color name="ct_tile_4">#FFD888</color>
+    <color name="ct_tile_8">#FFC868</color>
+    <color name="ct_tile_16">#F4A261</color>
+    <color name="ct_tile_32">#D4853A</color>
+    <color name="ct_tile_64">#2A9D8F</color>
+    <color name="ct_tile_128">#1F7A70</color>
+    <color name="ct_tile_256">#E76F51</color>
+    <color name="ct_tile_512">#E9C46A</color>
+    <color name="ct_tile_1024">#3A2A10</color>
+    <color name="ct_tile_2048">#FFFFFF</color>
+    <color name="ct_overlay">#80FFF0C8</color>
+    <color name="ct_scrim">#50F4A261</color>
+</resources>
+```
+
+**字体**：`sans-serif-medium`
+
+**形状**：按钮 14dp
+
+**动画**：Bouncy & Playful
+
+---
+
+## 💎 CRYSTAL GEM — 水晶宝石
+> 紫晶 + 冰青切面。
+
+**灵魂色**：`#B388FF` + `#00E5FF`
+
+```xml
+<resources>
+    <color name="cg_background">#0C0A18</color>
+    <color name="cg_surface">#14122A</color>
+    <color name="cg_surface_variant">#1E1A3A</color>
+    <color name="cg_surface_tint">#282250</color>
+    <color name="cg_primary">#B388FF</color>
+    <color name="cg_primary_dark">#8A5CD6</color>
+    <color name="cg_secondary">#00E5FF</color>
+    <color name="cg_tertiary">#FF80AB</color>
+    <color name="cg_on_background">#E8E0FF</color>
+    <color name="cg_on_surface">#E8E0FF</color>
+    <color name="cg_on_surface_dim">#6860A0</color>
+    <color name="cg_on_primary">#0C0A18</color>
+    <color name="cg_correct">#69F0AE</color>
+    <color name="cg_wrong">#FF5252</color>
+    <color name="cg_score">#00E5FF</color>
+    <color name="cg_timer_normal">#B388FF</color>
+    <color name="cg_timer_warning">#FF5252</color>
+    <color name="cg_highlight">#00E5FF</color>
+    <color name="cg_badge">#B388FF</color>
+    <color name="cg_nav_bar">#14122A</color>
+    <color name="cg_nav_selected">#B388FF</color>
+    <color name="cg_nav_unselected">#4A4570</color>
+    <color name="cg_status_bar">#0C0A18</color>
+    <color name="cg_tile_empty">#1E1A3A</color>
+    <color name="cg_tile_2">#2A2450</color>
+    <color name="cg_tile_4">#3A3070</color>
+    <color name="cg_tile_8">#5A40A0</color>
+    <color name="cg_tile_16">#8A5CD6</color>
+    <color name="cg_tile_32">#B388FF</color>
+    <color name="cg_tile_64">#00E5FF</color>
+    <color name="cg_tile_128">#00B8CC</color>
+    <color name="cg_tile_256">#FF80AB</color>
+    <color name="cg_tile_512">#69F0AE</color>
+    <color name="cg_tile_1024">#FFFFFF</color>
+    <color name="cg_tile_2048">#B388FF</color>
+    <color name="cg_overlay">#CC0C0A18</color>
+    <color name="cg_scrim">#990C0A18</color>
+</resources>
+```
+
+**字体**：`sans-serif-light`
+
+**形状**：按钮 12dp + 1dp 晶边
+
+**动画**：Smooth & Floating
+
+---
+
+## 🧱 CLAY STOPMOTION — 粘土定格
+> 陶土橙 + 粘土绿 + 米色。
+
+**灵魂色**：`#E07A5F` + `#81B29A`
+
+```xml
+<resources>
+    <color name="cl_background">#F5EDE3</color>
+    <color name="cl_surface">#FFF8F0</color>
+    <color name="cl_surface_variant">#E8D8C8</color>
+    <color name="cl_surface_tint">#F0E8DC</color>
+    <color name="cl_primary">#E07A5F</color>
+    <color name="cl_primary_dark">#C45A40</color>
+    <color name="cl_secondary">#81B29A</color>
+    <color name="cl_tertiary">#F2CC8F</color>
+    <color name="cl_on_background">#3D2C2E</color>
+    <color name="cl_on_surface">#3D2C2E</color>
+    <color name="cl_on_surface_dim">#9A8070</color>
+    <color name="cl_on_primary">#FFFFFF</color>
+    <color name="cl_correct">#81B29A</color>
+    <color name="cl_wrong">#E07A5F</color>
+    <color name="cl_score">#F2CC8F</color>
+    <color name="cl_timer_normal">#E07A5F</color>
+    <color name="cl_timer_warning">#C45A40</color>
+    <color name="cl_highlight">#81B29A</color>
+    <color name="cl_badge">#E07A5F</color>
+    <color name="cl_nav_bar">#FFF8F0</color>
+    <color name="cl_nav_selected">#E07A5F</color>
+    <color name="cl_nav_unselected">#C0A890</color>
+    <color name="cl_status_bar">#F5EDE3</color>
+    <color name="cl_tile_empty">#E8D8C8</color>
+    <color name="cl_tile_2">#D8C0A8</color>
+    <color name="cl_tile_4">#C8A888</color>
+    <color name="cl_tile_8">#E07A5F</color>
+    <color name="cl_tile_16">#C45A40</color>
+    <color name="cl_tile_32">#81B29A</color>
+    <color name="cl_tile_64">#5A9078</color>
+    <color name="cl_tile_128">#F2CC8F</color>
+    <color name="cl_tile_256">#D4A85A</color>
+    <color name="cl_tile_512">#3D2C2E</color>
+    <color name="cl_tile_1024">#FFFFFF</color>
+    <color name="cl_tile_2048">#E07A5F</color>
+    <color name="cl_overlay">#80E8D8C8</color>
+    <color name="cl_scrim">#50E07A5F</color>
+</resources>
+```
+
+**字体**：`sans-serif-medium`
+
+**形状**：按钮 16dp 厚实感
+
+**动画**：Bouncy & Playful
+
+---
+
+## 🎲 BOARD GAME TABLE — 桌游木桌
+> 胡桃木桌 + 深绿毡 + 黄铜。
+
+**灵魂色**：`#8B4513` + `#2E5A3C`
+
+```xml
+<resources>
+    <color name="bg_background">#EDE4D4</color>
+    <color name="bg_surface">#F8F2E8</color>
+    <color name="bg_surface_variant">#DDD0B8</color>
+    <color name="bg_surface_tint">#E8DCC8</color>
+    <color name="bg_primary">#8B4513</color>
+    <color name="bg_primary_dark">#6B3410</color>
+    <color name="bg_secondary">#2E5A3C</color>
+    <color name="bg_tertiary">#C4A35A</color>
+    <color name="bg_on_background">#2C1A0C</color>
+    <color name="bg_on_surface">#2C1A0C</color>
+    <color name="bg_on_surface_dim">#8A7050</color>
+    <color name="bg_on_primary">#F8F2E8</color>
+    <color name="bg_correct">#2E5A3C</color>
+    <color name="bg_wrong">#A02828</color>
+    <color name="bg_score">#C4A35A</color>
+    <color name="bg_timer_normal">#8B4513</color>
+    <color name="bg_timer_warning">#A02828</color>
+    <color name="bg_highlight">#C4A35A</color>
+    <color name="bg_badge">#8B4513</color>
+    <color name="bg_nav_bar">#F8F2E8</color>
+    <color name="bg_nav_selected">#8B4513</color>
+    <color name="bg_nav_unselected">#B0A080</color>
+    <color name="bg_status_bar">#EDE4D4</color>
+    <color name="bg_tile_empty">#DDD0B8</color>
+    <color name="bg_tile_2">#CDB890</color>
+    <color name="bg_tile_4">#BDA070</color>
+    <color name="bg_tile_8">#A08050</color>
+    <color name="bg_tile_16">#8B4513</color>
+    <color name="bg_tile_32">#6B3410</color>
+    <color name="bg_tile_64">#2E5A3C</color>
+    <color name="bg_tile_128">#1E4030</color>
+    <color name="bg_tile_256">#C4A35A</color>
+    <color name="bg_tile_512">#A02828</color>
+    <color name="bg_tile_1024">#2C1A0C</color>
+    <color name="bg_tile_2048">#FFFFFF</color>
+    <color name="bg_overlay">#80DDD0B8</color>
+    <color name="bg_scrim">#508B4513</color>
+</resources>
+```
+
+**字体**：`serif`
+
+**形状**：按钮 8dp + 1dp 木边
+
+**动画**：Smooth & Fluid
+
+---
+
+## 💥 COMIC HALFTONE — 漫画网点
+> 网点底 + 原色红/蓝/黄。
+
+**灵魂色**：`#FF1744` + `#2979FF`
+
+```xml
+<resources>
+    <color name="ch_background">#FFF8E7</color>
+    <color name="ch_surface">#FFFFFF</color>
+    <color name="ch_surface_variant">#FFE8C0</color>
+    <color name="ch_surface_tint">#FFF0D0</color>
+    <color name="ch_primary">#FF1744</color>
+    <color name="ch_primary_dark">#D50000</color>
+    <color name="ch_secondary">#2979FF</color>
+    <color name="ch_tertiary">#FFD600</color>
+    <color name="ch_on_background">#1A1A1A</color>
+    <color name="ch_on_surface">#1A1A1A</color>
+    <color name="ch_on_surface_dim">#707070</color>
+    <color name="ch_on_primary">#FFFFFF</color>
+    <color name="ch_correct">#00C853</color>
+    <color name="ch_wrong">#FF1744</color>
+    <color name="ch_score">#FFD600</color>
+    <color name="ch_timer_normal">#2979FF</color>
+    <color name="ch_timer_warning">#FF1744</color>
+    <color name="ch_highlight">#FFD600</color>
+    <color name="ch_badge">#FF1744</color>
+    <color name="ch_nav_bar">#FFFFFF</color>
+    <color name="ch_nav_selected">#FF1744</color>
+    <color name="ch_nav_unselected">#B0B0B0</color>
+    <color name="ch_status_bar">#FFF8E7</color>
+    <color name="ch_tile_empty">#FFE8C0</color>
+    <color name="ch_tile_2">#FFD890</color>
+    <color name="ch_tile_4">#FFC060</color>
+    <color name="ch_tile_8">#2979FF</color>
+    <color name="ch_tile_16">#1565C0</color>
+    <color name="ch_tile_32">#FF1744</color>
+    <color name="ch_tile_64">#D50000</color>
+    <color name="ch_tile_128">#FFD600</color>
+    <color name="ch_tile_256">#FFAB00</color>
+    <color name="ch_tile_512">#00C853</color>
+    <color name="ch_tile_1024">#1A1A1A</color>
+    <color name="ch_tile_2048">#FFFFFF</color>
+    <color name="ch_overlay">#80FFE8C0</color>
+    <color name="ch_scrim">#50FF1744</color>
+</resources>
+```
+
+**字体**：`sans-serif-black`
+
+**形状**：按钮 4dp + 3dp 黑描边
+
+**动画**：Fast & Electric
+
+---
+
+## 🖌 INK WASH — 水墨丹青
+> 宣纸白 + 浓墨 + 朱砂点。
+
+**灵魂色**：`#2C2C2C` + `#8B3A3A`
+
+```xml
+<resources>
+    <color name="iw_background">#F2EFE6</color>
+    <color name="iw_surface">#FAF8F2</color>
+    <color name="iw_surface_variant">#E0DCD0</color>
+    <color name="iw_surface_tint">#EBE8DC</color>
+    <color name="iw_primary">#2C2C2C</color>
+    <color name="iw_primary_dark">#1A1A1A</color>
+    <color name="iw_secondary">#8B3A3A</color>
+    <color name="iw_tertiary">#4A6A5A</color>
+    <color name="iw_on_background">#1A1A1A</color>
+    <color name="iw_on_surface">#1A1A1A</color>
+    <color name="iw_on_surface_dim">#7A7870</color>
+    <color name="iw_on_primary">#FAF8F2</color>
+    <color name="iw_correct">#4A6A5A</color>
+    <color name="iw_wrong">#8B3A3A</color>
+    <color name="iw_score">#2C2C2C</color>
+    <color name="iw_timer_normal">#2C2C2C</color>
+    <color name="iw_timer_warning">#8B3A3A</color>
+    <color name="iw_highlight">#4A6A5A</color>
+    <color name="iw_badge">#8B3A3A</color>
+    <color name="iw_nav_bar">#FAF8F2</color>
+    <color name="iw_nav_selected">#2C2C2C</color>
+    <color name="iw_nav_unselected">#A8A8A0</color>
+    <color name="iw_status_bar">#F2EFE6</color>
+    <color name="iw_tile_empty">#E0DCD0</color>
+    <color name="iw_tile_2">#D0CCC0</color>
+    <color name="iw_tile_4">#B8B4A8</color>
+    <color name="iw_tile_8">#909088</color>
+    <color name="iw_tile_16">#686860</color>
+    <color name="iw_tile_32">#4A4A48</color>
+    <color name="iw_tile_64">#2C2C2C</color>
+    <color name="iw_tile_128">#8B3A3A</color>
+    <color name="iw_tile_256">#4A6A5A</color>
+    <color name="iw_tile_512">#1A1A1A</color>
+    <color name="iw_tile_1024">#FAF8F2</color>
+    <color name="iw_tile_2048">#2C2C2C</color>
+    <color name="iw_overlay">#80E0DCD0</color>
+    <color name="iw_scrim">#502C2C2C</color>
+</resources>
+```
+
+**字体**：`serif`
+
+**形状**：按钮 2dp 极小圆角
+
+**动画**：Gentle & Breathing
+
+---
+
+## 🖼 RETRO POSTER — 复古海报
+> 复古纸黄 + 海报橙 + 海军蓝。
+
+**灵魂色**：`#E85D04` + `#023E8A`
+
+```xml
+<resources>
+    <color name="rp_background">#F5E6C8</color>
+    <color name="rp_surface">#FFF5E0</color>
+    <color name="rp_surface_variant">#E8D0A0</color>
+    <color name="rp_surface_tint">#F0E0B8</color>
+    <color name="rp_primary">#E85D04</color>
+    <color name="rp_primary_dark">#C44A00</color>
+    <color name="rp_secondary">#023E8A</color>
+    <color name="rp_tertiary">#FFB703</color>
+    <color name="rp_on_background">#2A1A08</color>
+    <color name="rp_on_surface">#2A1A08</color>
+    <color name="rp_on_surface_dim">#8A7050</color>
+    <color name="rp_on_primary">#FFF5E0</color>
+    <color name="rp_correct">#2A9D8F</color>
+    <color name="rp_wrong">#D00000</color>
+    <color name="rp_score">#FFB703</color>
+    <color name="rp_timer_normal">#E85D04</color>
+    <color name="rp_timer_warning">#D00000</color>
+    <color name="rp_highlight">#023E8A</color>
+    <color name="rp_badge">#E85D04</color>
+    <color name="rp_nav_bar">#FFF5E0</color>
+    <color name="rp_nav_selected">#E85D04</color>
+    <color name="rp_nav_unselected">#B0A080</color>
+    <color name="rp_status_bar">#F5E6C8</color>
+    <color name="rp_tile_empty">#E8D0A0</color>
+    <color name="rp_tile_2">#D8B880</color>
+    <color name="rp_tile_4">#C8A060</color>
+    <color name="rp_tile_8">#E85D04</color>
+    <color name="rp_tile_16">#C44A00</color>
+    <color name="rp_tile_32">#023E8A</color>
+    <color name="rp_tile_64">#0353A4</color>
+    <color name="rp_tile_128">#FFB703</color>
+    <color name="rp_tile_256">#D00000</color>
+    <color name="rp_tile_512">#2A9D8F</color>
+    <color name="rp_tile_1024">#2A1A08</color>
+    <color name="rp_tile_2048">#FFFFFF</color>
+    <color name="rp_overlay">#80E8D0A0</color>
+    <color name="rp_scrim">#50E85D04</color>
+</resources>
+```
+
+**字体**：`sans-serif-condensed`
+
+**形状**：0dp 方角 + 2dp 描边
+
+**动画**：Smooth & Fluid
+
+---
+
+## 🌴 JUNGLE ADVENTURE — 丛林探险
+> 密林绿 + 探险金。
+
+**灵魂色**：`#F4A261` + `#2D6A4F`
+
+```xml
+<resources>
+    <color name="ja_background">#0A140C</color>
+    <color name="ja_surface">#121C14</color>
+    <color name="ja_surface_variant">#1A2A1C</color>
+    <color name="ja_surface_tint">#223424</color>
+    <color name="ja_primary">#F4A261</color>
+    <color name="ja_primary_dark">#D4853A</color>
+    <color name="ja_secondary">#2D6A4F</color>
+    <color name="ja_tertiary">#95D5B2</color>
+    <color name="ja_on_background">#E8F0E0</color>
+    <color name="ja_on_surface">#E8F0E0</color>
+    <color name="ja_on_surface_dim">#5A7860</color>
+    <color name="ja_on_primary">#0A140C</color>
+    <color name="ja_correct">#95D5B2</color>
+    <color name="ja_wrong">#E63946</color>
+    <color name="ja_score">#F4A261</color>
+    <color name="ja_timer_normal">#95D5B2</color>
+    <color name="ja_timer_warning">#E63946</color>
+    <color name="ja_highlight">#F4A261</color>
+    <color name="ja_badge">#F4A261</color>
+    <color name="ja_nav_bar">#121C14</color>
+    <color name="ja_nav_selected">#F4A261</color>
+    <color name="ja_nav_unselected">#3A5040</color>
+    <color name="ja_status_bar">#0A140C</color>
+    <color name="ja_tile_empty">#1A2A1C</color>
+    <color name="ja_tile_2">#223424</color>
+    <color name="ja_tile_4">#2A4030</color>
+    <color name="ja_tile_8">#2D6A4F</color>
+    <color name="ja_tile_16">#40916C</color>
+    <color name="ja_tile_32">#52B788</color>
+    <color name="ja_tile_64">#95D5B2</color>
+    <color name="ja_tile_128">#D4853A</color>
+    <color name="ja_tile_256">#F4A261</color>
+    <color name="ja_tile_512">#E63946</color>
+    <color name="ja_tile_1024">#E8F0E0</color>
+    <color name="ja_tile_2048">#FFFFFF</color>
+    <color name="ja_overlay">#CC0A140C</color>
+    <color name="ja_scrim">#990A140C</color>
+</resources>
+```
+
+**字体**：`sans-serif`
+
+**形状**：按钮 10dp
+
+**动画**：Dramatic & Intense
+
+---
+
+## ⛄ SNOW FESTIVAL — 冰雪节庆
+> 霜白 + 节日蓝 + 圣诞红点缀。
+
+**灵魂色**：`#1E88E5` + `#E53935`
+
+```xml
+<resources>
+    <color name="sf_background">#F0F7FC</color>
+    <color name="sf_surface">#FFFFFF</color>
+    <color name="sf_surface_variant">#D8EAF5</color>
+    <color name="sf_surface_tint">#E8F2F8</color>
+    <color name="sf_primary">#1E88E5</color>
+    <color name="sf_primary_dark">#1565C0</color>
+    <color name="sf_secondary">#E53935</color>
+    <color name="sf_tertiary">#FFD54F</color>
+    <color name="sf_on_background">#0D2137</color>
+    <color name="sf_on_surface">#0D2137</color>
+    <color name="sf_on_surface_dim">#7090B0</color>
+    <color name="sf_on_primary">#FFFFFF</color>
+    <color name="sf_correct">#43A047</color>
+    <color name="sf_wrong">#E53935</color>
+    <color name="sf_score">#FFD54F</color>
+    <color name="sf_timer_normal">#1E88E5</color>
+    <color name="sf_timer_warning">#E53935</color>
+    <color name="sf_highlight">#FFD54F</color>
+    <color name="sf_badge">#E53935</color>
+    <color name="sf_nav_bar">#FFFFFF</color>
+    <color name="sf_nav_selected">#1E88E5</color>
+    <color name="sf_nav_unselected">#90B0C8</color>
+    <color name="sf_status_bar">#F0F7FC</color>
+    <color name="sf_tile_empty">#D8EAF5</color>
+    <color name="sf_tile_2">#C0DCF0</color>
+    <color name="sf_tile_4">#A8D0E8</color>
+    <color name="sf_tile_8">#78B8E0</color>
+    <color name="sf_tile_16">#1E88E5</color>
+    <color name="sf_tile_32">#1565C0</color>
+    <color name="sf_tile_64">#E53935</color>
+    <color name="sf_tile_128">#C62828</color>
+    <color name="sf_tile_256">#FFD54F</color>
+    <color name="sf_tile_512">#43A047</color>
+    <color name="sf_tile_1024">#0D2137</color>
+    <color name="sf_tile_2048">#FFFFFF</color>
+    <color name="sf_overlay">#80D8EAF5</color>
+    <color name="sf_scrim">#501E88E5</color>
+</resources>
+```
+
+**字体**：`sans-serif-medium`
+
+**形状**：按钮 16dp
+
+**动画**：Festive & Sparkling
+
+---

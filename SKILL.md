@@ -1,19 +1,17 @@
 ---
 name: android-ui-design-skill
 description: >-
-  Android casual game UI design system for Kotlin games. Delivers 30 complete
+  Android casual game UI design system for Kotlin games. Delivers 50 complete
   visual design themes — each a full design language: color tokens, typography,
   shape system, elevation, background treatment, Material3 styles, animation
-  personality. Themes include Neon Dark, Space Galaxy, Lava Fire, Midnight
-  Luxury, Deep Sea, Aurora Night, Halloween, Steampunk, Graffiti Street, Noir
-  Cinema, Cyber Mint, Ember Coal, Ocean Breeze, Forest Zen, Candy Pop, Sakura
-  Spring, Desert Gold, Ice Crystal, Pastel Dream, Christmas, Matcha Cafe, Coral
-  Reef, Honey Amber, Sunset Plaza, Pixel Classic, Cartoon Fun, Minimalist White,
-  Paper Craft, Neon Synthwave, Arcade Cabinet. When the user has not locked a
-  theme, recommend exactly 3 options and wait for an explicit pick before writing
-  the design-spec. Outputs a design-spec markdown file constraining fonts,
-  colors, themes, shapes, elevation, spacing, and animation personality — the
-  design contract for the app team, NOT generated UI code.
+  personality. Themes span cyberpunk, pirate, royal, industrial, night market,
+  tropical, bubble tea, farm, cloud, lavender, citrus, crystal, clay, board game,
+  comic, ink wash, retro poster, jungle, snow festival, plus classic neon/pixel/
+  candy/space/lava sets. When the user has not locked a theme, recommend exactly
+  3 options and wait for an explicit pick before writing the design-spec.
+  Outputs a design-spec markdown file constraining fonts, colors, themes,
+  shapes, elevation, spacing, and animation personality — the design contract
+  for the app team, NOT generated UI code.
   Trigger: android game theme, ui design theme, game color scheme, android
   visual style, neon theme, pixel theme, candy theme, space theme, dark theme
   game, material3 game, game design system, casual game ui, android ui design,
@@ -21,9 +19,9 @@ description: >-
 license: MIT
 metadata:
   author: Claude
-  version: 6.0.0
+  version: 7.0.0
   created: 2026-06-29
-  last_reviewed: 2026-07-12
+  last_reviewed: 2026-07-13
   review_interval_days: 90
 ---
 # /android-ui-design-skill — Android Game UI Design System
@@ -108,22 +106,24 @@ metadata:
 
 | 游戏类型 | 优先考虑 | 通常避开 |
 |---------|---------|---------|
-| Quiz / Trivia | `midnight_luxury` · `noir_cinema` · `minimalist_white` · `matcha_cafe` · `ocean_breeze` | `cartoon_fun`（除非儿童 trivia） |
-| 2048 / Number merge | `pixel_classic` · `neon_dark` · `honey_amber` · `paper_craft` · `arcade_cabinet` | 纹理过重导致数字难读的主题 |
-| Word / Crossword | `paper_craft` · `matcha_cafe` · `noir_cinema` · `forest_zen` · `minimalist_white` | 高饱和霓虹（长时间阅读刺眼） |
-| Match-3 / Bubble | `candy_pop` · `coral_reef` · `pastel_dream` · `cartoon_fun` · `sakura_spring` | `steampunk` / `noir_cinema` |
-| Speed / Reflex | `lava_fire` · `neon_dark` · `graffiti_street` · `neon_synthwave` · `ember_coal` | `gentle` 系慢动画主题 |
-| Puzzle / Logic | `deep_sea` · `space_galaxy` · `ice_crystal` · `cyber_mint` · `aurora_night` | 节日限定除非活动版 |
-| Kids / Family | `cartoon_fun` · `candy_pop` · `ocean_breeze` · `honey_amber` | `halloween` / 高对比闪烁主题 |
-| Seasonal event | `christmas` · `halloween` · `sakura_spring` · `sunset_plaza` | 与节日无关的常驻主题别硬塞 |
+| Quiz / Trivia | `midnight_luxury` · `noir_cinema` · `minimalist_white` · `matcha_cafe` · `board_game_table` · `royal_velvet` · `ink_wash` | `cartoon_fun`（除非儿童 trivia） |
+| 2048 / Number merge | `pixel_classic` · `neon_dark` · `honey_amber` · `paper_craft` · `arcade_cabinet` · `crystal_gem` · `industrial_steel` | 纹理过重导致数字难读的主题 |
+| Word / Crossword | `paper_craft` · `matcha_cafe` · `noir_cinema` · `forest_zen` · `ink_wash` · `bubble_tea` · `board_game_table` | 高饱和霓虹（长时间阅读刺眼） |
+| Match-3 / Bubble | `candy_pop` · `coral_reef` · `pastel_dream` · `tropical_fruit` · `clay_stopmotion` · `citrus_fresh` · `crystal_gem` | `steampunk` / `noir_cinema` |
+| Speed / Reflex | `lava_fire` · `neon_dark` · `graffiti_street` · `neon_synthwave` · `cyberpunk_city` · `industrial_steel` · `comic_halftone` | `gentle` 系慢动画主题 |
+| Puzzle / Logic | `deep_sea` · `space_galaxy` · `ice_crystal` · `cyber_mint` · `moonlit_garden` · `crystal_gem` · `ink_wash` | 节日限定除非活动版 |
+| Kids / Family | `cartoon_fun` · `candy_pop` · `cloud_sky` · `farm_cottage` · `clay_stopmotion` · `tropical_fruit` · `honey_amber` | `halloween` / 高对比闪烁主题 |
+| Adventure / RPG lite | `pirate_cove` · `jungle_adventure` · `royal_velvet` · `steampunk` · `desert_gold` · `board_game_table` | 纯儿童糖果风除非目标受众 |
+| Casual / Idle | `bubble_tea` · `lavender_fields` · `farm_cottage` · `matcha_cafe` · `cloud_sky` · `sunset_plaza` | `lava_fire` 等高刺激主题 |
+| Seasonal event | `christmas` · `halloween` · `sakura_spring` · `snow_festival` · `sunset_plaza` · `night_market` | 与节日无关的常驻主题别硬塞 |
 
 ---
 
-## 设计主题目录（30个）
+## 设计主题目录（50个）
 
-命名与关键词写材质和场景，不写空泛情绪词。分区：暗色 12 · 亮色 12 · 特色 6。
+命名与关键词写材质和场景，不写空泛情绪词。分区：暗色 19 · 亮色 19 · 特色 12。
 
-### 暗色 · Dark（12）
+### 暗色 · Dark（19）
 
 | ID | 名称 | 材质 / 场景 | 动画基调 |
 |----|------|------------|----------|
@@ -139,8 +139,15 @@ metadata:
 | `noir_cinema` | 黑色电影 | 高反差黑白 + 一点血红 | Smooth & Fluid |
 | `cyber_mint` | 薄荷赛博 | 墨绿终端底 + 薄荷绿光标 | Fast & Electric |
 | `ember_coal` | 余烬炭火 | 炭黑底 + 暗红余烬 + 琥珀火花 | Dramatic & Intense |
+| `cyberpunk_city` | 赛博朋克都市 | 霓虹雨夜 + 全息青/品红 | Fast & Electric |
+| `pirate_cove` | 海盗海湾 | 橡木甲板 + 旧金 + 深海蓝 | Smooth & Fluid |
+| `royal_velvet` | 皇家天鹅绒 | 紫丝绒 + 金冠线 | Smooth & Fluid |
+| `industrial_steel` | 工业钢铁 | 钢板灰 + 警示橙 | Fast & Electric |
+| `night_market` | 夜市灯笼 | 灯笼暖橙 + 夜市红 | Festive & Sparkling |
+| `moonlit_garden` | 月下花园 | 月下苔绿 + 淡紫月光 | Gentle & Breathing |
+| `jungle_adventure` | 丛林探险 | 密林绿 + 探险金 | Dramatic & Intense |
 
-### 亮色 · Light（12）
+### 亮色 · Light（19）
 
 | ID | 名称 | 材质 / 场景 | 动画基调 |
 |----|------|------------|----------|
@@ -156,8 +163,15 @@ metadata:
 | `coral_reef` | 珊瑚礁 | 珊瑚粉 + 潟湖蓝 + 浅沙底 | Bouncy & Playful |
 | `honey_amber` | 蜂蜜琥珀 | 蜂蜡金 + 奶油白 + 焦糖边 | Smooth & Fluid |
 | `sunset_plaza` | 落日广场 | 晚霞橘粉 + 石砖暖灰 + 余晖金 | Smooth & Fluid |
+| `tropical_fruit` | 热带水果 | 芒果橙 + 青柠 + 浅沙 | Bouncy & Playful |
+| `bubble_tea` | 奶茶时光 | 奶茶褐 + 珍珠粉 + 燕麦底 | Gentle & Breathing |
+| `farm_cottage` | 田园小屋 | 田园绿 + 干草金 + 亚麻白 | Gentle & Breathing |
+| `cloud_sky` | 云朵天空 | 积云白 + 天蓝 + 珊瑚点缀 | Smooth & Floating |
+| `lavender_fields` | 薰衣草田 | 薰衣草紫 + 干草黄 | Gentle & Breathing |
+| `citrus_fresh` | 柑橘清新 | 橙橘 + 青绿点缀 | Bouncy & Playful |
+| `snow_festival` | 冰雪节庆 | 霜白 + 节日蓝 + 圣诞红点缀 | Festive & Sparkling |
 
-### 特色 · Signature（6）
+### 特色 · Signature（12）
 
 | ID | 名称 | 材质 / 场景 | 动画基调 |
 |----|------|------------|----------|
@@ -167,6 +181,12 @@ metadata:
 | `paper_craft` | 纸艺剪贴 | 牛皮纸底 + 叠层阴影 + 手撕边缘感 | Smooth & Fluid |
 | `neon_synthwave` | 合成波 | 80s 紫粉网格 + 地平线渐变 | Fast & Electric |
 | `arcade_cabinet` | 街机柜 | CRT 磷光绿 + 机柜深紫 + thruster 橙按钮 | Instant Snap |
+| `crystal_gem` | 水晶宝石 | 紫晶 + 冰青切面 | Smooth & Floating |
+| `clay_stopmotion` | 粘土定格 | 陶土橙 + 粘土绿 + 米色 | Bouncy & Playful |
+| `board_game_table` | 桌游木桌 | 胡桃木桌 + 深绿毡 + 黄铜 | Smooth & Fluid |
+| `comic_halftone` | 漫画网点 | 网点底 + 原色红/蓝/黄 | Fast & Electric |
+| `ink_wash` | 水墨丹青 | 宣纸白 + 浓墨 + 朱砂点 | Gentle & Breathing |
+| `retro_poster` | 复古海报 | 复古纸黄 + 海报橙 + 海军蓝 | Smooth & Fluid |
 
 ---
 
@@ -401,7 +421,7 @@ metadata:
 | Bouncy & Playful | 糖果、樱花、卡通 | 400–500ms | OvershootInterpolator |
 | Gentle & Breathing | 森林禅意、极简白、粉彩 | 500–800ms | AccelerateDecelerate |
 | Instant Snap | 像素复古 | 0ms | 无过渡 |
-| Festive & Sparkling | 圣诞、万圣节 | 300–600ms | 粒子爆炸效果 |
+| Festive & Sparkling | 圣诞、万圣节、夜市灯笼、冰雪节庆 | 300–600ms | 粒子爆炸效果 |
 
 ---
 
@@ -513,7 +533,7 @@ metadata:
 ---
 
 参考文档（按需加载）：
-- `references/theme-full-specs.md` — 30 个内置主题完整配色数值
+- `references/theme-full-specs.md` — 50 个内置主题完整配色数值
 - `references/design-principles.md` — Material3 集成、深/浅色规则
 - `references/animation-guide.md` — 动画基调完整描述
 - `references/screen-layouts.md` — 页面布局结构规范

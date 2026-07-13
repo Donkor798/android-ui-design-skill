@@ -1,6 +1,6 @@
 # android-ui-design-skill
 
-Android casual game UI design system for Kotlin games. 30 complete visual design themes, each with color tokens, typography, shape system, elevation, background treatment, Material3 styles, and animation personality.
+Android casual game UI design system for Kotlin games. 50 complete visual design themes, each with color tokens, typography, shape system, elevation, background treatment, Material3 styles, and animation personality.
 
 **Output**: A `design-spec_[theme].md` file — the design contract for the app team. No UI code generated.
 
@@ -48,13 +48,13 @@ Each locked theme request produces a `design-spec_[theme_name].md` with 9 chapte
 
 Plus: spacing tokens, Loading / Empty / Error states, accessibility constraints.
 
-## 30 Themes
+## 50 Themes
 
 | Category | Themes |
 |----------|--------|
-| Dark (12) | Neon Dark · Space Galaxy · Lava Fire · Midnight Luxury · Deep Sea · Aurora Night · Halloween · Steampunk · Graffiti Street · Noir Cinema · Cyber Mint · Ember Coal |
-| Light (12) | Ocean Breeze · Forest Zen · Candy Pop · Sakura Spring · Desert Gold · Ice Crystal · Pastel Dream · Christmas · Matcha Cafe · Coral Reef · Honey Amber · Sunset Plaza |
-| Signature (6) | Pixel Classic · Cartoon Fun · Minimalist White · Paper Craft · Neon Synthwave · Arcade Cabinet |
+| Dark (19) | Neon Dark · Space Galaxy · Lava Fire · Midnight Luxury · Deep Sea · Aurora Night · Halloween · Steampunk · Graffiti Street · Noir Cinema · Cyber Mint · Ember Coal · Cyberpunk City · Pirate Cove · Royal Velvet · Industrial Steel · Night Market · Moonlit Garden · Jungle Adventure |
+| Light (19) | Ocean Breeze · Forest Zen · Candy Pop · Sakura Spring · Desert Gold · Ice Crystal · Pastel Dream · Christmas · Matcha Cafe · Coral Reef · Honey Amber · Sunset Plaza · Tropical Fruit · Bubble Tea · Farm Cottage · Cloud Sky · Lavender Fields · Citrus Fresh · Snow Festival |
+| Signature (12) | Pixel Classic · Cartoon Fun · Minimalist White · Paper Craft · Neon Synthwave · Arcade Cabinet · Crystal Gem · Clay Stopmotion · Board Game Table · Comic Halftone · Ink Wash · Retro Poster |
 
 ## Scripts
 
@@ -69,10 +69,10 @@ python3 scripts/run_evals.py --validate
 
 ```
 android-ui-design-skill/
-├── SKILL.md                      # 30 themes + selection flow + 9-chapter design spec
+├── SKILL.md                      # 50 themes + selection flow + 9-chapter design spec
 ├── AGENTS.md
 ├── references/
-│   ├── theme-full-specs.md       # All 30 themes: color values + design notes
+│   ├── theme-full-specs.md       # All 50 themes: color values + design notes
 │   ├── design-principles.md      # Material3 integration, dark/light rules
 │   ├── animation-guide.md        # Animation personalities
 │   ├── screen-layouts.md         # Page layout structure specs

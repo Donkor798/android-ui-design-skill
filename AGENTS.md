@@ -1,6 +1,6 @@
 # android-ui-design-skill
 
-Android casual game UI design system for Kotlin games. Provides 30 complete visual design themes, each delivering a full design language: color tokens, typography, shape system, elevation, background treatment, Material3 styles, and animation personality.
+Android casual game UI design system for Kotlin games. Provides 50 complete visual design themes, each delivering a full design language: color tokens, typography, shape system, elevation, background treatment, Material3 styles, and animation personality.
 
 **Outputs a design-spec markdown file** — the design contract for the app team. No UI code generated.
 
@@ -26,4 +26,4 @@ Invoke with `/android-ui-design-skill` or describe a task matching:
 
 ## Details
 
-See [SKILL.md](./SKILL.md) for the 30-theme catalogue, forced 3-pick selection flow, 9-chapter design spec system, and token naming rules.
+See [SKILL.md](./SKILL.md) for the 50-theme catalogue, forced 3-pick selection flow, 9-chapter design spec system, and token naming rules.
