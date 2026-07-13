@@ -42,13 +42,19 @@ Run with: `python3 scripts/run_evals.py`
       "id": "spec-no-xml-code",
       "type": "command",
       "text": "Design spec contains no XML code blocks (no <?xml or </resources>)",
-      "cmd": "! grep -q '<?xml\\|</resources>\\|ConstraintLayout' {output}/design-spec_*.md"
+      "cmd": "! grep -qE '<\\?xml|</resources>|ConstraintLayout|@\\+id/' {output}/design-spec_*.md"
     },
     {
       "id": "spec-no-kotlin-code",
       "type": "command",
-      "text": "Design spec contains no Kotlin code blocks (no fun / class / val patterns)",
-      "cmd": "! grep -qE '^fun |^class |^val |^object ' {output}/design-spec_*.md"
+      "text": "Design spec contains no Kotlin/Compose implementation code",
+      "cmd": "! grep -qE '^fun |^class |^val |^object |@Composable|ViewBinding|setContentView' {output}/design-spec_*.md"
+    },
+    {
+      "id": "spec-no-android-resource-files",
+      "type": "command",
+      "text": "Design spec does not embed colors/themes/dimens resource file shapes",
+      "cmd": "! grep -qE '<color name=|<dimen name=|<style name=\"Theme\\.|colors_[a-z_]+\\.xml' {output}/design-spec_*.md"
     },
     {
       "id": "spec-has-button-states",
@@ -64,7 +70,28 @@ Run with: `python3 scripts/run_evals.py`
     {
       "id": "spec-heading-hierarchy",
       "type": "llm-judge",
-      "text": "Design spec chapter 3 includes heading hierarchy with alignment, capitalization, and truncation rules"
+      "text": "Design spec chapter 3 includes heading hierarchy with alignment, capitalization, truncation rules, AND toolbar/top-bar constraints (variant A/B/C/D or equivalent height/title size/anti-pattern rules)"
+    },
+    {
+      "id": "spec-toolbar-system",
+      "type": "llm-judge",
+      "text": "Design spec constrains custom title bars: 56dp height, ~20sp title, visual center, max 2 actions, background usually page background not heavy primary fill, no thick gradient bars"
+    },
+    {
+      "id": "spec-button-height-56",
+      "type": "command",
+      "text": "Primary button height is specified as 56dp (not the 4dp progress-track typo)",
+      "cmd": "grep -qE '56[[:space:]]*dp' {output}/design-spec_*.md && ! grep -qE '主按钮.*4dp|Primary.*height.*4dp|/ 4dp / 16dp' {output}/design-spec_*.md"
+    },
+    {
+      "id": "spec-dialog-or-hud",
+      "type": "llm-judge",
+      "text": "Design spec includes dialog/result constraints (width/scrim/button order) and/or Game HUD rules (no full toolbar in-game, score/timer typography)"
+    },
+    {
+      "id": "spec-color-quality-gates",
+      "type": "llm-judge",
+      "text": "Design spec chapter 1 mentions contrast or quality checks and soul-color roles (primary/score/highlight); glow token present or explicitly n/a for light themes"
     },
     {
       "id": "spec-icon-system",
@@ -75,6 +102,16 @@ Run with: `python3 scripts/run_evals.py`
       "id": "spec-shape-table",
       "type": "llm-judge",
       "text": "Design spec chapter 5 includes corner radius per component"
+    },
+    {
+      "id": "spec-identity-card",
+      "type": "llm-judge",
+      "text": "Design spec starts with a theme identity card: material one-liner, soul-color roles (primary/score/highlight), toolbar accent, animation personality, and one theme-specific forbid"
+    },
+    {
+      "id": "spec-background-layers",
+      "type": "llm-judge",
+      "text": "Design spec chapter 7 specifies backgrounds by page role (home / shell / in-game / dialog scrim) with limits so in-game background does not compete with board/question"
     },
     {
       "id": "spec-animation-table",

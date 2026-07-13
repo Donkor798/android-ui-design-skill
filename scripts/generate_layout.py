@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """
-generate_layout.py — Print design constraints for a given screen + theme.
+generate_layout.py — Print design constraints (text) for a given screen + theme.
+
+Outputs a human-readable constraint summary for authoring design-spec markdown.
+Does NOT generate Android layout XML or Kotlin.
 
 Usage:
     python3 scripts/generate_layout.py --screen game_quiz --theme neon_dark
@@ -458,9 +461,10 @@ def render_constraints(screen_id: str, theme_id: str) -> str:
             lines.append(f"  ⚠ {note_r}")
 
     lines.append(f"\n{'─'*60}")
-    lines.append(f"  Full color tokens    : references/theme-full-specs.md")
-    lines.append(f"  Material3 theme XML  : references/design-principles.md")
-    lines.append(f"  Animation Kotlin     : references/animation-guide.md")
+    lines.append(f"  Full color tokens    : references/theme-full-specs.md (HEX tables only)")
+    lines.append(f"  Design rules         : references/design-principles.md (ignore code samples)")
+    lines.append(f"  Animation personality: references/animation-guide.md (durations only)")
+    lines.append(f"  Output contract      : design-spec markdown ONLY — no app XML/Kotlin")
     lines.append(f"{'─'*60}\n")
 
     return "\n".join(lines)

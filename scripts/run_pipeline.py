@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """
-run_pipeline.py — Single entry-point for android-ui-design-skill scripts.
+run_pipeline.py — Print design-constraint summaries (not app source).
+
+Chains generate_layout (constraint text) + generate_theme (token markdown).
+Never writes Android layout/theme XML into an app module.
 
 Usage:
     python3 scripts/run_pipeline.py --screen quiz --theme neon_dark
@@ -19,18 +22,27 @@ def run(cmd: list[str]) -> int:
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description="Export design constraints + token tables (design-spec only)."
+    )
     parser.add_argument("--screen", default="home")
     parser.add_argument("--theme", default="neon_dark")
     parser.add_argument("--output", default="./output")
     args = parser.parse_args(argv)
 
     py = sys.executable
+    # Constraint text to stdout (no layout XML)
     rc = run([py, str(SCRIPTS / "generate_layout.py"),
-              "--screen", args.screen, "--theme", args.theme, "--output", args.output])
+              "--screen", args.screen, "--theme", args.theme])
     if rc != 0:
         return rc
-    print(f"\nDone. Output: {args.output}")
+    # Token markdown for design-spec chapter 1 (not colors.xml)
+    rc = run([py, str(SCRIPTS / "generate_theme.py"),
+              "--theme", args.theme, "--output", args.output])
+    if rc != 0:
+        return rc
+    print(f"\nDone. Design tokens under: {args.output}/design-tokens/")
+    print("Deliver design-spec markdown only — do not ship script output as app source.")
     return 0
 
 

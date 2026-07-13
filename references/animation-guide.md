@@ -1,5 +1,9 @@
 # Animation Guide — 7种动画基调 Kotlin 实现
 
+> **⚠️ 内部参考。** 文中 Kotlin 示例仅供推导 duration/interpolator。  
+> 写入 design-spec 时只保留基调名、时长、曲线名与反馈描述；**禁止**输出可编译动画源码。
+
+
 ## 基调一：Fast & Electric（霓虹暗黑、合成波）
 
 **特点**：快速、闪烁、电流感，duration ≤ 150ms

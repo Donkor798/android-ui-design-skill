@@ -1,19 +1,28 @@
 #!/usr/bin/env python3
 """
-generate_theme.py — Generate res/values/colors_<theme>.xml for any of the 50 themes.
+generate_theme.py — Export theme color tokens as markdown tables for design-spec.
+
+This skill delivers design contracts only. It does NOT emit Android resource XML
+for the app (no colors_*.xml / themes.xml). Use the markdown table inside
+design-spec_[theme].md chapter 1.
+
+Also regenerates references/theme-full-specs.md (pure markdown tables).
 
 Usage:
     python3 scripts/generate_theme.py --theme neon_dark --output ./output/
     python3 scripts/generate_theme.py --theme all --output ./output/
     python3 scripts/generate_theme.py --list
+    python3 scripts/generate_theme.py --write-full-specs
 """
 from __future__ import annotations
-import argparse, sys, textwrap
+import argparse, sys, re
 from pathlib import Path
 
+SKILL_DIR = Path(__file__).resolve().parent.parent
+
 # ── Complete color data for all 50 themes ────────────────────────────────────
-# Each theme: dict of token_suffix → hex_color
 # Token naming: {prefix}_{suffix}  e.g. nd_background, sg_primary
+# glow: dark themes = HEX; light themes = "n/a" (elevation instead of glow)
 
 THEMES: dict[str, dict] = {
     "neon_dark": {
@@ -21,12 +30,12 @@ THEMES: dict[str, dict] = {
         "background": "#0D0D0D", "surface": "#1A1A2E", "surface_variant": "#16213E", "surface_tint": "#1F1035",
         "primary": "#E94560", "primary_dark": "#C73652", "secondary": "#0F3460", "tertiary": "#533483",
         "on_background": "#EAEAEA", "on_surface": "#EAEAEA", "on_surface_dim": "#757575", "on_primary": "#FFFFFF",
-        "correct": "#00E676", "wrong": "#FF1744", "score": "#FFD700",
-        "timer_normal": "#00FFCC", "timer_warning": "#FF6D00", "highlight": "#00FFCC", "badge": "#E94560",
-        "nav_bar": "#1A1A2E", "nav_selected": "#E94560", "nav_unselected": "#555555", "status_bar": "#0D0D0D",
-        "tile_empty": "#16213E", "tile_2": "#1A1A3E", "tile_4": "#1E1E4A", "tile_8": "#533483",
-        "tile_16": "#6A3D9A", "tile_32": "#E94560", "tile_64": "#C73652", "tile_128": "#00FFCC",
-        "tile_256": "#00CCB0", "tile_512": "#FFD700", "tile_1024": "#FF6D00", "tile_2048": "#FFFFFF",
+        "correct": "#00E676", "wrong": "#FF1744", "score": "#FFD700", "timer_normal": "#00FFCC",
+        "timer_warning": "#FF6D00", "highlight": "#00FFCC", "badge": "#E94560", "star": "#FFD700",
+        "nav_bar": "#1A1A2E", "nav_selected": "#E94560",
+        "nav_unselected": "#555555", "status_bar": "#0D0D0D", "glow": "#00FFCC",
+        "tile_empty": "#16213E", "tile_2": "#1A1A3E", "tile_4": "#1E1E4A", "tile_8": "#533483", "tile_16": "#6A3D9A", "tile_32": "#E94560",
+        "tile_64": "#C73652", "tile_128": "#00FFCC", "tile_256": "#00CCB0", "tile_512": "#FFD700", "tile_1024": "#FF6D00", "tile_2048": "#FFFFFF",
         "overlay": "#CC0D0D0D", "scrim": "#990D0D0D",
     },
     "space_galaxy": {
@@ -34,12 +43,12 @@ THEMES: dict[str, dict] = {
         "background": "#06061A", "surface": "#0D0D2B", "surface_variant": "#151540", "surface_tint": "#1A1050",
         "primary": "#7B2FBE", "primary_dark": "#5C1F9E", "secondary": "#4CC9F0", "tertiary": "#F72585",
         "on_background": "#E8E8FF", "on_surface": "#E8E8FF", "on_surface_dim": "#6060A0", "on_primary": "#FFFFFF",
-        "correct": "#4CC9F0", "wrong": "#F72585", "score": "#FFD60A",
-        "timer_normal": "#4CC9F0", "timer_warning": "#F72585", "highlight": "#4CC9F0", "badge": "#F72585",
-        "nav_bar": "#0D0D2B", "nav_selected": "#7B2FBE", "nav_unselected": "#404070", "status_bar": "#06061A",
-        "tile_empty": "#0D0D3A", "tile_2": "#151560", "tile_4": "#1E1E80", "tile_8": "#4A1E8C",
-        "tile_16": "#7B2FBE", "tile_32": "#9B4FDE", "tile_64": "#4CC9F0", "tile_128": "#3BB8DF",
-        "tile_256": "#F72585", "tile_512": "#FFD60A", "tile_1024": "#FFFFFF", "tile_2048": "#FFD60A",
+        "correct": "#4CC9F0", "wrong": "#F72585", "score": "#FFD60A", "timer_normal": "#4CC9F0",
+        "timer_warning": "#F72585", "highlight": "#4CC9F0", "badge": "#F72585", "star": "#FFD60A",
+        "nav_bar": "#0D0D2B", "nav_selected": "#7B2FBE",
+        "nav_unselected": "#404070", "status_bar": "#06061A", "glow": "#4CC9F0",
+        "tile_empty": "#0D0D3A", "tile_2": "#151560", "tile_4": "#1E1E80", "tile_8": "#4A1E8C", "tile_16": "#7B2FBE", "tile_32": "#9B4FDE",
+        "tile_64": "#4CC9F0", "tile_128": "#3BB8DF", "tile_256": "#F72585", "tile_512": "#FFD60A", "tile_1024": "#FFFFFF", "tile_2048": "#FFD60A",
         "overlay": "#CC06061A", "scrim": "#9906061A",
     },
     "lava_fire": {
@@ -47,12 +56,12 @@ THEMES: dict[str, dict] = {
         "background": "#0A0000", "surface": "#1A0800", "surface_variant": "#2D1000", "surface_tint": "#3D1500",
         "primary": "#FF4500", "primary_dark": "#CC3700", "secondary": "#FFB700", "tertiary": "#FF0050",
         "on_background": "#FFE0CC", "on_surface": "#FFE0CC", "on_surface_dim": "#8B5E40", "on_primary": "#FFFFFF",
-        "correct": "#FFB700", "wrong": "#FF0050", "score": "#FFE566",
-        "timer_normal": "#FFB700", "timer_warning": "#FF0050", "highlight": "#FFB700", "badge": "#FF4500",
-        "nav_bar": "#1A0800", "nav_selected": "#FF4500", "nav_unselected": "#5C3020", "status_bar": "#0A0000",
-        "tile_empty": "#1A0800", "tile_2": "#2D1000", "tile_4": "#4A1800", "tile_8": "#7A2800",
-        "tile_16": "#AA3800", "tile_32": "#CC3700", "tile_64": "#FF4500", "tile_128": "#FF6B00",
-        "tile_256": "#FFB700", "tile_512": "#FFD700", "tile_1024": "#FFE566", "tile_2048": "#FFFFFF",
+        "correct": "#FFB700", "wrong": "#FF0050", "score": "#FFE566", "timer_normal": "#FFB700",
+        "timer_warning": "#FF0050", "highlight": "#FFB700", "badge": "#FF4500", "star": "#FFE566",
+        "nav_bar": "#1A0800", "nav_selected": "#FF4500",
+        "nav_unselected": "#5C3020", "status_bar": "#0A0000", "glow": "#FFB700",
+        "tile_empty": "#1A0800", "tile_2": "#2D1000", "tile_4": "#4A1800", "tile_8": "#7A2800", "tile_16": "#AA3800", "tile_32": "#CC3700",
+        "tile_64": "#FF4500", "tile_128": "#FF6B00", "tile_256": "#FFB700", "tile_512": "#FFD700", "tile_1024": "#FFE566", "tile_2048": "#FFFFFF",
         "overlay": "#CC0A0000", "scrim": "#990A0000",
     },
     "midnight_luxury": {
@@ -60,12 +69,12 @@ THEMES: dict[str, dict] = {
         "background": "#0A0A0A", "surface": "#141414", "surface_variant": "#1E1E1E", "surface_tint": "#1A1A0A",
         "primary": "#D4AF37", "primary_dark": "#B8941F", "secondary": "#C0C0C0", "tertiary": "#E8D5A3",
         "on_background": "#F5F5F0", "on_surface": "#F5F5F0", "on_surface_dim": "#808080", "on_primary": "#0A0A0A",
-        "correct": "#4CAF50", "wrong": "#F44336", "score": "#D4AF37",
-        "timer_normal": "#C0C0C0", "timer_warning": "#FF6F00", "highlight": "#D4AF37", "badge": "#D4AF37",
-        "nav_bar": "#141414", "nav_selected": "#D4AF37", "nav_unselected": "#505050", "status_bar": "#0A0A0A",
-        "tile_empty": "#1E1E1E", "tile_2": "#2A2A2A", "tile_4": "#363636", "tile_8": "#4A3810",
-        "tile_16": "#6B5220", "tile_32": "#8C6C2A", "tile_64": "#B8941F", "tile_128": "#D4AF37",
-        "tile_256": "#DFC060", "tile_512": "#E8D080", "tile_1024": "#F0E0A0", "tile_2048": "#FFFFFF",
+        "correct": "#4CAF50", "wrong": "#F44336", "score": "#D4AF37", "timer_normal": "#C0C0C0",
+        "timer_warning": "#FF6F00", "highlight": "#D4AF37", "badge": "#D4AF37", "star": "#D4AF37",
+        "nav_bar": "#141414", "nav_selected": "#D4AF37",
+        "nav_unselected": "#505050", "status_bar": "#0A0A0A", "glow": "#D4AF37",
+        "tile_empty": "#1E1E1E", "tile_2": "#2A2A2A", "tile_4": "#363636", "tile_8": "#4A3810", "tile_16": "#6B5220", "tile_32": "#8C6C2A",
+        "tile_64": "#B8941F", "tile_128": "#D4AF37", "tile_256": "#DFC060", "tile_512": "#E8D080", "tile_1024": "#F0E0A0", "tile_2048": "#FFFFFF",
         "overlay": "#E50A0A0A", "scrim": "#990A0A0A",
     },
     "deep_sea": {
@@ -73,12 +82,12 @@ THEMES: dict[str, dict] = {
         "background": "#000A1A", "surface": "#001830", "surface_variant": "#00243F", "surface_tint": "#00305A",
         "primary": "#00CFFF", "primary_dark": "#009CC0", "secondary": "#0055AA", "tertiary": "#7FFFFF",
         "on_background": "#B0E8FF", "on_surface": "#B0E8FF", "on_surface_dim": "#405070", "on_primary": "#000A1A",
-        "correct": "#7FFFFF", "wrong": "#FF4466", "score": "#00CFFF",
-        "timer_normal": "#00CFFF", "timer_warning": "#FF4466", "highlight": "#7FFFFF", "badge": "#00CFFF",
-        "nav_bar": "#001830", "nav_selected": "#00CFFF", "nav_unselected": "#204060", "status_bar": "#000A1A",
-        "tile_empty": "#00243F", "tile_2": "#003060", "tile_4": "#004080", "tile_8": "#0055AA",
-        "tile_16": "#0070CC", "tile_32": "#0090EE", "tile_64": "#00CFFF", "tile_128": "#7FFFFF",
-        "tile_256": "#AAFFFF", "tile_512": "#FF4466", "tile_1024": "#FF8800", "tile_2048": "#FFFFFF",
+        "correct": "#7FFFFF", "wrong": "#FF4466", "score": "#00CFFF", "timer_normal": "#00CFFF",
+        "timer_warning": "#FF4466", "highlight": "#7FFFFF", "badge": "#00CFFF", "star": "#00CFFF",
+        "nav_bar": "#001830", "nav_selected": "#00CFFF",
+        "nav_unselected": "#204060", "status_bar": "#000A1A", "glow": "#7FFFFF",
+        "tile_empty": "#00243F", "tile_2": "#003060", "tile_4": "#004080", "tile_8": "#0055AA", "tile_16": "#0070CC", "tile_32": "#0090EE",
+        "tile_64": "#00CFFF", "tile_128": "#7FFFFF", "tile_256": "#AAFFFF", "tile_512": "#FF4466", "tile_1024": "#FF8800", "tile_2048": "#FFFFFF",
         "overlay": "#CC000A1A", "scrim": "#99000A1A",
     },
     "aurora_night": {
@@ -86,12 +95,12 @@ THEMES: dict[str, dict] = {
         "background": "#060812", "surface": "#0C1020", "surface_variant": "#131828", "surface_tint": "#1A2030",
         "primary": "#00FF88", "primary_dark": "#00CC66", "secondary": "#AA00FF", "tertiary": "#00CCFF",
         "on_background": "#D0FFE8", "on_surface": "#D0FFE8", "on_surface_dim": "#406050", "on_primary": "#060812",
-        "correct": "#00FF88", "wrong": "#FF4488", "score": "#00CCFF",
-        "timer_normal": "#00FF88", "timer_warning": "#FF4488", "highlight": "#AA00FF", "badge": "#00FF88",
-        "nav_bar": "#0C1020", "nav_selected": "#00FF88", "nav_unselected": "#304040", "status_bar": "#060812",
-        "tile_empty": "#131828", "tile_2": "#1A2535", "tile_4": "#003322", "tile_8": "#006644",
-        "tile_16": "#00AA66", "tile_32": "#00FF88", "tile_64": "#00CCFF", "tile_128": "#AA00FF",
-        "tile_256": "#CC44FF", "tile_512": "#FF4488", "tile_1024": "#FFCC00", "tile_2048": "#FFFFFF",
+        "correct": "#00FF88", "wrong": "#FF4488", "score": "#00CCFF", "timer_normal": "#00FF88",
+        "timer_warning": "#FF4488", "highlight": "#AA00FF", "badge": "#00FF88", "star": "#00CCFF",
+        "nav_bar": "#0C1020", "nav_selected": "#00FF88",
+        "nav_unselected": "#304040", "status_bar": "#060812", "glow": "#AA00FF",
+        "tile_empty": "#131828", "tile_2": "#1A2535", "tile_4": "#003322", "tile_8": "#006644", "tile_16": "#00AA66", "tile_32": "#00FF88",
+        "tile_64": "#00CCFF", "tile_128": "#AA00FF", "tile_256": "#CC44FF", "tile_512": "#FF4488", "tile_1024": "#FFCC00", "tile_2048": "#FFFFFF",
         "overlay": "#CC060812", "scrim": "#99060812",
     },
     "halloween": {
@@ -99,12 +108,12 @@ THEMES: dict[str, dict] = {
         "background": "#0D0800", "surface": "#1A1000", "surface_variant": "#2A1A00", "surface_tint": "#301800",
         "primary": "#FF6600", "primary_dark": "#CC5200", "secondary": "#8B00FF", "tertiary": "#00CC66",
         "on_background": "#F0E0C0", "on_surface": "#F0E0C0", "on_surface_dim": "#806040", "on_primary": "#FFFFFF",
-        "correct": "#00CC66", "wrong": "#FF1744", "score": "#FF6600",
-        "timer_normal": "#FF6600", "timer_warning": "#FF1744", "highlight": "#8B00FF", "badge": "#FF6600",
-        "nav_bar": "#1A1000", "nav_selected": "#FF6600", "nav_unselected": "#604020", "status_bar": "#0D0800",
-        "tile_empty": "#1A1000", "tile_2": "#2A1A00", "tile_4": "#3D2800", "tile_8": "#5C3A00",
-        "tile_16": "#7A4E00", "tile_32": "#CC5200", "tile_64": "#FF6600", "tile_128": "#8B00FF",
-        "tile_256": "#6A00CC", "tile_512": "#00CC66", "tile_1024": "#FF1744", "tile_2048": "#F0F0F0",
+        "correct": "#00CC66", "wrong": "#FF1744", "score": "#FF6600", "timer_normal": "#FF6600",
+        "timer_warning": "#FF1744", "highlight": "#8B00FF", "badge": "#FF6600", "star": "#FF6600",
+        "nav_bar": "#1A1000", "nav_selected": "#FF6600",
+        "nav_unselected": "#604020", "status_bar": "#0D0800", "glow": "#8B00FF",
+        "tile_empty": "#1A1000", "tile_2": "#2A1A00", "tile_4": "#3D2800", "tile_8": "#5C3A00", "tile_16": "#7A4E00", "tile_32": "#CC5200",
+        "tile_64": "#FF6600", "tile_128": "#8B00FF", "tile_256": "#6A00CC", "tile_512": "#00CC66", "tile_1024": "#FF1744", "tile_2048": "#F0F0F0",
         "overlay": "#CC0D0800", "scrim": "#990D0800",
     },
     "steampunk": {
@@ -112,12 +121,12 @@ THEMES: dict[str, dict] = {
         "background": "#1A1008", "surface": "#2A1C0C", "surface_variant": "#3A2810", "surface_tint": "#4A3418",
         "primary": "#B87333", "primary_dark": "#8A5520", "secondary": "#D4A838", "tertiary": "#7A6040",
         "on_background": "#F0D898", "on_surface": "#F0D898", "on_surface_dim": "#907050", "on_primary": "#1A1008",
-        "correct": "#88CC44", "wrong": "#CC4422", "score": "#D4A838",
-        "timer_normal": "#B87333", "timer_warning": "#CC4422", "highlight": "#D4A838", "badge": "#B87333",
-        "nav_bar": "#2A1C0C", "nav_selected": "#B87333", "nav_unselected": "#706040", "status_bar": "#1A1008",
-        "tile_empty": "#2A1C0C", "tile_2": "#3A2810", "tile_4": "#5A3C18", "tile_8": "#7A5020",
-        "tile_16": "#8A5520", "tile_32": "#B87333", "tile_64": "#C88840", "tile_128": "#D4A838",
-        "tile_256": "#E0BC50", "tile_512": "#EED068", "tile_1024": "#F5E080", "tile_2048": "#FFFACC",
+        "correct": "#88CC44", "wrong": "#CC4422", "score": "#D4A838", "timer_normal": "#B87333",
+        "timer_warning": "#CC4422", "highlight": "#D4A838", "badge": "#B87333", "star": "#D4A838",
+        "nav_bar": "#2A1C0C", "nav_selected": "#B87333",
+        "nav_unselected": "#706040", "status_bar": "#1A1008", "glow": "#D4A838",
+        "tile_empty": "#2A1C0C", "tile_2": "#3A2810", "tile_4": "#5A3C18", "tile_8": "#7A5020", "tile_16": "#8A5520", "tile_32": "#B87333",
+        "tile_64": "#C88840", "tile_128": "#D4A838", "tile_256": "#E0BC50", "tile_512": "#EED068", "tile_1024": "#F5E080", "tile_2048": "#FFFACC",
         "overlay": "#CC1A1008", "scrim": "#991A1008",
     },
     "graffiti_street": {
@@ -125,12 +134,12 @@ THEMES: dict[str, dict] = {
         "background": "#111111", "surface": "#1E1E1E", "surface_variant": "#2E2E2E", "surface_tint": "#333333",
         "primary": "#FFEB00", "primary_dark": "#CCBB00", "secondary": "#0044FF", "tertiary": "#FF2200",
         "on_background": "#FFFFFF", "on_surface": "#FFFFFF", "on_surface_dim": "#888888", "on_primary": "#111111",
-        "correct": "#00FF44", "wrong": "#FF2200", "score": "#FFEB00",
-        "timer_normal": "#FFEB00", "timer_warning": "#FF2200", "highlight": "#0044FF", "badge": "#FF2200",
-        "nav_bar": "#1E1E1E", "nav_selected": "#FFEB00", "nav_unselected": "#666666", "status_bar": "#111111",
-        "tile_empty": "#2E2E2E", "tile_2": "#3E3E3E", "tile_4": "#4E4E4E", "tile_8": "#0033CC",
-        "tile_16": "#0044FF", "tile_32": "#3366FF", "tile_64": "#FFEB00", "tile_128": "#FFCC00",
-        "tile_256": "#FF2200", "tile_512": "#FF5500", "tile_1024": "#00FF44", "tile_2048": "#FFFFFF",
+        "correct": "#00FF44", "wrong": "#FF2200", "score": "#FFEB00", "timer_normal": "#FFEB00",
+        "timer_warning": "#FF2200", "highlight": "#0044FF", "badge": "#FF2200", "star": "#FFEB00",
+        "nav_bar": "#1E1E1E", "nav_selected": "#FFEB00",
+        "nav_unselected": "#666666", "status_bar": "#111111", "glow": "#0044FF",
+        "tile_empty": "#2E2E2E", "tile_2": "#3E3E3E", "tile_4": "#4E4E4E", "tile_8": "#0033CC", "tile_16": "#0044FF", "tile_32": "#3366FF",
+        "tile_64": "#FFEB00", "tile_128": "#FFCC00", "tile_256": "#FF2200", "tile_512": "#FF5500", "tile_1024": "#00FF44", "tile_2048": "#FFFFFF",
         "overlay": "#CC111111", "scrim": "#99111111",
     },
     "ocean_breeze": {
@@ -138,12 +147,12 @@ THEMES: dict[str, dict] = {
         "background": "#E8F4FD", "surface": "#FFFFFF", "surface_variant": "#CAF0F8", "surface_tint": "#E0F7FF",
         "primary": "#0077B6", "primary_dark": "#005A8E", "secondary": "#00B4D8", "tertiary": "#0096C7",
         "on_background": "#03045E", "on_surface": "#03045E", "on_surface_dim": "#6B8FAE", "on_primary": "#FFFFFF",
-        "correct": "#06D6A0", "wrong": "#EF476F", "score": "#0096C7",
-        "timer_normal": "#0077B6", "timer_warning": "#FF9E00", "highlight": "#48CAE4", "badge": "#0077B6",
-        "nav_bar": "#FFFFFF", "nav_selected": "#0077B6", "nav_unselected": "#B0C4D8", "status_bar": "#E8F4FD",
-        "tile_empty": "#CAF0F8", "tile_2": "#ADE8F4", "tile_4": "#90E0EF", "tile_8": "#48CAE4",
-        "tile_16": "#00B4D8", "tile_32": "#0096C7", "tile_64": "#0077B6", "tile_128": "#023E8A",
-        "tile_256": "#03045E", "tile_512": "#FFD166", "tile_1024": "#EF476F", "tile_2048": "#06D6A0",
+        "correct": "#06D6A0", "wrong": "#EF476F", "score": "#0096C7", "timer_normal": "#0077B6",
+        "timer_warning": "#FF9E00", "highlight": "#48CAE4", "badge": "#0077B6", "star": "#0096C7",
+        "nav_bar": "#FFFFFF", "nav_selected": "#0077B6",
+        "nav_unselected": "#B0C4D8", "status_bar": "#E8F4FD", "glow": "n/a",
+        "tile_empty": "#CAF0F8", "tile_2": "#ADE8F4", "tile_4": "#90E0EF", "tile_8": "#48CAE4", "tile_16": "#00B4D8", "tile_32": "#0096C7",
+        "tile_64": "#0077B6", "tile_128": "#023E8A", "tile_256": "#03045E", "tile_512": "#FFD166", "tile_1024": "#EF476F", "tile_2048": "#06D6A0",
         "overlay": "#80ADE8F4", "scrim": "#500077B6",
     },
     "forest_zen": {
@@ -151,12 +160,12 @@ THEMES: dict[str, dict] = {
         "background": "#F1F8E9", "surface": "#FFFFFF", "surface_variant": "#DCEDC8", "surface_tint": "#E8F5E9",
         "primary": "#2E7D32", "primary_dark": "#1B5E20", "secondary": "#66BB6A", "tertiary": "#A67C52",
         "on_background": "#1B3A1C", "on_surface": "#1B3A1C", "on_surface_dim": "#7A9E7B", "on_primary": "#FFFFFF",
-        "correct": "#00C853", "wrong": "#D32F2F", "score": "#F9A825",
-        "timer_normal": "#2E7D32", "timer_warning": "#FF8F00", "highlight": "#81C784", "badge": "#2E7D32",
-        "nav_bar": "#FFFFFF", "nav_selected": "#2E7D32", "nav_unselected": "#9AB89B", "status_bar": "#F1F8E9",
-        "tile_empty": "#DCEDC8", "tile_2": "#C5E1A5", "tile_4": "#AED581", "tile_8": "#9CCC65",
-        "tile_16": "#8BC34A", "tile_32": "#7CB342", "tile_64": "#558B2F", "tile_128": "#33691E",
-        "tile_256": "#2E7D32", "tile_512": "#1B5E20", "tile_1024": "#F9A825", "tile_2048": "#E65100",
+        "correct": "#00C853", "wrong": "#D32F2F", "score": "#F9A825", "timer_normal": "#2E7D32",
+        "timer_warning": "#FF8F00", "highlight": "#81C784", "badge": "#2E7D32", "star": "#F9A825",
+        "nav_bar": "#FFFFFF", "nav_selected": "#2E7D32",
+        "nav_unselected": "#9AB89B", "status_bar": "#F1F8E9", "glow": "n/a",
+        "tile_empty": "#DCEDC8", "tile_2": "#C5E1A5", "tile_4": "#AED581", "tile_8": "#9CCC65", "tile_16": "#8BC34A", "tile_32": "#7CB342",
+        "tile_64": "#558B2F", "tile_128": "#33691E", "tile_256": "#2E7D32", "tile_512": "#1B5E20", "tile_1024": "#F9A825", "tile_2048": "#E65100",
         "overlay": "#80DCEDC8", "scrim": "#502E7D32",
     },
     "candy_pop": {
@@ -164,12 +173,12 @@ THEMES: dict[str, dict] = {
         "background": "#FFF0F3", "surface": "#FFFFFF", "surface_variant": "#FFCCD5", "surface_tint": "#FFF5F7",
         "primary": "#FF4D6D", "primary_dark": "#C9184A", "secondary": "#A4DEF5", "tertiary": "#FFCB47",
         "on_background": "#590D22", "on_surface": "#590D22", "on_surface_dim": "#B06070", "on_primary": "#FFFFFF",
-        "correct": "#06D6A0", "wrong": "#EF476F", "score": "#F4A261",
-        "timer_normal": "#FF4D6D", "timer_warning": "#EF476F", "highlight": "#A4DEF5", "badge": "#FF4D6D",
-        "nav_bar": "#FFFFFF", "nav_selected": "#FF4D6D", "nav_unselected": "#D4A0B0", "status_bar": "#FFF0F3",
-        "tile_empty": "#FFCCD5", "tile_2": "#FFADC0", "tile_4": "#FF8FA8", "tile_8": "#FF6D8E",
-        "tile_16": "#FF4D6D", "tile_32": "#E8365A", "tile_64": "#C9184A", "tile_128": "#A4DEF5",
-        "tile_256": "#74C2E1", "tile_512": "#FFCB47", "tile_1024": "#F4A261", "tile_2048": "#06D6A0",
+        "correct": "#06D6A0", "wrong": "#EF476F", "score": "#F4A261", "timer_normal": "#FF4D6D",
+        "timer_warning": "#EF476F", "highlight": "#A4DEF5", "badge": "#FF4D6D", "star": "#F4A261",
+        "nav_bar": "#FFFFFF", "nav_selected": "#FF4D6D",
+        "nav_unselected": "#D4A0B0", "status_bar": "#FFF0F3", "glow": "n/a",
+        "tile_empty": "#FFCCD5", "tile_2": "#FFADC0", "tile_4": "#FF8FA8", "tile_8": "#FF6D8E", "tile_16": "#FF4D6D", "tile_32": "#E8365A",
+        "tile_64": "#C9184A", "tile_128": "#A4DEF5", "tile_256": "#74C2E1", "tile_512": "#FFCB47", "tile_1024": "#F4A261", "tile_2048": "#06D6A0",
         "overlay": "#80FFCCD5", "scrim": "#50FF4D6D",
     },
     "sakura_spring": {
@@ -177,12 +186,12 @@ THEMES: dict[str, dict] = {
         "background": "#FFF5F7", "surface": "#FFFFFF", "surface_variant": "#FFE4EA", "surface_tint": "#FFF0F2",
         "primary": "#E8829A", "primary_dark": "#C96380", "secondary": "#5C8A5F", "tertiary": "#A67C52",
         "on_background": "#3D1C24", "on_surface": "#3D1C24", "on_surface_dim": "#B08898", "on_primary": "#FFFFFF",
-        "correct": "#5C8A5F", "wrong": "#C96380", "score": "#A67C52",
-        "timer_normal": "#E8829A", "timer_warning": "#C96380", "highlight": "#FFB7C5", "badge": "#E8829A",
-        "nav_bar": "#FFFFFF", "nav_selected": "#E8829A", "nav_unselected": "#D4A8B0", "status_bar": "#FFF5F7",
-        "tile_empty": "#FFE4EA", "tile_2": "#FFCCD6", "tile_4": "#FFB7C5", "tile_8": "#FF9BB0",
-        "tile_16": "#F07A95", "tile_32": "#E8829A", "tile_64": "#C96380", "tile_128": "#5C8A5F",
-        "tile_256": "#4A7050", "tile_512": "#A67C52", "tile_1024": "#8B6344", "tile_2048": "#3D1C24",
+        "correct": "#5C8A5F", "wrong": "#C96380", "score": "#A67C52", "timer_normal": "#E8829A",
+        "timer_warning": "#C96380", "highlight": "#FFB7C5", "badge": "#E8829A", "star": "#A67C52",
+        "nav_bar": "#FFFFFF", "nav_selected": "#E8829A",
+        "nav_unselected": "#D4A8B0", "status_bar": "#FFF5F7", "glow": "n/a",
+        "tile_empty": "#FFE4EA", "tile_2": "#FFCCD6", "tile_4": "#FFB7C5", "tile_8": "#FF9BB0", "tile_16": "#F07A95", "tile_32": "#E8829A",
+        "tile_64": "#C96380", "tile_128": "#5C8A5F", "tile_256": "#4A7050", "tile_512": "#A67C52", "tile_1024": "#8B6344", "tile_2048": "#3D1C24",
         "overlay": "#80FFB7C5", "scrim": "#50E8829A",
     },
     "desert_gold": {
@@ -190,12 +199,12 @@ THEMES: dict[str, dict] = {
         "background": "#FDF3E7", "surface": "#FFFFFF", "surface_variant": "#F0DFC0", "surface_tint": "#FAF0E0",
         "primary": "#A0522D", "primary_dark": "#7A3B1E", "secondary": "#C8A96E", "tertiary": "#D4AF37",
         "on_background": "#2C1A0E", "on_surface": "#2C1A0E", "on_surface_dim": "#9E7050", "on_primary": "#FDF3E7",
-        "correct": "#4CAF50", "wrong": "#D32F2F", "score": "#D4AF37",
-        "timer_normal": "#A0522D", "timer_warning": "#D32F2F", "highlight": "#D4AF37", "badge": "#A0522D",
-        "nav_bar": "#FFFFFF", "nav_selected": "#A0522D", "nav_unselected": "#C0A080", "status_bar": "#FDF3E7",
-        "tile_empty": "#F0DFC0", "tile_2": "#E8D0A0", "tile_4": "#DFC080", "tile_8": "#D4AF37",
-        "tile_16": "#C8A96E", "tile_32": "#B8904A", "tile_64": "#A0522D", "tile_128": "#7A3B1E",
-        "tile_256": "#5C2810", "tile_512": "#3A1A08", "tile_1024": "#D4AF37", "tile_2048": "#FFFFFF",
+        "correct": "#4CAF50", "wrong": "#D32F2F", "score": "#D4AF37", "timer_normal": "#A0522D",
+        "timer_warning": "#D32F2F", "highlight": "#D4AF37", "badge": "#A0522D", "star": "#D4AF37",
+        "nav_bar": "#FFFFFF", "nav_selected": "#A0522D",
+        "nav_unselected": "#C0A080", "status_bar": "#FDF3E7", "glow": "n/a",
+        "tile_empty": "#F0DFC0", "tile_2": "#E8D0A0", "tile_4": "#DFC080", "tile_8": "#D4AF37", "tile_16": "#C8A96E", "tile_32": "#B8904A",
+        "tile_64": "#A0522D", "tile_128": "#7A3B1E", "tile_256": "#5C2810", "tile_512": "#3A1A08", "tile_1024": "#D4AF37", "tile_2048": "#FFFFFF",
         "overlay": "#80F0DFC0", "scrim": "#50A0522D",
     },
     "ice_crystal": {
@@ -203,12 +212,12 @@ THEMES: dict[str, dict] = {
         "background": "#E8F4FD", "surface": "#F0F8FF", "surface_variant": "#D0E8F8", "surface_tint": "#E0F0FF",
         "primary": "#1E88E5", "primary_dark": "#1565C0", "secondary": "#78C8E6", "tertiary": "#B0D8F0",
         "on_background": "#0D2137", "on_surface": "#0D2137", "on_surface_dim": "#7090B0", "on_primary": "#FFFFFF",
-        "correct": "#00BCD4", "wrong": "#F06292", "score": "#1E88E5",
-        "timer_normal": "#1E88E5", "timer_warning": "#F06292", "highlight": "#78C8E6", "badge": "#1E88E5",
-        "nav_bar": "#F0F8FF", "nav_selected": "#1E88E5", "nav_unselected": "#90B8D0", "status_bar": "#E8F4FD",
-        "tile_empty": "#D0E8F8", "tile_2": "#B8DCF4", "tile_4": "#9ED0EE", "tile_8": "#78C8E6",
-        "tile_16": "#4AB8DE", "tile_32": "#1E88E5", "tile_64": "#1565C0", "tile_128": "#0D47A1",
-        "tile_256": "#F06292", "tile_512": "#E91E63", "tile_1024": "#FFFFFF", "tile_2048": "#FFD700",
+        "correct": "#00BCD4", "wrong": "#F06292", "score": "#1E88E5", "timer_normal": "#1E88E5",
+        "timer_warning": "#F06292", "highlight": "#78C8E6", "badge": "#1E88E5", "star": "#1E88E5",
+        "nav_bar": "#F0F8FF", "nav_selected": "#1E88E5",
+        "nav_unselected": "#90B8D0", "status_bar": "#E8F4FD", "glow": "n/a",
+        "tile_empty": "#D0E8F8", "tile_2": "#B8DCF4", "tile_4": "#9ED0EE", "tile_8": "#78C8E6", "tile_16": "#4AB8DE", "tile_32": "#1E88E5",
+        "tile_64": "#1565C0", "tile_128": "#0D47A1", "tile_256": "#F06292", "tile_512": "#E91E63", "tile_1024": "#FFFFFF", "tile_2048": "#FFD700",
         "overlay": "#80D0E8F8", "scrim": "#501E88E5",
     },
     "pastel_dream": {
@@ -216,12 +225,12 @@ THEMES: dict[str, dict] = {
         "background": "#FAFAFA", "surface": "#FFFFFF", "surface_variant": "#F0EEF8", "surface_tint": "#F5F3FC",
         "primary": "#9B72CF", "primary_dark": "#7B52AF", "secondary": "#72B7CF", "tertiary": "#CF9B72",
         "on_background": "#2D1B5A", "on_surface": "#2D1B5A", "on_surface_dim": "#9080B0", "on_primary": "#FFFFFF",
-        "correct": "#B5EAD7", "wrong": "#FFABAB", "score": "#FFD700",
-        "timer_normal": "#9B72CF", "timer_warning": "#FFABAB", "highlight": "#C3B1E1", "badge": "#9B72CF",
-        "nav_bar": "#FFFFFF", "nav_selected": "#9B72CF", "nav_unselected": "#C0B0D8", "status_bar": "#FAFAFA",
-        "tile_empty": "#F0EEF8", "tile_2": "#FFABAB", "tile_4": "#FFDAAB", "tile_8": "#FFFFAB",
-        "tile_16": "#B5EAD7", "tile_32": "#ABE4FF", "tile_64": "#C3B1E1", "tile_128": "#FFB7C5",
-        "tile_256": "#9B72CF", "tile_512": "#72B7CF", "tile_1024": "#CF9B72", "tile_2048": "#FFD700",
+        "correct": "#B5EAD7", "wrong": "#FFABAB", "score": "#FFD700", "timer_normal": "#9B72CF",
+        "timer_warning": "#FFABAB", "highlight": "#C3B1E1", "badge": "#9B72CF", "star": "#FFD700",
+        "nav_bar": "#FFFFFF", "nav_selected": "#9B72CF",
+        "nav_unselected": "#C0B0D8", "status_bar": "#FAFAFA", "glow": "n/a",
+        "tile_empty": "#F0EEF8", "tile_2": "#FFABAB", "tile_4": "#FFDAAB", "tile_8": "#FFFFAB", "tile_16": "#B5EAD7", "tile_32": "#ABE4FF",
+        "tile_64": "#C3B1E1", "tile_128": "#FFB7C5", "tile_256": "#9B72CF", "tile_512": "#72B7CF", "tile_1024": "#CF9B72", "tile_2048": "#FFD700",
         "overlay": "#80C3B1E1", "scrim": "#509B72CF",
     },
     "christmas": {
@@ -229,12 +238,12 @@ THEMES: dict[str, dict] = {
         "background": "#F5FFF5", "surface": "#FFFFFF", "surface_variant": "#E8F5E8", "surface_tint": "#F0FFF0",
         "primary": "#CC0000", "primary_dark": "#990000", "secondary": "#165B33", "tertiary": "#D4AF37",
         "on_background": "#1A1A1A", "on_surface": "#1A1A1A", "on_surface_dim": "#708070", "on_primary": "#FFFFFF",
-        "correct": "#165B33", "wrong": "#CC0000", "score": "#D4AF37",
-        "timer_normal": "#165B33", "timer_warning": "#CC0000", "highlight": "#D4AF37", "badge": "#CC0000",
-        "nav_bar": "#FFFFFF", "nav_selected": "#CC0000", "nav_unselected": "#A0B0A0", "status_bar": "#F5FFF5",
-        "tile_empty": "#E8F5E8", "tile_2": "#D4EDD4", "tile_4": "#B8DDB8", "tile_8": "#8BC48B",
-        "tile_16": "#5A9E5A", "tile_32": "#165B33", "tile_64": "#CC0000", "tile_128": "#990000",
-        "tile_256": "#D4AF37", "tile_512": "#B8941F", "tile_1024": "#E8D080", "tile_2048": "#FFFFFF",
+        "correct": "#165B33", "wrong": "#CC0000", "score": "#D4AF37", "timer_normal": "#165B33",
+        "timer_warning": "#CC0000", "highlight": "#D4AF37", "badge": "#CC0000", "star": "#D4AF37",
+        "nav_bar": "#FFFFFF", "nav_selected": "#CC0000",
+        "nav_unselected": "#A0B0A0", "status_bar": "#F5FFF5", "glow": "n/a",
+        "tile_empty": "#E8F5E8", "tile_2": "#D4EDD4", "tile_4": "#B8DDB8", "tile_8": "#8BC48B", "tile_16": "#5A9E5A", "tile_32": "#165B33",
+        "tile_64": "#CC0000", "tile_128": "#990000", "tile_256": "#D4AF37", "tile_512": "#B8941F", "tile_1024": "#E8D080", "tile_2048": "#FFFFFF",
         "overlay": "#80E8F5E8", "scrim": "#80165B33",
     },
     "pixel_classic": {
@@ -242,26 +251,26 @@ THEMES: dict[str, dict] = {
         "background": "#1E1E1E", "surface": "#2D2D2D", "surface_variant": "#3D3D3D", "surface_tint": "#353535",
         "primary": "#FF6B35", "primary_dark": "#D4562A", "secondary": "#F7C59F", "tertiary": "#4CC9F0",
         "on_background": "#FFFFFF", "on_surface": "#FFFFFF", "on_surface_dim": "#BDBDBD", "on_primary": "#FFFFFF",
-        "correct": "#06D6A0", "wrong": "#FF4757", "score": "#FFBE0B",
-        "timer_normal": "#FFBE0B", "timer_warning": "#FF6B35", "highlight": "#4CC9F0", "badge": "#FF6B35",
-        "border": "#FF6B35",
-        "nav_bar": "#2D2D2D", "nav_selected": "#FF6B35", "nav_unselected": "#707070", "status_bar": "#1E1E1E",
-        "tile_empty": "#2D2D2D", "tile_2": "#3D3D3D", "tile_4": "#4D4D4D", "tile_8": "#FF6B35",
-        "tile_16": "#D4562A", "tile_32": "#FFBE0B", "tile_64": "#D4A00A", "tile_128": "#4CC9F0",
-        "tile_256": "#3BACC8", "tile_512": "#06D6A0", "tile_1024": "#05B386", "tile_2048": "#FFBE0B",
+        "correct": "#06D6A0", "wrong": "#FF4757", "score": "#FFBE0B", "timer_normal": "#FFBE0B",
+        "timer_warning": "#FF6B35", "highlight": "#4CC9F0", "badge": "#FF6B35", "star": "#FFBE0B",
+        "nav_bar": "#2D2D2D", "nav_selected": "#FF6B35",
+        "nav_unselected": "#707070", "status_bar": "#1E1E1E", "glow": "#4CC9F0",
+        "tile_empty": "#2D2D2D", "tile_2": "#3D3D3D", "tile_4": "#4D4D4D", "tile_8": "#FF6B35", "tile_16": "#D4562A", "tile_32": "#FFBE0B",
+        "tile_64": "#D4A00A", "tile_128": "#4CC9F0", "tile_256": "#3BACC8", "tile_512": "#06D6A0", "tile_1024": "#05B386", "tile_2048": "#FFBE0B",
         "overlay": "#CC1E1E1E", "scrim": "#991E1E1E",
+        "border": "#FF6B35",
     },
     "cartoon_fun": {
         "_meta": {"prefix": "cf", "name": "Cartoon Fun", "dark": False},
         "background": "#FFF9E6", "surface": "#FFFFFF", "surface_variant": "#FFE8CC", "surface_tint": "#FFF0D8",
         "primary": "#FF3333", "primary_dark": "#CC0000", "secondary": "#FFD700", "tertiary": "#33CC33",
         "on_background": "#1A1A1A", "on_surface": "#1A1A1A", "on_surface_dim": "#888888", "on_primary": "#FFFFFF",
-        "correct": "#33CC33", "wrong": "#FF3333", "score": "#FFD700",
-        "timer_normal": "#FF9900", "timer_warning": "#FF3333", "highlight": "#FFD700", "badge": "#FF3333",
-        "nav_bar": "#FFFFFF", "nav_selected": "#FF3333", "nav_unselected": "#BBBBBB", "status_bar": "#FFF9E6",
-        "tile_empty": "#FFE8CC", "tile_2": "#FFD0A0", "tile_4": "#FFB870", "tile_8": "#FF9900",
-        "tile_16": "#FF6600", "tile_32": "#FF3333", "tile_64": "#CC0000", "tile_128": "#33CC33",
-        "tile_256": "#009900", "tile_512": "#FFD700", "tile_1024": "#FF9900", "tile_2048": "#1A1A1A",
+        "correct": "#33CC33", "wrong": "#FF3333", "score": "#FFD700", "timer_normal": "#FF9900",
+        "timer_warning": "#FF3333", "highlight": "#FFD700", "badge": "#FF3333", "star": "#FFD700",
+        "nav_bar": "#FFFFFF", "nav_selected": "#FF3333",
+        "nav_unselected": "#BBBBBB", "status_bar": "#FFF9E6", "glow": "n/a",
+        "tile_empty": "#FFE8CC", "tile_2": "#FFD0A0", "tile_4": "#FFB870", "tile_8": "#FF9900", "tile_16": "#FF6600", "tile_32": "#FF3333",
+        "tile_64": "#CC0000", "tile_128": "#33CC33", "tile_256": "#009900", "tile_512": "#FFD700", "tile_1024": "#FF9900", "tile_2048": "#1A1A1A",
         "overlay": "#80FFE8CC", "scrim": "#50FF3333",
     },
     "minimalist_white": {
@@ -269,12 +278,12 @@ THEMES: dict[str, dict] = {
         "background": "#F5F5F7", "surface": "#FFFFFF", "surface_variant": "#F0F0F0", "surface_tint": "#FAFAFA",
         "primary": "#0071E3", "primary_dark": "#0055B0", "secondary": "#6E6E73", "tertiary": "#1C1C1E",
         "on_background": "#1C1C1E", "on_surface": "#1C1C1E", "on_surface_dim": "#8E8E93", "on_primary": "#FFFFFF",
-        "correct": "#30D158", "wrong": "#FF3B30", "score": "#0071E3",
-        "timer_normal": "#0071E3", "timer_warning": "#FF3B30", "highlight": "#0071E3", "badge": "#0071E3",
-        "nav_bar": "#FFFFFF", "nav_selected": "#0071E3", "nav_unselected": "#C7C7CC", "status_bar": "#F5F5F7",
-        "tile_empty": "#F0F0F0", "tile_2": "#E5E5EA", "tile_4": "#D1D1D6", "tile_8": "#AEAEB2",
-        "tile_16": "#8E8E93", "tile_32": "#636366", "tile_64": "#48484A", "tile_128": "#0071E3",
-        "tile_256": "#0055B0", "tile_512": "#30D158", "tile_1024": "#FF9F0A", "tile_2048": "#FF3B30",
+        "correct": "#30D158", "wrong": "#FF3B30", "score": "#0071E3", "timer_normal": "#0071E3",
+        "timer_warning": "#FF3B30", "highlight": "#0071E3", "badge": "#0071E3", "star": "#0071E3",
+        "nav_bar": "#FFFFFF", "nav_selected": "#0071E3",
+        "nav_unselected": "#C7C7CC", "status_bar": "#F5F5F7", "glow": "n/a",
+        "tile_empty": "#F0F0F0", "tile_2": "#E5E5EA", "tile_4": "#D1D1D6", "tile_8": "#AEAEB2", "tile_16": "#8E8E93", "tile_32": "#636366",
+        "tile_64": "#48484A", "tile_128": "#0071E3", "tile_256": "#0055B0", "tile_512": "#30D158", "tile_1024": "#FF9F0A", "tile_2048": "#FF3B30",
         "overlay": "#80F0F0F0", "scrim": "#500071E3",
     },
     "paper_craft": {
@@ -282,12 +291,12 @@ THEMES: dict[str, dict] = {
         "background": "#F0E6D0", "surface": "#F8F0E0", "surface_variant": "#E8D8B8", "surface_tint": "#F0E8D8",
         "primary": "#8B5E3C", "primary_dark": "#6B3E1C", "secondary": "#D4936A", "tertiary": "#5B8A4A",
         "on_background": "#2C1A0C", "on_surface": "#2C1A0C", "on_surface_dim": "#9E7850", "on_primary": "#F8F0E0",
-        "correct": "#5B8A4A", "wrong": "#C04040", "score": "#8B5E3C",
-        "timer_normal": "#8B5E3C", "timer_warning": "#C04040", "highlight": "#D4936A", "badge": "#8B5E3C",
-        "nav_bar": "#F8F0E0", "nav_selected": "#8B5E3C", "nav_unselected": "#C0A080", "status_bar": "#F0E6D0",
-        "tile_empty": "#E8D8B8", "tile_2": "#F0D8A0", "tile_4": "#E8C880", "tile_8": "#D4B060",
-        "tile_16": "#C09040", "tile_32": "#D4936A", "tile_64": "#8B5E3C", "tile_128": "#5B8A4A",
-        "tile_256": "#3A6A2A", "tile_512": "#4A6A9A", "tile_1024": "#C04040", "tile_2048": "#2C1A0C",
+        "correct": "#5B8A4A", "wrong": "#C04040", "score": "#8B5E3C", "timer_normal": "#8B5E3C",
+        "timer_warning": "#C04040", "highlight": "#D4936A", "badge": "#8B5E3C", "star": "#8B5E3C",
+        "nav_bar": "#F8F0E0", "nav_selected": "#8B5E3C",
+        "nav_unselected": "#C0A080", "status_bar": "#F0E6D0", "glow": "n/a",
+        "tile_empty": "#E8D8B8", "tile_2": "#F0D8A0", "tile_4": "#E8C880", "tile_8": "#D4B060", "tile_16": "#C09040", "tile_32": "#D4936A",
+        "tile_64": "#8B5E3C", "tile_128": "#5B8A4A", "tile_256": "#3A6A2A", "tile_512": "#4A6A9A", "tile_1024": "#C04040", "tile_2048": "#2C1A0C",
         "overlay": "#80E8D8B8", "scrim": "#508B5E3C",
     },
     "neon_synthwave": {
@@ -295,12 +304,12 @@ THEMES: dict[str, dict] = {
         "background": "#0A0010", "surface": "#14002A", "surface_variant": "#1E0040", "surface_tint": "#250050",
         "primary": "#FF00FF", "primary_dark": "#CC00CC", "secondary": "#00FFFF", "tertiary": "#FF6EC7",
         "on_background": "#FFE8FF", "on_surface": "#FFE8FF", "on_surface_dim": "#8040A0", "on_primary": "#FFFFFF",
-        "correct": "#00FFFF", "wrong": "#FF0055", "score": "#FFFF00",
-        "timer_normal": "#00FFFF", "timer_warning": "#FF0055", "highlight": "#FF00FF", "badge": "#FF00FF",
-        "nav_bar": "#14002A", "nav_selected": "#FF00FF", "nav_unselected": "#604080", "status_bar": "#0A0010",
-        "tile_empty": "#1E0040", "tile_2": "#2A0060", "tile_4": "#40008A", "tile_8": "#6600BB",
-        "tile_16": "#9900DD", "tile_32": "#CC00CC", "tile_64": "#FF00FF", "tile_128": "#00FFFF",
-        "tile_256": "#00CCFF", "tile_512": "#FFFF00", "tile_1024": "#FF6EC7", "tile_2048": "#FFFFFF",
+        "correct": "#00FFFF", "wrong": "#FF0055", "score": "#FFFF00", "timer_normal": "#00FFFF",
+        "timer_warning": "#FF0055", "highlight": "#FF00FF", "badge": "#FF00FF", "star": "#FFFF00",
+        "nav_bar": "#14002A", "nav_selected": "#FF00FF",
+        "nav_unselected": "#604080", "status_bar": "#0A0010", "glow": "#FF00FF",
+        "tile_empty": "#1E0040", "tile_2": "#2A0060", "tile_4": "#40008A", "tile_8": "#6600BB", "tile_16": "#9900DD", "tile_32": "#CC00CC",
+        "tile_64": "#FF00FF", "tile_128": "#00FFFF", "tile_256": "#00CCFF", "tile_512": "#FFFF00", "tile_1024": "#FF6EC7", "tile_2048": "#FFFFFF",
         "overlay": "#CC0A0010", "scrim": "#990A0010",
     },
     "noir_cinema": {
@@ -308,12 +317,12 @@ THEMES: dict[str, dict] = {
         "background": "#0A0A0A", "surface": "#161616", "surface_variant": "#222222", "surface_tint": "#1C1212",
         "primary": "#E8E8E8", "primary_dark": "#BDBDBD", "secondary": "#8A1C1C", "tertiary": "#C4A35A",
         "on_background": "#F2F2F2", "on_surface": "#F2F2F2", "on_surface_dim": "#7A7A7A", "on_primary": "#0A0A0A",
-        "correct": "#6FBF73", "wrong": "#C62828", "score": "#C4A35A",
-        "timer_normal": "#E8E8E8", "timer_warning": "#C62828", "highlight": "#8A1C1C", "badge": "#8A1C1C",
-        "nav_bar": "#161616", "nav_selected": "#E8E8E8", "nav_unselected": "#555555", "status_bar": "#0A0A0A",
-        "tile_empty": "#1C1C1C", "tile_2": "#2A2A2A", "tile_4": "#3A3A3A", "tile_8": "#4A4A4A",
-        "tile_16": "#6A6A6A", "tile_32": "#8A1C1C", "tile_64": "#A02424", "tile_128": "#C4A35A",
-        "tile_256": "#D4B86A", "tile_512": "#E8E8E8", "tile_1024": "#F5F5F5", "tile_2048": "#FFFFFF",
+        "correct": "#6FBF73", "wrong": "#C62828", "score": "#C4A35A", "timer_normal": "#E8E8E8",
+        "timer_warning": "#C62828", "highlight": "#8A1C1C", "badge": "#8A1C1C", "star": "#C4A35A",
+        "nav_bar": "#161616", "nav_selected": "#E8E8E8",
+        "nav_unselected": "#555555", "status_bar": "#0A0A0A", "glow": "#8A1C1C",
+        "tile_empty": "#1C1C1C", "tile_2": "#2A2A2A", "tile_4": "#3A3A3A", "tile_8": "#4A4A4A", "tile_16": "#6A6A6A", "tile_32": "#8A1C1C",
+        "tile_64": "#A02424", "tile_128": "#C4A35A", "tile_256": "#D4B86A", "tile_512": "#E8E8E8", "tile_1024": "#F5F5F5", "tile_2048": "#FFFFFF",
         "overlay": "#E50A0A0A", "scrim": "#990A0A0A",
     },
     "cyber_mint": {
@@ -321,12 +330,12 @@ THEMES: dict[str, dict] = {
         "background": "#04120F", "surface": "#0A1F1A", "surface_variant": "#123028", "surface_tint": "#0F2A22",
         "primary": "#3DFFB5", "primary_dark": "#20C98A", "secondary": "#1FA2A2", "tertiary": "#A8FFCE",
         "on_background": "#D8FFF0", "on_surface": "#D8FFF0", "on_surface_dim": "#4A7A68", "on_primary": "#04120F",
-        "correct": "#3DFFB5", "wrong": "#FF4D6D", "score": "#A8FFCE",
-        "timer_normal": "#3DFFB5", "timer_warning": "#FF8A3D", "highlight": "#A8FFCE", "badge": "#3DFFB5",
-        "nav_bar": "#0A1F1A", "nav_selected": "#3DFFB5", "nav_unselected": "#3A5A50", "status_bar": "#04120F",
-        "tile_empty": "#123028", "tile_2": "#163A30", "tile_4": "#1A4A3C", "tile_8": "#1FA2A2",
-        "tile_16": "#20C98A", "tile_32": "#3DFFB5", "tile_64": "#6AFFC8", "tile_128": "#A8FFCE",
-        "tile_256": "#D8FFF0", "tile_512": "#FF8A3D", "tile_1024": "#FF4D6D", "tile_2048": "#FFFFFF",
+        "correct": "#3DFFB5", "wrong": "#FF4D6D", "score": "#A8FFCE", "timer_normal": "#3DFFB5",
+        "timer_warning": "#FF8A3D", "highlight": "#A8FFCE", "badge": "#3DFFB5", "star": "#A8FFCE",
+        "nav_bar": "#0A1F1A", "nav_selected": "#3DFFB5",
+        "nav_unselected": "#3A5A50", "status_bar": "#04120F", "glow": "#A8FFCE",
+        "tile_empty": "#123028", "tile_2": "#163A30", "tile_4": "#1A4A3C", "tile_8": "#1FA2A2", "tile_16": "#20C98A", "tile_32": "#3DFFB5",
+        "tile_64": "#6AFFC8", "tile_128": "#A8FFCE", "tile_256": "#D8FFF0", "tile_512": "#FF8A3D", "tile_1024": "#FF4D6D", "tile_2048": "#FFFFFF",
         "overlay": "#CC04120F", "scrim": "#9904120F",
     },
     "ember_coal": {
@@ -334,12 +343,12 @@ THEMES: dict[str, dict] = {
         "background": "#100806", "surface": "#1C100C", "surface_variant": "#2A1812", "surface_tint": "#301A12",
         "primary": "#E85D04", "primary_dark": "#B84503", "secondary": "#DC2F02", "tertiary": "#F48C06",
         "on_background": "#FFE8D6", "on_surface": "#FFE8D6", "on_surface_dim": "#8A5A40", "on_primary": "#100806",
-        "correct": "#90BE6D", "wrong": "#DC2F02", "score": "#F48C06",
-        "timer_normal": "#F48C06", "timer_warning": "#DC2F02", "highlight": "#F48C06", "badge": "#E85D04",
-        "nav_bar": "#1C100C", "nav_selected": "#E85D04", "nav_unselected": "#5A3A2A", "status_bar": "#100806",
-        "tile_empty": "#2A1812", "tile_2": "#3A2018", "tile_4": "#4A2818", "tile_8": "#6A3410",
-        "tile_16": "#9A4010", "tile_32": "#B84503", "tile_64": "#E85D04", "tile_128": "#F48C06",
-        "tile_256": "#FFB703", "tile_512": "#DC2F02", "tile_1024": "#FFD166", "tile_2048": "#FFFFFF",
+        "correct": "#90BE6D", "wrong": "#DC2F02", "score": "#F48C06", "timer_normal": "#F48C06",
+        "timer_warning": "#DC2F02", "highlight": "#F48C06", "badge": "#E85D04", "star": "#F48C06",
+        "nav_bar": "#1C100C", "nav_selected": "#E85D04",
+        "nav_unselected": "#5A3A2A", "status_bar": "#100806", "glow": "#F48C06",
+        "tile_empty": "#2A1812", "tile_2": "#3A2018", "tile_4": "#4A2818", "tile_8": "#6A3410", "tile_16": "#9A4010", "tile_32": "#B84503",
+        "tile_64": "#E85D04", "tile_128": "#F48C06", "tile_256": "#FFB703", "tile_512": "#DC2F02", "tile_1024": "#FFD166", "tile_2048": "#FFFFFF",
         "overlay": "#CC100806", "scrim": "#99100806",
     },
     "matcha_cafe": {
@@ -347,12 +356,12 @@ THEMES: dict[str, dict] = {
         "background": "#F4F1E8", "surface": "#FFFCF5", "surface_variant": "#E4E8D4", "surface_tint": "#F0EDE2",
         "primary": "#5F7A45", "primary_dark": "#465C32", "secondary": "#C4A574", "tertiary": "#8B6F47",
         "on_background": "#2A2E22", "on_surface": "#2A2E22", "on_surface_dim": "#7A8070", "on_primary": "#FFFCF5",
-        "correct": "#5F7A45", "wrong": "#B54A3A", "score": "#C4A574",
-        "timer_normal": "#5F7A45", "timer_warning": "#B54A3A", "highlight": "#A8C47A", "badge": "#5F7A45",
-        "nav_bar": "#FFFCF5", "nav_selected": "#5F7A45", "nav_unselected": "#A8A898", "status_bar": "#F4F1E8",
-        "tile_empty": "#E4E8D4", "tile_2": "#D4DCC0", "tile_4": "#C0CCAA", "tile_8": "#A8C47A",
-        "tile_16": "#8BA85C", "tile_32": "#5F7A45", "tile_64": "#465C32", "tile_128": "#C4A574",
-        "tile_256": "#8B6F47", "tile_512": "#B54A3A", "tile_1024": "#E8D5A3", "tile_2048": "#2A2E22",
+        "correct": "#5F7A45", "wrong": "#B54A3A", "score": "#C4A574", "timer_normal": "#5F7A45",
+        "timer_warning": "#B54A3A", "highlight": "#A8C47A", "badge": "#5F7A45", "star": "#C4A574",
+        "nav_bar": "#FFFCF5", "nav_selected": "#5F7A45",
+        "nav_unselected": "#A8A898", "status_bar": "#F4F1E8", "glow": "n/a",
+        "tile_empty": "#E4E8D4", "tile_2": "#D4DCC0", "tile_4": "#C0CCAA", "tile_8": "#A8C47A", "tile_16": "#8BA85C", "tile_32": "#5F7A45",
+        "tile_64": "#465C32", "tile_128": "#C4A574", "tile_256": "#8B6F47", "tile_512": "#B54A3A", "tile_1024": "#E8D5A3", "tile_2048": "#2A2E22",
         "overlay": "#80E4E8D4", "scrim": "#505F7A45",
     },
     "coral_reef": {
@@ -360,12 +369,12 @@ THEMES: dict[str, dict] = {
         "background": "#FFF5F2", "surface": "#FFFFFF", "surface_variant": "#FFE0D6", "surface_tint": "#FFF0EC",
         "primary": "#FF6F61", "primary_dark": "#E2554A", "secondary": "#00A8A8", "tertiary": "#FFB4A2",
         "on_background": "#3A1F1A", "on_surface": "#3A1F1A", "on_surface_dim": "#A07870", "on_primary": "#FFFFFF",
-        "correct": "#2BB673", "wrong": "#E2554A", "score": "#00A8A8",
-        "timer_normal": "#00A8A8", "timer_warning": "#FF6F61", "highlight": "#FFB4A2", "badge": "#FF6F61",
-        "nav_bar": "#FFFFFF", "nav_selected": "#FF6F61", "nav_unselected": "#C8A8A0", "status_bar": "#FFF5F2",
-        "tile_empty": "#FFE0D6", "tile_2": "#FFD0C4", "tile_4": "#FFB4A2", "tile_8": "#FF8F7A",
-        "tile_16": "#FF6F61", "tile_32": "#E2554A", "tile_64": "#00A8A8", "tile_128": "#008F8F",
-        "tile_256": "#2BB673", "tile_512": "#FFD166", "tile_1024": "#3A1F1A", "tile_2048": "#FFFFFF",
+        "correct": "#2BB673", "wrong": "#E2554A", "score": "#00A8A8", "timer_normal": "#00A8A8",
+        "timer_warning": "#FF6F61", "highlight": "#FFB4A2", "badge": "#FF6F61", "star": "#00A8A8",
+        "nav_bar": "#FFFFFF", "nav_selected": "#FF6F61",
+        "nav_unselected": "#C8A8A0", "status_bar": "#FFF5F2", "glow": "n/a",
+        "tile_empty": "#FFE0D6", "tile_2": "#FFD0C4", "tile_4": "#FFB4A2", "tile_8": "#FF8F7A", "tile_16": "#FF6F61", "tile_32": "#E2554A",
+        "tile_64": "#00A8A8", "tile_128": "#008F8F", "tile_256": "#2BB673", "tile_512": "#FFD166", "tile_1024": "#3A1F1A", "tile_2048": "#FFFFFF",
         "overlay": "#80FFE0D6", "scrim": "#50FF6F61",
     },
     "honey_amber": {
@@ -373,12 +382,12 @@ THEMES: dict[str, dict] = {
         "background": "#FFF8EB", "surface": "#FFFCF5", "surface_variant": "#F5E6C8", "surface_tint": "#FFF4E0",
         "primary": "#D4A017", "primary_dark": "#A67C0A", "secondary": "#E8B86D", "tertiary": "#8B5A2B",
         "on_background": "#3A2A12", "on_surface": "#3A2A12", "on_surface_dim": "#9A8050", "on_primary": "#3A2A12",
-        "correct": "#6B9E3A", "wrong": "#C4472A", "score": "#D4A017",
-        "timer_normal": "#D4A017", "timer_warning": "#C4472A", "highlight": "#E8B86D", "badge": "#D4A017",
-        "nav_bar": "#FFFCF5", "nav_selected": "#D4A017", "nav_unselected": "#C0A878", "status_bar": "#FFF8EB",
-        "tile_empty": "#F5E6C8", "tile_2": "#F0DCA8", "tile_4": "#E8D08A", "tile_8": "#E8B86D",
-        "tile_16": "#D4A017", "tile_32": "#A67C0A", "tile_64": "#8B5A2B", "tile_128": "#6B9E3A",
-        "tile_256": "#C4472A", "tile_512": "#F0C040", "tile_1024": "#FFF8EB", "tile_2048": "#3A2A12",
+        "correct": "#6B9E3A", "wrong": "#C4472A", "score": "#D4A017", "timer_normal": "#D4A017",
+        "timer_warning": "#C4472A", "highlight": "#E8B86D", "badge": "#D4A017", "star": "#D4A017",
+        "nav_bar": "#FFFCF5", "nav_selected": "#D4A017",
+        "nav_unselected": "#C0A878", "status_bar": "#FFF8EB", "glow": "n/a",
+        "tile_empty": "#F5E6C8", "tile_2": "#F0DCA8", "tile_4": "#E8D08A", "tile_8": "#E8B86D", "tile_16": "#D4A017", "tile_32": "#A67C0A",
+        "tile_64": "#8B5A2B", "tile_128": "#6B9E3A", "tile_256": "#C4472A", "tile_512": "#F0C040", "tile_1024": "#FFF8EB", "tile_2048": "#3A2A12",
         "overlay": "#80F5E6C8", "scrim": "#50D4A017",
     },
     "sunset_plaza": {
@@ -386,12 +395,12 @@ THEMES: dict[str, dict] = {
         "background": "#FFF1E8", "surface": "#FFFAF6", "surface_variant": "#FFD8C2", "surface_tint": "#FFE8DA",
         "primary": "#E76F51", "primary_dark": "#C4553A", "secondary": "#F4A261", "tertiary": "#2A9D8F",
         "on_background": "#3A2218", "on_surface": "#3A2218", "on_surface_dim": "#A07A68", "on_primary": "#FFFFFF",
-        "correct": "#2A9D8F", "wrong": "#C4553A", "score": "#F4A261",
-        "timer_normal": "#E76F51", "timer_warning": "#C4553A", "highlight": "#F4A261", "badge": "#E76F51",
-        "nav_bar": "#FFFAF6", "nav_selected": "#E76F51", "nav_unselected": "#C8A898", "status_bar": "#FFF1E8",
-        "tile_empty": "#FFD8C2", "tile_2": "#FFC8A8", "tile_4": "#F4A261", "tile_8": "#E98A4A",
-        "tile_16": "#E76F51", "tile_32": "#C4553A", "tile_64": "#2A9D8F", "tile_128": "#1F7A70",
-        "tile_256": "#E9C46A", "tile_512": "#264653", "tile_1024": "#FFFFFF", "tile_2048": "#3A2218",
+        "correct": "#2A9D8F", "wrong": "#C4553A", "score": "#F4A261", "timer_normal": "#E76F51",
+        "timer_warning": "#C4553A", "highlight": "#F4A261", "badge": "#E76F51", "star": "#F4A261",
+        "nav_bar": "#FFFAF6", "nav_selected": "#E76F51",
+        "nav_unselected": "#C8A898", "status_bar": "#FFF1E8", "glow": "n/a",
+        "tile_empty": "#FFD8C2", "tile_2": "#FFC8A8", "tile_4": "#F4A261", "tile_8": "#E98A4A", "tile_16": "#E76F51", "tile_32": "#C4553A",
+        "tile_64": "#2A9D8F", "tile_128": "#1F7A70", "tile_256": "#E9C46A", "tile_512": "#264653", "tile_1024": "#FFFFFF", "tile_2048": "#3A2218",
         "overlay": "#80FFD8C2", "scrim": "#50E76F51",
     },
     "arcade_cabinet": {
@@ -399,12 +408,12 @@ THEMES: dict[str, dict] = {
         "background": "#0B0B14", "surface": "#161625", "surface_variant": "#222238", "surface_tint": "#1A1A2E",
         "primary": "#39FF14", "primary_dark": "#28C40E", "secondary": "#FF6B00", "tertiary": "#00E5FF",
         "on_background": "#E8FFE8", "on_surface": "#E8FFE8", "on_surface_dim": "#5A7A5A", "on_primary": "#0B0B14",
-        "correct": "#39FF14", "wrong": "#FF2A55", "score": "#FF6B00",
-        "timer_normal": "#39FF14", "timer_warning": "#FF6B00", "highlight": "#00E5FF", "badge": "#FF6B00",
-        "nav_bar": "#161625", "nav_selected": "#39FF14", "nav_unselected": "#4A4A68", "status_bar": "#0B0B14",
-        "tile_empty": "#222238", "tile_2": "#2A2A48", "tile_4": "#323260", "tile_8": "#28C40E",
-        "tile_16": "#39FF14", "tile_32": "#00E5FF", "tile_64": "#00B8CC", "tile_128": "#FF6B00",
-        "tile_256": "#FF8C33", "tile_512": "#FF2A55", "tile_1024": "#FFE600", "tile_2048": "#FFFFFF",
+        "correct": "#39FF14", "wrong": "#FF2A55", "score": "#FF6B00", "timer_normal": "#39FF14",
+        "timer_warning": "#FF6B00", "highlight": "#00E5FF", "badge": "#FF6B00", "star": "#FF6B00",
+        "nav_bar": "#161625", "nav_selected": "#39FF14",
+        "nav_unselected": "#4A4A68", "status_bar": "#0B0B14", "glow": "#00E5FF",
+        "tile_empty": "#222238", "tile_2": "#2A2A48", "tile_4": "#323260", "tile_8": "#28C40E", "tile_16": "#39FF14", "tile_32": "#00E5FF",
+        "tile_64": "#00B8CC", "tile_128": "#FF6B00", "tile_256": "#FF8C33", "tile_512": "#FF2A55", "tile_1024": "#FFE600", "tile_2048": "#FFFFFF",
         "overlay": "#CC0B0B14", "scrim": "#990B0B14",
     },
     "cyberpunk_city": {
@@ -412,12 +421,12 @@ THEMES: dict[str, dict] = {
         "background": "#0A0A12", "surface": "#12121F", "surface_variant": "#1A1A2E", "surface_tint": "#1E1535",
         "primary": "#00F0FF", "primary_dark": "#00B8C4", "secondary": "#FF2A6D", "tertiary": "#F9F002",
         "on_background": "#E8F4FF", "on_surface": "#E8F4FF", "on_surface_dim": "#5A6A80", "on_primary": "#0A0A12",
-        "correct": "#00F0FF", "wrong": "#FF2A6D", "score": "#F9F002",
-        "timer_normal": "#00F0FF", "timer_warning": "#FF2A6D", "highlight": "#F9F002", "badge": "#FF2A6D",
-        "nav_bar": "#12121F", "nav_selected": "#00F0FF", "nav_unselected": "#4A4A68", "status_bar": "#0A0A12",
-        "tile_empty": "#1A1A2E", "tile_2": "#222240", "tile_4": "#2A2A55", "tile_8": "#003A50",
-        "tile_16": "#007A90", "tile_32": "#00B8C4", "tile_64": "#00F0FF", "tile_128": "#FF2A6D",
-        "tile_256": "#FF5A8D", "tile_512": "#F9F002", "tile_1024": "#FFFFFF", "tile_2048": "#00F0FF",
+        "correct": "#00F0FF", "wrong": "#FF2A6D", "score": "#F9F002", "timer_normal": "#00F0FF",
+        "timer_warning": "#FF2A6D", "highlight": "#F9F002", "badge": "#FF2A6D", "star": "#F9F002",
+        "nav_bar": "#12121F", "nav_selected": "#00F0FF",
+        "nav_unselected": "#4A4A68", "status_bar": "#0A0A12", "glow": "#F9F002",
+        "tile_empty": "#1A1A2E", "tile_2": "#222240", "tile_4": "#2A2A55", "tile_8": "#003A50", "tile_16": "#007A90", "tile_32": "#00B8C4",
+        "tile_64": "#00F0FF", "tile_128": "#FF2A6D", "tile_256": "#FF5A8D", "tile_512": "#F9F002", "tile_1024": "#FFFFFF", "tile_2048": "#00F0FF",
         "overlay": "#CC0A0A12", "scrim": "#990A0A12",
     },
     "pirate_cove": {
@@ -425,12 +434,12 @@ THEMES: dict[str, dict] = {
         "background": "#0C100E", "surface": "#161C18", "surface_variant": "#1E2820", "surface_tint": "#243028",
         "primary": "#C9A227", "primary_dark": "#A07E1A", "secondary": "#1B4F72", "tertiary": "#8B3A2A",
         "on_background": "#F0E6C8", "on_surface": "#F0E6C8", "on_surface_dim": "#7A8068", "on_primary": "#0C100E",
-        "correct": "#4CAF50", "wrong": "#C62828", "score": "#C9A227",
-        "timer_normal": "#C9A227", "timer_warning": "#C62828", "highlight": "#1B4F72", "badge": "#C9A227",
-        "nav_bar": "#161C18", "nav_selected": "#C9A227", "nav_unselected": "#4A5548", "status_bar": "#0C100E",
-        "tile_empty": "#1E2820", "tile_2": "#283228", "tile_4": "#344038", "tile_8": "#3A4A50",
-        "tile_16": "#1B4F72", "tile_32": "#2A6A90", "tile_64": "#8B3A2A", "tile_128": "#A07E1A",
-        "tile_256": "#C9A227", "tile_512": "#E0C040", "tile_1024": "#F0E6C8", "tile_2048": "#FFFFFF",
+        "correct": "#4CAF50", "wrong": "#C62828", "score": "#C9A227", "timer_normal": "#C9A227",
+        "timer_warning": "#C62828", "highlight": "#1B4F72", "badge": "#C9A227", "star": "#C9A227",
+        "nav_bar": "#161C18", "nav_selected": "#C9A227",
+        "nav_unselected": "#4A5548", "status_bar": "#0C100E", "glow": "#1B4F72",
+        "tile_empty": "#1E2820", "tile_2": "#283228", "tile_4": "#344038", "tile_8": "#3A4A50", "tile_16": "#1B4F72", "tile_32": "#2A6A90",
+        "tile_64": "#8B3A2A", "tile_128": "#A07E1A", "tile_256": "#C9A227", "tile_512": "#E0C040", "tile_1024": "#F0E6C8", "tile_2048": "#FFFFFF",
         "overlay": "#CC0C100E", "scrim": "#990C100E",
     },
     "royal_velvet": {
@@ -438,12 +447,12 @@ THEMES: dict[str, dict] = {
         "background": "#0F0818", "surface": "#1A1028", "surface_variant": "#241838", "surface_tint": "#2E1E48",
         "primary": "#C9A84C", "primary_dark": "#A88A30", "secondary": "#6B2D8B", "tertiary": "#9B4DB8",
         "on_background": "#F5E8C8", "on_surface": "#F5E8C8", "on_surface_dim": "#7A6888", "on_primary": "#0F0818",
-        "correct": "#6BCB77", "wrong": "#E74C3C", "score": "#C9A84C",
-        "timer_normal": "#C9A84C", "timer_warning": "#E74C3C", "highlight": "#9B4DB8", "badge": "#C9A84C",
-        "nav_bar": "#1A1028", "nav_selected": "#C9A84C", "nav_unselected": "#504060", "status_bar": "#0F0818",
-        "tile_empty": "#241838", "tile_2": "#2E1E48", "tile_4": "#3A2860", "tile_8": "#4A3080",
-        "tile_16": "#6B2D8B", "tile_32": "#9B4DB8", "tile_64": "#A88A30", "tile_128": "#C9A84C",
-        "tile_256": "#D4BC68", "tile_512": "#E8D080", "tile_1024": "#F5E8C8", "tile_2048": "#FFFFFF",
+        "correct": "#6BCB77", "wrong": "#E74C3C", "score": "#C9A84C", "timer_normal": "#C9A84C",
+        "timer_warning": "#E74C3C", "highlight": "#9B4DB8", "badge": "#C9A84C", "star": "#C9A84C",
+        "nav_bar": "#1A1028", "nav_selected": "#C9A84C",
+        "nav_unselected": "#504060", "status_bar": "#0F0818", "glow": "#9B4DB8",
+        "tile_empty": "#241838", "tile_2": "#2E1E48", "tile_4": "#3A2860", "tile_8": "#4A3080", "tile_16": "#6B2D8B", "tile_32": "#9B4DB8",
+        "tile_64": "#A88A30", "tile_128": "#C9A84C", "tile_256": "#D4BC68", "tile_512": "#E8D080", "tile_1024": "#F5E8C8", "tile_2048": "#FFFFFF",
         "overlay": "#CC0F0818", "scrim": "#990F0818",
     },
     "industrial_steel": {
@@ -451,12 +460,12 @@ THEMES: dict[str, dict] = {
         "background": "#121418", "surface": "#1C1E24", "surface_variant": "#282A32", "surface_tint": "#30323A",
         "primary": "#FF6B00", "primary_dark": "#CC5500", "secondary": "#8A9199", "tertiary": "#4FC3F7",
         "on_background": "#E8EAED", "on_surface": "#E8EAED", "on_surface_dim": "#6A7078", "on_primary": "#121418",
-        "correct": "#66BB6A", "wrong": "#EF5350", "score": "#FF6B00",
-        "timer_normal": "#4FC3F7", "timer_warning": "#EF5350", "highlight": "#FF6B00", "badge": "#FF6B00",
-        "nav_bar": "#1C1E24", "nav_selected": "#FF6B00", "nav_unselected": "#505860", "status_bar": "#121418",
-        "tile_empty": "#282A32", "tile_2": "#343640", "tile_4": "#404248", "tile_8": "#505860",
-        "tile_16": "#606870", "tile_32": "#8A9199", "tile_64": "#CC5500", "tile_128": "#FF6B00",
-        "tile_256": "#FF8A33", "tile_512": "#4FC3F7", "tile_1024": "#66BB6A", "tile_2048": "#FFFFFF",
+        "correct": "#66BB6A", "wrong": "#EF5350", "score": "#FF6B00", "timer_normal": "#4FC3F7",
+        "timer_warning": "#EF5350", "highlight": "#FF6B00", "badge": "#FF6B00", "star": "#FF6B00",
+        "nav_bar": "#1C1E24", "nav_selected": "#FF6B00",
+        "nav_unselected": "#505860", "status_bar": "#121418", "glow": "#FF6B00",
+        "tile_empty": "#282A32", "tile_2": "#343640", "tile_4": "#404248", "tile_8": "#505860", "tile_16": "#606870", "tile_32": "#8A9199",
+        "tile_64": "#CC5500", "tile_128": "#FF6B00", "tile_256": "#FF8A33", "tile_512": "#4FC3F7", "tile_1024": "#66BB6A", "tile_2048": "#FFFFFF",
         "overlay": "#CC121418", "scrim": "#99121418",
     },
     "night_market": {
@@ -464,12 +473,12 @@ THEMES: dict[str, dict] = {
         "background": "#0E0A08", "surface": "#1A1410", "surface_variant": "#261C16", "surface_tint": "#302418",
         "primary": "#FF6B35", "primary_dark": "#D4521A", "secondary": "#FFD166", "tertiary": "#E63946",
         "on_background": "#FFE8D6", "on_surface": "#FFE8D6", "on_surface_dim": "#8A6A50", "on_primary": "#0E0A08",
-        "correct": "#2A9D8F", "wrong": "#E63946", "score": "#FFD166",
-        "timer_normal": "#FFD166", "timer_warning": "#E63946", "highlight": "#FF6B35", "badge": "#E63946",
-        "nav_bar": "#1A1410", "nav_selected": "#FF6B35", "nav_unselected": "#5A4030", "status_bar": "#0E0A08",
-        "tile_empty": "#261C16", "tile_2": "#322418", "tile_4": "#3E3020", "tile_8": "#5A4028",
-        "tile_16": "#D4521A", "tile_32": "#FF6B35", "tile_64": "#FF8A55", "tile_128": "#FFD166",
-        "tile_256": "#E63946", "tile_512": "#2A9D8F", "tile_1024": "#FFE8D6", "tile_2048": "#FFFFFF",
+        "correct": "#2A9D8F", "wrong": "#E63946", "score": "#FFD166", "timer_normal": "#FFD166",
+        "timer_warning": "#E63946", "highlight": "#FF6B35", "badge": "#E63946", "star": "#FFD166",
+        "nav_bar": "#1A1410", "nav_selected": "#FF6B35",
+        "nav_unselected": "#5A4030", "status_bar": "#0E0A08", "glow": "#FF6B35",
+        "tile_empty": "#261C16", "tile_2": "#322418", "tile_4": "#3E3020", "tile_8": "#5A4028", "tile_16": "#D4521A", "tile_32": "#FF6B35",
+        "tile_64": "#FF8A55", "tile_128": "#FFD166", "tile_256": "#E63946", "tile_512": "#2A9D8F", "tile_1024": "#FFE8D6", "tile_2048": "#FFFFFF",
         "overlay": "#CC0E0A08", "scrim": "#990E0A08",
     },
     "moonlit_garden": {
@@ -477,12 +486,12 @@ THEMES: dict[str, dict] = {
         "background": "#0A1210", "surface": "#121C18", "surface_variant": "#1A2820", "surface_tint": "#203028",
         "primary": "#7EC8A3", "primary_dark": "#5AA882", "secondary": "#C4B5E0", "tertiary": "#E8E0F0",
         "on_background": "#E0F0E8", "on_surface": "#E0F0E8", "on_surface_dim": "#5A7868", "on_primary": "#0A1210",
-        "correct": "#7EC8A3", "wrong": "#E07080", "score": "#C4B5E0",
-        "timer_normal": "#7EC8A3", "timer_warning": "#E07080", "highlight": "#C4B5E0", "badge": "#7EC8A3",
-        "nav_bar": "#121C18", "nav_selected": "#7EC8A3", "nav_unselected": "#3A5048", "status_bar": "#0A1210",
-        "tile_empty": "#1A2820", "tile_2": "#223028", "tile_4": "#2A3A30", "tile_8": "#3A5040",
-        "tile_16": "#5AA882", "tile_32": "#7EC8A3", "tile_64": "#A0D8B8", "tile_128": "#C4B5E0",
-        "tile_256": "#D0C8E8", "tile_512": "#E8E0F0", "tile_1024": "#FFFFFF", "tile_2048": "#7EC8A3",
+        "correct": "#7EC8A3", "wrong": "#E07080", "score": "#C4B5E0", "timer_normal": "#7EC8A3",
+        "timer_warning": "#E07080", "highlight": "#C4B5E0", "badge": "#7EC8A3", "star": "#C4B5E0",
+        "nav_bar": "#121C18", "nav_selected": "#7EC8A3",
+        "nav_unselected": "#3A5048", "status_bar": "#0A1210", "glow": "#C4B5E0",
+        "tile_empty": "#1A2820", "tile_2": "#223028", "tile_4": "#2A3A30", "tile_8": "#3A5040", "tile_16": "#5AA882", "tile_32": "#7EC8A3",
+        "tile_64": "#A0D8B8", "tile_128": "#C4B5E0", "tile_256": "#D0C8E8", "tile_512": "#E8E0F0", "tile_1024": "#FFFFFF", "tile_2048": "#7EC8A3",
         "overlay": "#CC0A1210", "scrim": "#990A1210",
     },
     "tropical_fruit": {
@@ -490,12 +499,12 @@ THEMES: dict[str, dict] = {
         "background": "#FFF8F0", "surface": "#FFFFFF", "surface_variant": "#FFE8D0", "surface_tint": "#FFF0E0",
         "primary": "#FF6B35", "primary_dark": "#E05520", "secondary": "#00B4A0", "tertiary": "#FFD166",
         "on_background": "#3A2010", "on_surface": "#3A2010", "on_surface_dim": "#A07850", "on_primary": "#FFFFFF",
-        "correct": "#00B4A0", "wrong": "#E63946", "score": "#FFD166",
-        "timer_normal": "#FF6B35", "timer_warning": "#E63946", "highlight": "#00B4A0", "badge": "#FF6B35",
-        "nav_bar": "#FFFFFF", "nav_selected": "#FF6B35", "nav_unselected": "#C0A080", "status_bar": "#FFF8F0",
-        "tile_empty": "#FFE8D0", "tile_2": "#FFD8B0", "tile_4": "#FFC890", "tile_8": "#FFB070",
-        "tile_16": "#FF6B35", "tile_32": "#E05520", "tile_64": "#00B4A0", "tile_128": "#008F80",
-        "tile_256": "#FFD166", "tile_512": "#E63946", "tile_1024": "#3A2010", "tile_2048": "#FFFFFF",
+        "correct": "#00B4A0", "wrong": "#E63946", "score": "#FFD166", "timer_normal": "#FF6B35",
+        "timer_warning": "#E63946", "highlight": "#00B4A0", "badge": "#FF6B35", "star": "#FFD166",
+        "nav_bar": "#FFFFFF", "nav_selected": "#FF6B35",
+        "nav_unselected": "#C0A080", "status_bar": "#FFF8F0", "glow": "n/a",
+        "tile_empty": "#FFE8D0", "tile_2": "#FFD8B0", "tile_4": "#FFC890", "tile_8": "#FFB070", "tile_16": "#FF6B35", "tile_32": "#E05520",
+        "tile_64": "#00B4A0", "tile_128": "#008F80", "tile_256": "#FFD166", "tile_512": "#E63946", "tile_1024": "#3A2010", "tile_2048": "#FFFFFF",
         "overlay": "#80FFE8D0", "scrim": "#50FF6B35",
     },
     "bubble_tea": {
@@ -503,12 +512,12 @@ THEMES: dict[str, dict] = {
         "background": "#FBF3EA", "surface": "#FFFCF7", "surface_variant": "#F0E0D0", "surface_tint": "#F8ECE0",
         "primary": "#C47A4A", "primary_dark": "#A06038", "secondary": "#8B5E4A", "tertiary": "#E8B4B8",
         "on_background": "#3A2A20", "on_surface": "#3A2A20", "on_surface_dim": "#9A8070", "on_primary": "#FFFCF7",
-        "correct": "#6B9E5A", "wrong": "#C4473A", "score": "#C47A4A",
-        "timer_normal": "#C47A4A", "timer_warning": "#C4473A", "highlight": "#E8B4B8", "badge": "#C47A4A",
-        "nav_bar": "#FFFCF7", "nav_selected": "#C47A4A", "nav_unselected": "#C0A090", "status_bar": "#FBF3EA",
-        "tile_empty": "#F0E0D0", "tile_2": "#E8D0B8", "tile_4": "#D8B898", "tile_8": "#C8A078",
-        "tile_16": "#C47A4A", "tile_32": "#A06038", "tile_64": "#8B5E4A", "tile_128": "#E8B4B8",
-        "tile_256": "#D09098", "tile_512": "#6B9E5A", "tile_1024": "#3A2A20", "tile_2048": "#FFFFFF",
+        "correct": "#6B9E5A", "wrong": "#C4473A", "score": "#C47A4A", "timer_normal": "#C47A4A",
+        "timer_warning": "#C4473A", "highlight": "#E8B4B8", "badge": "#C47A4A", "star": "#C47A4A",
+        "nav_bar": "#FFFCF7", "nav_selected": "#C47A4A",
+        "nav_unselected": "#C0A090", "status_bar": "#FBF3EA", "glow": "n/a",
+        "tile_empty": "#F0E0D0", "tile_2": "#E8D0B8", "tile_4": "#D8B898", "tile_8": "#C8A078", "tile_16": "#C47A4A", "tile_32": "#A06038",
+        "tile_64": "#8B5E4A", "tile_128": "#E8B4B8", "tile_256": "#D09098", "tile_512": "#6B9E5A", "tile_1024": "#3A2A20", "tile_2048": "#FFFFFF",
         "overlay": "#80F0E0D0", "scrim": "#50C47A4A",
     },
     "farm_cottage": {
@@ -516,12 +525,12 @@ THEMES: dict[str, dict] = {
         "background": "#F5F0E6", "surface": "#FFFEF8", "surface_variant": "#E8E0D0", "surface_tint": "#F0EBE0",
         "primary": "#5B8C3E", "primary_dark": "#456C2E", "secondary": "#D4A05A", "tertiary": "#8B5A2B",
         "on_background": "#2A2A1A", "on_surface": "#2A2A1A", "on_surface_dim": "#7A7A60", "on_primary": "#FFFEF8",
-        "correct": "#5B8C3E", "wrong": "#C04030", "score": "#D4A05A",
-        "timer_normal": "#5B8C3E", "timer_warning": "#C04030", "highlight": "#D4A05A", "badge": "#5B8C3E",
-        "nav_bar": "#FFFEF8", "nav_selected": "#5B8C3E", "nav_unselected": "#A0A088", "status_bar": "#F5F0E6",
-        "tile_empty": "#E8E0D0", "tile_2": "#D8D0B8", "tile_4": "#C0C0A0", "tile_8": "#A0B080",
-        "tile_16": "#80A060", "tile_32": "#5B8C3E", "tile_64": "#456C2E", "tile_128": "#D4A05A",
-        "tile_256": "#8B5A2B", "tile_512": "#C04030", "tile_1024": "#2A2A1A", "tile_2048": "#FFFFFF",
+        "correct": "#5B8C3E", "wrong": "#C04030", "score": "#D4A05A", "timer_normal": "#5B8C3E",
+        "timer_warning": "#C04030", "highlight": "#D4A05A", "badge": "#5B8C3E", "star": "#D4A05A",
+        "nav_bar": "#FFFEF8", "nav_selected": "#5B8C3E",
+        "nav_unselected": "#A0A088", "status_bar": "#F5F0E6", "glow": "n/a",
+        "tile_empty": "#E8E0D0", "tile_2": "#D8D0B8", "tile_4": "#C0C0A0", "tile_8": "#A0B080", "tile_16": "#80A060", "tile_32": "#5B8C3E",
+        "tile_64": "#456C2E", "tile_128": "#D4A05A", "tile_256": "#8B5A2B", "tile_512": "#C04030", "tile_1024": "#2A2A1A", "tile_2048": "#FFFFFF",
         "overlay": "#80E8E0D0", "scrim": "#505B8C3E",
     },
     "cloud_sky": {
@@ -529,12 +538,12 @@ THEMES: dict[str, dict] = {
         "background": "#E8F4FC", "surface": "#FFFFFF", "surface_variant": "#D0E8F8", "surface_tint": "#E0F0FA",
         "primary": "#4A90D9", "primary_dark": "#3570B0", "secondary": "#7EC8E8", "tertiary": "#FFB4A0",
         "on_background": "#1A3050", "on_surface": "#1A3050", "on_surface_dim": "#7090B0", "on_primary": "#FFFFFF",
-        "correct": "#3DB87A", "wrong": "#E85A5A", "score": "#4A90D9",
-        "timer_normal": "#4A90D9", "timer_warning": "#E85A5A", "highlight": "#7EC8E8", "badge": "#4A90D9",
-        "nav_bar": "#FFFFFF", "nav_selected": "#4A90D9", "nav_unselected": "#A0C0D8", "status_bar": "#E8F4FC",
-        "tile_empty": "#D0E8F8", "tile_2": "#B8DCF0", "tile_4": "#A0D0E8", "tile_8": "#7EC8E8",
-        "tile_16": "#4A90D9", "tile_32": "#3570B0", "tile_64": "#FFB4A0", "tile_128": "#FF9080",
-        "tile_256": "#3DB87A", "tile_512": "#E85A5A", "tile_1024": "#1A3050", "tile_2048": "#FFFFFF",
+        "correct": "#3DB87A", "wrong": "#E85A5A", "score": "#4A90D9", "timer_normal": "#4A90D9",
+        "timer_warning": "#E85A5A", "highlight": "#7EC8E8", "badge": "#4A90D9", "star": "#4A90D9",
+        "nav_bar": "#FFFFFF", "nav_selected": "#4A90D9",
+        "nav_unselected": "#A0C0D8", "status_bar": "#E8F4FC", "glow": "n/a",
+        "tile_empty": "#D0E8F8", "tile_2": "#B8DCF0", "tile_4": "#A0D0E8", "tile_8": "#7EC8E8", "tile_16": "#4A90D9", "tile_32": "#3570B0",
+        "tile_64": "#FFB4A0", "tile_128": "#FF9080", "tile_256": "#3DB87A", "tile_512": "#E85A5A", "tile_1024": "#1A3050", "tile_2048": "#FFFFFF",
         "overlay": "#80D0E8F8", "scrim": "#504A90D9",
     },
     "lavender_fields": {
@@ -542,12 +551,12 @@ THEMES: dict[str, dict] = {
         "background": "#F5F0FA", "surface": "#FFFEFF", "surface_variant": "#E8DCF5", "surface_tint": "#F0E8F8",
         "primary": "#7B5EA7", "primary_dark": "#5E4580", "secondary": "#B8A0D0", "tertiary": "#E8C8A0",
         "on_background": "#2A1A3A", "on_surface": "#2A1A3A", "on_surface_dim": "#8070A0", "on_primary": "#FFFFFF",
-        "correct": "#6B9E5A", "wrong": "#C05060", "score": "#7B5EA7",
-        "timer_normal": "#7B5EA7", "timer_warning": "#C05060", "highlight": "#B8A0D0", "badge": "#7B5EA7",
-        "nav_bar": "#FFFEFF", "nav_selected": "#7B5EA7", "nav_unselected": "#B0A0C8", "status_bar": "#F5F0FA",
-        "tile_empty": "#E8DCF5", "tile_2": "#D8C8E8", "tile_4": "#C8B0E0", "tile_8": "#B8A0D0",
-        "tile_16": "#9A80C0", "tile_32": "#7B5EA7", "tile_64": "#5E4580", "tile_128": "#E8C8A0",
-        "tile_256": "#6B9E5A", "tile_512": "#C05060", "tile_1024": "#2A1A3A", "tile_2048": "#FFFFFF",
+        "correct": "#6B9E5A", "wrong": "#C05060", "score": "#7B5EA7", "timer_normal": "#7B5EA7",
+        "timer_warning": "#C05060", "highlight": "#B8A0D0", "badge": "#7B5EA7", "star": "#7B5EA7",
+        "nav_bar": "#FFFEFF", "nav_selected": "#7B5EA7",
+        "nav_unselected": "#B0A0C8", "status_bar": "#F5F0FA", "glow": "n/a",
+        "tile_empty": "#E8DCF5", "tile_2": "#D8C8E8", "tile_4": "#C8B0E0", "tile_8": "#B8A0D0", "tile_16": "#9A80C0", "tile_32": "#7B5EA7",
+        "tile_64": "#5E4580", "tile_128": "#E8C8A0", "tile_256": "#6B9E5A", "tile_512": "#C05060", "tile_1024": "#2A1A3A", "tile_2048": "#FFFFFF",
         "overlay": "#80E8DCF5", "scrim": "#507B5EA7",
     },
     "citrus_fresh": {
@@ -555,12 +564,12 @@ THEMES: dict[str, dict] = {
         "background": "#FFF9E8", "surface": "#FFFEF5", "surface_variant": "#FFF0C8", "surface_tint": "#FFF5D8",
         "primary": "#F4A261", "primary_dark": "#D4853A", "secondary": "#2A9D8F", "tertiary": "#E76F51",
         "on_background": "#3A2A10", "on_surface": "#3A2A10", "on_surface_dim": "#9A8050", "on_primary": "#FFFFFF",
-        "correct": "#2A9D8F", "wrong": "#E76F51", "score": "#F4A261",
-        "timer_normal": "#F4A261", "timer_warning": "#E76F51", "highlight": "#2A9D8F", "badge": "#F4A261",
-        "nav_bar": "#FFFEF5", "nav_selected": "#F4A261", "nav_unselected": "#C0A870", "status_bar": "#FFF9E8",
-        "tile_empty": "#FFF0C8", "tile_2": "#FFE8A8", "tile_4": "#FFD888", "tile_8": "#FFC868",
-        "tile_16": "#F4A261", "tile_32": "#D4853A", "tile_64": "#2A9D8F", "tile_128": "#1F7A70",
-        "tile_256": "#E76F51", "tile_512": "#E9C46A", "tile_1024": "#3A2A10", "tile_2048": "#FFFFFF",
+        "correct": "#2A9D8F", "wrong": "#E76F51", "score": "#F4A261", "timer_normal": "#F4A261",
+        "timer_warning": "#E76F51", "highlight": "#2A9D8F", "badge": "#F4A261", "star": "#F4A261",
+        "nav_bar": "#FFFEF5", "nav_selected": "#F4A261",
+        "nav_unselected": "#C0A870", "status_bar": "#FFF9E8", "glow": "n/a",
+        "tile_empty": "#FFF0C8", "tile_2": "#FFE8A8", "tile_4": "#FFD888", "tile_8": "#FFC868", "tile_16": "#F4A261", "tile_32": "#D4853A",
+        "tile_64": "#2A9D8F", "tile_128": "#1F7A70", "tile_256": "#E76F51", "tile_512": "#E9C46A", "tile_1024": "#3A2A10", "tile_2048": "#FFFFFF",
         "overlay": "#80FFF0C8", "scrim": "#50F4A261",
     },
     "crystal_gem": {
@@ -568,12 +577,12 @@ THEMES: dict[str, dict] = {
         "background": "#0C0A18", "surface": "#14122A", "surface_variant": "#1E1A3A", "surface_tint": "#282250",
         "primary": "#B388FF", "primary_dark": "#8A5CD6", "secondary": "#00E5FF", "tertiary": "#FF80AB",
         "on_background": "#E8E0FF", "on_surface": "#E8E0FF", "on_surface_dim": "#6860A0", "on_primary": "#0C0A18",
-        "correct": "#69F0AE", "wrong": "#FF5252", "score": "#00E5FF",
-        "timer_normal": "#B388FF", "timer_warning": "#FF5252", "highlight": "#00E5FF", "badge": "#B388FF",
-        "nav_bar": "#14122A", "nav_selected": "#B388FF", "nav_unselected": "#4A4570", "status_bar": "#0C0A18",
-        "tile_empty": "#1E1A3A", "tile_2": "#2A2450", "tile_4": "#3A3070", "tile_8": "#5A40A0",
-        "tile_16": "#8A5CD6", "tile_32": "#B388FF", "tile_64": "#00E5FF", "tile_128": "#00B8CC",
-        "tile_256": "#FF80AB", "tile_512": "#69F0AE", "tile_1024": "#FFFFFF", "tile_2048": "#B388FF",
+        "correct": "#69F0AE", "wrong": "#FF5252", "score": "#00E5FF", "timer_normal": "#B388FF",
+        "timer_warning": "#FF5252", "highlight": "#00E5FF", "badge": "#B388FF", "star": "#00E5FF",
+        "nav_bar": "#14122A", "nav_selected": "#B388FF",
+        "nav_unselected": "#4A4570", "status_bar": "#0C0A18", "glow": "#00E5FF",
+        "tile_empty": "#1E1A3A", "tile_2": "#2A2450", "tile_4": "#3A3070", "tile_8": "#5A40A0", "tile_16": "#8A5CD6", "tile_32": "#B388FF",
+        "tile_64": "#00E5FF", "tile_128": "#00B8CC", "tile_256": "#FF80AB", "tile_512": "#69F0AE", "tile_1024": "#FFFFFF", "tile_2048": "#B388FF",
         "overlay": "#CC0C0A18", "scrim": "#990C0A18",
     },
     "clay_stopmotion": {
@@ -581,12 +590,12 @@ THEMES: dict[str, dict] = {
         "background": "#F5EDE3", "surface": "#FFF8F0", "surface_variant": "#E8D8C8", "surface_tint": "#F0E8DC",
         "primary": "#E07A5F", "primary_dark": "#C45A40", "secondary": "#81B29A", "tertiary": "#F2CC8F",
         "on_background": "#3D2C2E", "on_surface": "#3D2C2E", "on_surface_dim": "#9A8070", "on_primary": "#FFFFFF",
-        "correct": "#81B29A", "wrong": "#E07A5F", "score": "#F2CC8F",
-        "timer_normal": "#E07A5F", "timer_warning": "#C45A40", "highlight": "#81B29A", "badge": "#E07A5F",
-        "nav_bar": "#FFF8F0", "nav_selected": "#E07A5F", "nav_unselected": "#C0A890", "status_bar": "#F5EDE3",
-        "tile_empty": "#E8D8C8", "tile_2": "#D8C0A8", "tile_4": "#C8A888", "tile_8": "#E07A5F",
-        "tile_16": "#C45A40", "tile_32": "#81B29A", "tile_64": "#5A9078", "tile_128": "#F2CC8F",
-        "tile_256": "#D4A85A", "tile_512": "#3D2C2E", "tile_1024": "#FFFFFF", "tile_2048": "#E07A5F",
+        "correct": "#81B29A", "wrong": "#E07A5F", "score": "#F2CC8F", "timer_normal": "#E07A5F",
+        "timer_warning": "#C45A40", "highlight": "#81B29A", "badge": "#E07A5F", "star": "#F2CC8F",
+        "nav_bar": "#FFF8F0", "nav_selected": "#E07A5F",
+        "nav_unselected": "#C0A890", "status_bar": "#F5EDE3", "glow": "n/a",
+        "tile_empty": "#E8D8C8", "tile_2": "#D8C0A8", "tile_4": "#C8A888", "tile_8": "#E07A5F", "tile_16": "#C45A40", "tile_32": "#81B29A",
+        "tile_64": "#5A9078", "tile_128": "#F2CC8F", "tile_256": "#D4A85A", "tile_512": "#3D2C2E", "tile_1024": "#FFFFFF", "tile_2048": "#E07A5F",
         "overlay": "#80E8D8C8", "scrim": "#50E07A5F",
     },
     "board_game_table": {
@@ -594,12 +603,12 @@ THEMES: dict[str, dict] = {
         "background": "#EDE4D4", "surface": "#F8F2E8", "surface_variant": "#DDD0B8", "surface_tint": "#E8DCC8",
         "primary": "#8B4513", "primary_dark": "#6B3410", "secondary": "#2E5A3C", "tertiary": "#C4A35A",
         "on_background": "#2C1A0C", "on_surface": "#2C1A0C", "on_surface_dim": "#8A7050", "on_primary": "#F8F2E8",
-        "correct": "#2E5A3C", "wrong": "#A02828", "score": "#C4A35A",
-        "timer_normal": "#8B4513", "timer_warning": "#A02828", "highlight": "#C4A35A", "badge": "#8B4513",
-        "nav_bar": "#F8F2E8", "nav_selected": "#8B4513", "nav_unselected": "#B0A080", "status_bar": "#EDE4D4",
-        "tile_empty": "#DDD0B8", "tile_2": "#CDB890", "tile_4": "#BDA070", "tile_8": "#A08050",
-        "tile_16": "#8B4513", "tile_32": "#6B3410", "tile_64": "#2E5A3C", "tile_128": "#1E4030",
-        "tile_256": "#C4A35A", "tile_512": "#A02828", "tile_1024": "#2C1A0C", "tile_2048": "#FFFFFF",
+        "correct": "#2E5A3C", "wrong": "#A02828", "score": "#C4A35A", "timer_normal": "#8B4513",
+        "timer_warning": "#A02828", "highlight": "#C4A35A", "badge": "#8B4513", "star": "#C4A35A",
+        "nav_bar": "#F8F2E8", "nav_selected": "#8B4513",
+        "nav_unselected": "#B0A080", "status_bar": "#EDE4D4", "glow": "n/a",
+        "tile_empty": "#DDD0B8", "tile_2": "#CDB890", "tile_4": "#BDA070", "tile_8": "#A08050", "tile_16": "#8B4513", "tile_32": "#6B3410",
+        "tile_64": "#2E5A3C", "tile_128": "#1E4030", "tile_256": "#C4A35A", "tile_512": "#A02828", "tile_1024": "#2C1A0C", "tile_2048": "#FFFFFF",
         "overlay": "#80DDD0B8", "scrim": "#508B4513",
     },
     "comic_halftone": {
@@ -607,26 +616,26 @@ THEMES: dict[str, dict] = {
         "background": "#FFF8E7", "surface": "#FFFFFF", "surface_variant": "#FFE8C0", "surface_tint": "#FFF0D0",
         "primary": "#FF1744", "primary_dark": "#D50000", "secondary": "#2979FF", "tertiary": "#FFD600",
         "on_background": "#1A1A1A", "on_surface": "#1A1A1A", "on_surface_dim": "#707070", "on_primary": "#FFFFFF",
-        "correct": "#00C853", "wrong": "#FF1744", "score": "#FFD600",
-        "timer_normal": "#2979FF", "timer_warning": "#FF1744", "highlight": "#FFD600", "badge": "#FF1744",
-        "border": "#1A1A1A",
-        "nav_bar": "#FFFFFF", "nav_selected": "#FF1744", "nav_unselected": "#B0B0B0", "status_bar": "#FFF8E7",
-        "tile_empty": "#FFE8C0", "tile_2": "#FFD890", "tile_4": "#FFC060", "tile_8": "#2979FF",
-        "tile_16": "#1565C0", "tile_32": "#FF1744", "tile_64": "#D50000", "tile_128": "#FFD600",
-        "tile_256": "#FFAB00", "tile_512": "#00C853", "tile_1024": "#1A1A1A", "tile_2048": "#FFFFFF",
+        "correct": "#00C853", "wrong": "#FF1744", "score": "#FFD600", "timer_normal": "#2979FF",
+        "timer_warning": "#FF1744", "highlight": "#FFD600", "badge": "#FF1744", "star": "#FFD600",
+        "nav_bar": "#FFFFFF", "nav_selected": "#FF1744",
+        "nav_unselected": "#B0B0B0", "status_bar": "#FFF8E7", "glow": "n/a",
+        "tile_empty": "#FFE8C0", "tile_2": "#FFD890", "tile_4": "#FFC060", "tile_8": "#2979FF", "tile_16": "#1565C0", "tile_32": "#FF1744",
+        "tile_64": "#D50000", "tile_128": "#FFD600", "tile_256": "#FFAB00", "tile_512": "#00C853", "tile_1024": "#1A1A1A", "tile_2048": "#FFFFFF",
         "overlay": "#80FFE8C0", "scrim": "#50FF1744",
+        "border": "#1A1A1A",
     },
     "ink_wash": {
         "_meta": {"prefix": "iw", "name": "Ink Wash", "dark": False},
         "background": "#F2EFE6", "surface": "#FAF8F2", "surface_variant": "#E0DCD0", "surface_tint": "#EBE8DC",
         "primary": "#2C2C2C", "primary_dark": "#1A1A1A", "secondary": "#8B3A3A", "tertiary": "#4A6A5A",
         "on_background": "#1A1A1A", "on_surface": "#1A1A1A", "on_surface_dim": "#7A7870", "on_primary": "#FAF8F2",
-        "correct": "#4A6A5A", "wrong": "#8B3A3A", "score": "#2C2C2C",
-        "timer_normal": "#2C2C2C", "timer_warning": "#8B3A3A", "highlight": "#4A6A5A", "badge": "#8B3A3A",
-        "nav_bar": "#FAF8F2", "nav_selected": "#2C2C2C", "nav_unselected": "#A8A8A0", "status_bar": "#F2EFE6",
-        "tile_empty": "#E0DCD0", "tile_2": "#D0CCC0", "tile_4": "#B8B4A8", "tile_8": "#909088",
-        "tile_16": "#686860", "tile_32": "#4A4A48", "tile_64": "#2C2C2C", "tile_128": "#8B3A3A",
-        "tile_256": "#4A6A5A", "tile_512": "#1A1A1A", "tile_1024": "#FAF8F2", "tile_2048": "#2C2C2C",
+        "correct": "#4A6A5A", "wrong": "#8B3A3A", "score": "#2C2C2C", "timer_normal": "#2C2C2C",
+        "timer_warning": "#8B3A3A", "highlight": "#4A6A5A", "badge": "#8B3A3A", "star": "#2C2C2C",
+        "nav_bar": "#FAF8F2", "nav_selected": "#2C2C2C",
+        "nav_unselected": "#A8A8A0", "status_bar": "#F2EFE6", "glow": "n/a",
+        "tile_empty": "#E0DCD0", "tile_2": "#D0CCC0", "tile_4": "#B8B4A8", "tile_8": "#909088", "tile_16": "#686860", "tile_32": "#4A4A48",
+        "tile_64": "#2C2C2C", "tile_128": "#8B3A3A", "tile_256": "#4A6A5A", "tile_512": "#1A1A1A", "tile_1024": "#FAF8F2", "tile_2048": "#2C2C2C",
         "overlay": "#80E0DCD0", "scrim": "#502C2C2C",
     },
     "retro_poster": {
@@ -634,12 +643,12 @@ THEMES: dict[str, dict] = {
         "background": "#F5E6C8", "surface": "#FFF5E0", "surface_variant": "#E8D0A0", "surface_tint": "#F0E0B8",
         "primary": "#E85D04", "primary_dark": "#C44A00", "secondary": "#023E8A", "tertiary": "#FFB703",
         "on_background": "#2A1A08", "on_surface": "#2A1A08", "on_surface_dim": "#8A7050", "on_primary": "#FFF5E0",
-        "correct": "#2A9D8F", "wrong": "#D00000", "score": "#FFB703",
-        "timer_normal": "#E85D04", "timer_warning": "#D00000", "highlight": "#023E8A", "badge": "#E85D04",
-        "nav_bar": "#FFF5E0", "nav_selected": "#E85D04", "nav_unselected": "#B0A080", "status_bar": "#F5E6C8",
-        "tile_empty": "#E8D0A0", "tile_2": "#D8B880", "tile_4": "#C8A060", "tile_8": "#E85D04",
-        "tile_16": "#C44A00", "tile_32": "#023E8A", "tile_64": "#0353A4", "tile_128": "#FFB703",
-        "tile_256": "#D00000", "tile_512": "#2A9D8F", "tile_1024": "#2A1A08", "tile_2048": "#FFFFFF",
+        "correct": "#2A9D8F", "wrong": "#D00000", "score": "#FFB703", "timer_normal": "#E85D04",
+        "timer_warning": "#D00000", "highlight": "#023E8A", "badge": "#E85D04", "star": "#FFB703",
+        "nav_bar": "#FFF5E0", "nav_selected": "#E85D04",
+        "nav_unselected": "#B0A080", "status_bar": "#F5E6C8", "glow": "n/a",
+        "tile_empty": "#E8D0A0", "tile_2": "#D8B880", "tile_4": "#C8A060", "tile_8": "#E85D04", "tile_16": "#C44A00", "tile_32": "#023E8A",
+        "tile_64": "#0353A4", "tile_128": "#FFB703", "tile_256": "#D00000", "tile_512": "#2A9D8F", "tile_1024": "#2A1A08", "tile_2048": "#FFFFFF",
         "overlay": "#80E8D0A0", "scrim": "#50E85D04",
     },
     "jungle_adventure": {
@@ -647,12 +656,12 @@ THEMES: dict[str, dict] = {
         "background": "#0A140C", "surface": "#121C14", "surface_variant": "#1A2A1C", "surface_tint": "#223424",
         "primary": "#F4A261", "primary_dark": "#D4853A", "secondary": "#2D6A4F", "tertiary": "#95D5B2",
         "on_background": "#E8F0E0", "on_surface": "#E8F0E0", "on_surface_dim": "#5A7860", "on_primary": "#0A140C",
-        "correct": "#95D5B2", "wrong": "#E63946", "score": "#F4A261",
-        "timer_normal": "#95D5B2", "timer_warning": "#E63946", "highlight": "#F4A261", "badge": "#F4A261",
-        "nav_bar": "#121C14", "nav_selected": "#F4A261", "nav_unselected": "#3A5040", "status_bar": "#0A140C",
-        "tile_empty": "#1A2A1C", "tile_2": "#223424", "tile_4": "#2A4030", "tile_8": "#2D6A4F",
-        "tile_16": "#40916C", "tile_32": "#52B788", "tile_64": "#95D5B2", "tile_128": "#D4853A",
-        "tile_256": "#F4A261", "tile_512": "#E63946", "tile_1024": "#E8F0E0", "tile_2048": "#FFFFFF",
+        "correct": "#95D5B2", "wrong": "#E63946", "score": "#F4A261", "timer_normal": "#95D5B2",
+        "timer_warning": "#E63946", "highlight": "#F4A261", "badge": "#F4A261", "star": "#F4A261",
+        "nav_bar": "#121C14", "nav_selected": "#F4A261",
+        "nav_unselected": "#3A5040", "status_bar": "#0A140C", "glow": "#F4A261",
+        "tile_empty": "#1A2A1C", "tile_2": "#223424", "tile_4": "#2A4030", "tile_8": "#2D6A4F", "tile_16": "#40916C", "tile_32": "#52B788",
+        "tile_64": "#95D5B2", "tile_128": "#D4853A", "tile_256": "#F4A261", "tile_512": "#E63946", "tile_1024": "#E8F0E0", "tile_2048": "#FFFFFF",
         "overlay": "#CC0A140C", "scrim": "#990A140C",
     },
     "snow_festival": {
@@ -660,68 +669,166 @@ THEMES: dict[str, dict] = {
         "background": "#F0F7FC", "surface": "#FFFFFF", "surface_variant": "#D8EAF5", "surface_tint": "#E8F2F8",
         "primary": "#1E88E5", "primary_dark": "#1565C0", "secondary": "#E53935", "tertiary": "#FFD54F",
         "on_background": "#0D2137", "on_surface": "#0D2137", "on_surface_dim": "#7090B0", "on_primary": "#FFFFFF",
-        "correct": "#43A047", "wrong": "#E53935", "score": "#FFD54F",
-        "timer_normal": "#1E88E5", "timer_warning": "#E53935", "highlight": "#FFD54F", "badge": "#E53935",
-        "nav_bar": "#FFFFFF", "nav_selected": "#1E88E5", "nav_unselected": "#90B0C8", "status_bar": "#F0F7FC",
-        "tile_empty": "#D8EAF5", "tile_2": "#C0DCF0", "tile_4": "#A8D0E8", "tile_8": "#78B8E0",
-        "tile_16": "#1E88E5", "tile_32": "#1565C0", "tile_64": "#E53935", "tile_128": "#C62828",
-        "tile_256": "#FFD54F", "tile_512": "#43A047", "tile_1024": "#0D2137", "tile_2048": "#FFFFFF",
+        "correct": "#43A047", "wrong": "#E53935", "score": "#FFD54F", "timer_normal": "#1E88E5",
+        "timer_warning": "#E53935", "highlight": "#FFD54F", "badge": "#E53935", "star": "#FFD54F",
+        "nav_bar": "#FFFFFF", "nav_selected": "#1E88E5",
+        "nav_unselected": "#90B0C8", "status_bar": "#F0F7FC", "glow": "n/a",
+        "tile_empty": "#D8EAF5", "tile_2": "#C0DCF0", "tile_4": "#A8D0E8", "tile_8": "#78B8E0", "tile_16": "#1E88E5", "tile_32": "#1565C0",
+        "tile_64": "#E53935", "tile_128": "#C62828", "tile_256": "#FFD54F", "tile_512": "#43A047", "tile_1024": "#0D2137", "tile_2048": "#FFFFFF",
         "overlay": "#80D8EAF5", "scrim": "#501E88E5",
     },
 }
 
-TOKEN_ORDER = [
-    "background", "surface", "surface_variant", "surface_tint",
-    "primary", "primary_dark", "secondary", "tertiary",
-    "on_background", "on_surface", "on_surface_dim", "on_primary",
-    "correct", "wrong", "score", "timer_normal", "timer_warning", "highlight", "badge",
-    "border",  # pixel_classic only
-    "nav_bar", "nav_selected", "nav_unselected", "status_bar",
-    "tile_empty", "tile_2", "tile_4", "tile_8", "tile_16", "tile_32", "tile_64",
-    "tile_128", "tile_256", "tile_512", "tile_1024", "tile_2048",
-    "overlay", "scrim",
-]
 
-SECTION_COMMENTS = {
-    "background":  "    <!-- Background layers -->",
-    "primary":     "    <!-- Primary colors -->",
-    "on_background": "    <!-- Text colors -->",
-    "correct":     "    <!-- Functional colors -->",
-    "nav_bar":     "    <!-- Navigation -->",
-    "tile_empty":  "    <!-- 2048 tile colors -->",
-    "overlay":     "    <!-- Overlays -->",
-}
+TOKEN_ORDER = ['background', 'surface', 'surface_variant', 'surface_tint', 'primary', 'primary_dark', 'secondary', 'tertiary', 'on_background', 'on_surface', 'on_surface_dim', 'on_primary', 'correct', 'wrong', 'score', 'timer_normal', 'timer_warning', 'highlight', 'badge', 'star', 'nav_bar', 'nav_selected', 'nav_unselected', 'status_bar', 'glow', 'tile_empty', 'tile_2', 'tile_4', 'tile_8', 'tile_16', 'tile_32', 'tile_64', 'tile_128', 'tile_256', 'tile_512', 'tile_1024', 'tile_2048', 'overlay', 'scrim', 'border']
+
+SECTION_LABELS = {'background': 'Background layers', 'primary': 'Primary colors', 'on_background': 'Text colors', 'correct': 'Functional colors', 'nav_bar': 'Navigation', 'glow': 'Effects', 'tile_empty': '2048 tiles (optional appendix)', 'overlay': 'Overlays', 'border': 'Special'}
+
+# Optional prose for full-specs (material / soul / type notes). Filled at export time from catalog.
+THEME_PROSE: dict[str, dict] = {}
 
 
-def build_xml(theme_id: str) -> str:
+def _load_prose() -> dict[str, dict]:
+    """Material + animation from SKILL catalog; optional extras if present."""
+    skill_path = SKILL_DIR / "SKILL.md"
+    prose: dict[str, dict] = {}
+    if skill_path.exists():
+        skill = skill_path.read_text(encoding="utf-8")
+        for m in re.finditer(
+            r"\|\s*`([a-z0-9_]+)`\s*\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|",
+            skill,
+        ):
+            tid, name_zh, material, anim = [x.strip() for x in m.groups()]
+            if tid not in THEMES:
+                continue
+            prose[tid] = {
+                "name_zh": name_zh,
+                "material": material,
+                "animation": anim,
+            }
+    # hand-authored soul role hints (primary / score / highlight)
+    defaults = {
+        "neon_dark": {"soul_roles": "primary=CTA粉 · score=金 · highlight/timer=青", "toolbar_accent": "底边 1dp primary@40%", "forbid": "Toolbar 内标题外发光"},
+        "space_galaxy": {"soul_roles": "primary=星云紫 CTA · score=星光黄 · highlight=星青", "toolbar_accent": "无；HUD 数字用 secondary", "forbid": "整栏紫渐变"},
+        "lava_fire": {"soul_roles": "primary=熔橙 CTA · score=亮黄 · highlight=同黄", "toolbar_accent": "无 elevation", "forbid": "全局常驻红闪背景"},
+        "midnight_luxury": {"soul_roles": "primary=香槟金 CTA/描边 · score=同金", "toolbar_accent": "底边 1dp 金 hairline", "forbid": "厚金条铺满顶栏"},
+        "deep_sea": {"soul_roles": "primary=生物荧光青 CTA · score=同青 · highlight=浅荧光", "toolbar_accent": "无", "forbid": "高饱和红作主 CTA"},
+        "pixel_classic": {"soul_roles": "primary= thruster · score=高亮黄", "toolbar_accent": "0 圆角硬边", "forbid": "任何阴影与抗锯齿圆角"},
+        "candy_pop": {"soul_roles": "primary=糖粉 CTA · score=柠檬黄", "toolbar_accent": "动作图标可高饱和 1 个", "forbid": "彩虹渐变标题栏"},
+        "ocean_breeze": {"soul_roles": "primary=深海蓝 CTA · score=暖点缀可选 · highlight=天蓝", "toolbar_accent": "无", "forbid": "顶栏用深 surface 脏条"},
+        "sakura_spring": {"soul_roles": "primary=樱粉 CTA · score=抹茶点缀 · highlight=淡粉", "toolbar_accent": "无", "forbid": "Toolbar 大插画头图"},
+        "neon_synthwave": {"soul_roles": "primary=品红 · secondary=青 · score=黄", "toolbar_accent": "可选 1dp 品红底边", "forbid": "多条霓虹描边同时用在顶栏"},
+        "noir_cinema": {"soul_roles": "primary=血红点缀 · 其余近灰度", "toolbar_accent": "1dp 极细浅线", "forbid": "彩色渐变与圆角大胶囊栏"},
+        "minimalist_white": {"soul_roles": "primary=系统蓝唯一强调 · score=同主色或深灰", "toolbar_accent": "无", "forbid": "装饰纹理与多强调色"},
+        "christmas": {"soul_roles": "primary=圣诞红 · secondary=松绿 · score=金", "toolbar_accent": "无或细金线", "forbid": "局内持续下雪挡字"},
+        "arcade_cabinet": {"soul_roles": "primary=磷光绿 · CTA 可 thruster 橙", "toolbar_accent": "0 动画硬切", "forbid": "Material 大圆角与长 fade"},
+    }
+    for tid, extra in defaults.items():
+        prose.setdefault(tid, {})
+        prose[tid].update(extra)
+    return prose
+
+
+def build_token_markdown(theme_id: str) -> str:
+    """Emit a design-token table only — never Android resource XML."""
     data = THEMES[theme_id]
     meta = data["_meta"]
     prefix = meta["prefix"]
     name = meta["name"]
+    mode = "Dark" if meta["dark"] else "Light"
 
     lines = [
-        f'<?xml version="1.0" encoding="utf-8"?>',
-        f'<!-- res/values/colors_{theme_id}.xml — {name} theme -->',
-        f'<resources>',
+        f"# Color tokens — {name} (`{theme_id}`)",
+        "",
+        f"- Prefix: `{prefix}_`",
+        f"- Mode: {mode}",
+        f"- Use: copy into `design-spec_{theme_id}.md` chapter 1 as a markdown table.",
+        f"- **Not** an app source file. Do not emit `colors.xml` / `themes.xml`.",
+        "",
+        "| Token | Value | Group |",
+        "|-------|-------|-------|",
     ]
 
+    section = ""
     for token in TOKEN_ORDER:
-        if token in SECTION_COMMENTS:
-            lines.append("")
-            lines.append(SECTION_COMMENTS[token])
-        if token in data:
-            lines.append(f'    <color name="{prefix}_{token}">{data[token]}</color>')
+        if token in SECTION_LABELS:
+            section = SECTION_LABELS[token]
+        if token not in data:
+            continue
+        val = data[token]
+        lines.append(f"| {prefix}_{token} | {val} | {section} |")
 
     lines.append("")
-    lines.append("</resources>")
     return "\n".join(lines)
 
 
+def build_full_specs_markdown() -> str:
+    """Pure markdown reference for all themes — no XML fences."""
+    prose = _load_prose()
+    out = []
+    out.append("# Theme Full Specs — 50 个主题完整配色数值")
+    out.append("")
+    out.append("> **内部色板（纯 Markdown 表）。** 只把 HEX/token 抄进 `design-spec` 第 1 章。")
+    out.append("> **禁止**输出为 `colors_*.xml` / 任何 app 资源文件。")
+    out.append(">")
+    out.append("> 数值以 `scripts/generate_theme.py` 的 `THEMES` 为单一真相；本文件可用")
+    out.append("> `python3 scripts/generate_theme.py --write-full-specs` 重新生成。")
+    out.append("")
+    out.append("---")
+    out.append("")
+
+    for tid, data in THEMES.items():
+        meta = data["_meta"]
+        prefix = meta["prefix"]
+        name = meta["name"]
+        mode = "Dark" if meta["dark"] else "Light"
+        p = prose.get(tid, {})
+        name_zh = p.get("name_zh", "")
+        material = p.get("material", "")
+        anim = p.get("animation", "")
+        title = f"## {name.upper()}"
+        if name_zh:
+            title += f" — {name_zh}"
+        out.append(title)
+        out.append("")
+        out.append(f"- **ID**: `{tid}` · **Prefix**: `{prefix}_` · **Mode**: {mode}")
+        if material:
+            out.append(f"- **材质 / 场景**: {material}")
+        if anim:
+            out.append(f"- **动画基调**: {anim}")
+        if p.get("soul_roles"):
+            out.append(f"- **灵魂色分工**: {p['soul_roles']}")
+        if p.get("toolbar_accent"):
+            out.append(f"- **Toolbar 点缀**: {p['toolbar_accent']}")
+        if p.get("forbid"):
+            out.append(f"- **禁止**: {p['forbid']}")
+        out.append("")
+        out.append("| Token | Value |")
+        out.append("|-------|-------|")
+        for token in TOKEN_ORDER:
+            if token not in data:
+                continue
+            # skip full 2048 dump in full-specs? include all for completeness
+            out.append(f"| {prefix}_{token} | {data[token]} |")
+        out.append("")
+        out.append("---")
+        out.append("")
+
+    return "\n".join(out).rstrip() + "\n"
+
+
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Generate res/values/colors_<theme>.xml")
-    parser.add_argument("--theme", help="Theme ID, or 'all' to generate all 50 themes")
+    parser = argparse.ArgumentParser(
+        description="Export theme color tokens as markdown tables for design-spec (NOT colors.xml)."
+    )
+    parser.add_argument("--theme", help="Theme ID, or 'all' to export all themes")
     parser.add_argument("--list", action="store_true", help="List all theme IDs")
     parser.add_argument("--output", default="./output", help="Output directory (default: ./output)")
+    parser.add_argument(
+        "--write-full-specs",
+        action="store_true",
+        help="Rewrite references/theme-full-specs.md as pure markdown tables",
+    )
     args = parser.parse_args(argv)
 
     if args.list:
@@ -734,11 +841,20 @@ def main(argv: list[str] | None = None) -> int:
         print(f"\nTotal: {len(THEMES)} themes")
         return 0
 
-    if not args.theme:
+    if args.write_full_specs:
+        path = SKILL_DIR / "references" / "theme-full-specs.md"
+        path.write_text(build_full_specs_markdown(), encoding="utf-8")
+        print(f"Wrote pure-markdown full specs: {path}")
+        # fall through if also --theme
+
+    if not args.theme and not args.write_full_specs:
         parser.print_help()
         return 1
 
-    out_dir = Path(args.output) / "res" / "values"
+    if not args.theme:
+        return 0
+
+    out_dir = Path(args.output) / "design-tokens"
     out_dir.mkdir(parents=True, exist_ok=True)
 
     targets = list(THEMES.keys()) if args.theme == "all" else [args.theme]
@@ -747,13 +863,14 @@ def main(argv: list[str] | None = None) -> int:
         if tid not in THEMES:
             print(f"ERROR: unknown theme '{tid}'. Run --list to see all.", file=sys.stderr)
             return 1
-        xml = build_xml(tid)
-        out_file = out_dir / f"colors_{tid}.xml"
-        out_file.write_text(xml, encoding="utf-8")
-        print(f"Generated: {out_file}")
+        md = build_token_markdown(tid)
+        out_file = out_dir / f"tokens_{tid}.md"
+        out_file.write_text(md, encoding="utf-8")
+        print(f"Exported design tokens: {out_file}")
 
     if len(targets) > 1:
-        print(f"\n✓ {len(targets)} theme files written to {out_dir}")
+        print(f"\n✓ {len(targets)} token markdown files written to {out_dir}")
+        print("  These are design-spec inputs only — not app source.")
 
     return 0
 
